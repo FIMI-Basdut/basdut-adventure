@@ -6,3 +6,6 @@ def show_mantap(request):
 
 def show_ticket(request):
     return render(request, 'ticket.html')
+
+def show_seat(request):
+    return render(request, 'seat.html')
