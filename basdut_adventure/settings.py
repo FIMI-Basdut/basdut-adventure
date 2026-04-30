@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'main',
+    'seat',
+    'ticket',
     'autentikasi',
     'venue',
     'event',
