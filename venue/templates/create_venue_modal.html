@@ -1,6 +1,6 @@
 <!-- Modal -->
-<div id="createModal" class="hidden fixed inset-0 z-50 w-full flex items-center justify-center bg-gray-800 bg-opacity-50">
-  <div id="createModalContent" class="bg-white rounded-lg shadow-lg w-5/6 sm:w-3/5 md:w-1/2 lg:w-2/5 xl:w-1/3 max-h-screen overflow-y-auto">
+<div id="createVenueModal" class="hidden fixed inset-0 z-50 w-full flex items-center justify-center bg-gray-800 bg-opacity-50">
+  <div id="createVenueModalContent" class="bg-white rounded-lg shadow-lg w-5/6 sm:w-3/5 md:w-1/2 lg:w-2/5 xl:w-1/3 max-h-screen overflow-y-auto">
     <!-- Modal header -->
     <div class="flex items-center justify-between p-4 border-b">
       <div>
@@ -58,8 +58,8 @@
 
 <script>
   function showCreateVenueModal() {
-      const modal = document.getElementById('createModal');
-      const modalContent = document.getElementById('createModalContent');
+      const modal = document.getElementById('createVenueModal');
+      const modalContent = document.getElementById('createVenueModalContent');
 
       modal.classList.remove('hidden'); 
       setTimeout(() => {
@@ -69,8 +69,8 @@
   }
 
   function hideCreateVenueModal() {
-      const modal = document.getElementById('createModal');
-      const modalContent = document.getElementById('createModalContent');
+      const modal = document.getElementById('createVenueModal');
+      const modalContent = document.getElementById('createVenueModalContent');
 
       modalContent.classList.remove('opacity-100', 'scale-100');
       modalContent.classList.add('opacity-0', 'scale-95');

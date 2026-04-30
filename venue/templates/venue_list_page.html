@@ -109,7 +109,7 @@
                         <button onclick="showUpdateVenueModal()" class="px-4 py-2 rounded-lg border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-2 transition-colors">
                             <i class="far fa-edit"></i> Edit
                         </button>
-                        <button class="px-4 py-2 rounded-lg border border-red-100 text-sm font-medium text-red-500 hover:bg-red-50 flex items-center gap-2 transition-colors">
+                        <button onclick="showDeleteVenueModal()" class="px-4 py-2 rounded-lg border border-red-100 text-sm font-medium text-red-500 hover:bg-red-50 flex items-center gap-2 transition-colors">
                             <i class="far fa-trash-alt"></i> Hapus
                         </button>
                     </div>
@@ -147,7 +147,7 @@
                         <button onclick="showUpdateVenueModal()" class="px-4 py-2 rounded-lg border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-2 transition-colors">
                             <i class="far fa-edit"></i> Edit
                         </button>
-                        <button class="px-4 py-2 rounded-lg border border-red-100 text-sm font-medium text-red-500 hover:bg-red-50 flex items-center gap-2 transition-colors">
+                        <button onclick="showDeleteVenueModal()" class="px-4 py-2 rounded-lg border border-red-100 text-sm font-medium text-red-500 hover:bg-red-50 flex items-center gap-2 transition-colors">
                             <i class="far fa-trash-alt"></i> Hapus
                         </button>
                     </div>
@@ -185,7 +185,7 @@
                         <button onclick="showUpdateVenueModal()" class="px-4 py-2 rounded-lg border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-2 transition-colors">
                             <i class="far fa-edit"></i> Edit
                         </button>
-                        <button class="px-4 py-2 rounded-lg border border-red-100 text-sm font-medium text-red-500 hover:bg-red-50 flex items-center gap-2 transition-colors">
+                        <button onclick="showDeleteVenueModal()" class="px-4 py-2 rounded-lg border border-red-100 text-sm font-medium text-red-500 hover:bg-red-50 flex items-center gap-2 transition-colors">
                             <i class="far fa-trash-alt"></i> Hapus
                         </button>
                     </div>
@@ -223,7 +223,7 @@
                         <button onclick="showUpdateVenueModal()" class="px-4 py-2 rounded-lg border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-2 transition-colors">
                             <i class="far fa-edit"></i> Edit
                         </button>
-                        <button class="px-4 py-2 rounded-lg border border-red-100 text-sm font-medium text-red-500 hover:bg-red-50 flex items-center gap-2 transition-colors">
+                        <button onclick="showDeleteVenueModal()" class="px-4 py-2 rounded-lg border border-red-100 text-sm font-medium text-red-500 hover:bg-red-50 flex items-center gap-2 transition-colors">
                             <i class="far fa-trash-alt"></i> Hapus
                         </button>
                     </div>
@@ -261,7 +261,7 @@
                         <button onclick="showUpdateVenueModal()" class="px-4 py-2 rounded-lg border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-2 transition-colors">
                             <i class="far fa-edit"></i> Edit
                         </button>
-                        <button class="px-4 py-2 rounded-lg border border-red-100 text-sm font-medium text-red-500 hover:bg-red-50 flex items-center gap-2 transition-colors">
+                        <button onclick="showDeleteVenueModal()" class="px-4 py-2 rounded-lg border border-red-100 text-sm font-medium text-red-500 hover:bg-red-50 flex items-center gap-2 transition-colors">
                             <i class="far fa-trash-alt"></i> Hapus
                         </button>
                     </div>
@@ -272,5 +272,6 @@
     </div>
 {% include 'create_venue_modal.html' %}
 {% include 'update_venue_modal.html' %}
+{% include 'delete_venue_modal.html' %}
 </body>
 {% endblock content %}

@@ -1,6 +1,6 @@
 <!-- Modal -->
-<div id="updateModal" class="hidden fixed inset-0 z-50 w-full flex items-center justify-center bg-gray-800 bg-opacity-50">
-  <div id="updateModalContent" class="bg-white rounded-lg shadow-lg w-5/6 sm:w-3/5 md:w-1/2 lg:w-2/5 xl:w-1/3 max-h-screen overflow-y-auto">
+<div id="updateVenueModal" class="hidden fixed inset-0 z-50 w-full flex items-center justify-center bg-gray-800 bg-opacity-50">
+  <div id="updateVenueModalContent" class="bg-white rounded-lg shadow-lg w-5/6 sm:w-3/5 md:w-1/2 lg:w-2/5 xl:w-1/3 max-h-screen overflow-y-auto">
     <!-- Modal header -->
     <div class="flex items-center justify-between p-4 border-b">
       <div>
@@ -59,8 +59,8 @@
 <!-- referensi modal edit bisa lihat di tugas kelompok pbp-->
 <script>
   function showUpdateVenueModal() {
-      const modal = document.getElementById('updateModal');
-      const modalContent = document.getElementById('updateModalContent');
+      const modal = document.getElementById('updateVenueModal');
+      const modalContent = document.getElementById('updateVenueModalContent');
 
       modal.classList.remove('hidden'); 
       setTimeout(() => {
@@ -70,8 +70,8 @@
   }
 
   function hideUpdateVenueModal() {
-      const modal = document.getElementById('updateModal');
-      const modalContent = document.getElementById('updateModalContent');
+      const modal = document.getElementById('updateVenueModal');
+      const modalContent = document.getElementById('updateVenueModalContent');
 
       modalContent.classList.remove('opacity-100', 'scale-100');
       modalContent.classList.add('opacity-0', 'scale-95');
