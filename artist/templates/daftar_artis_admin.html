@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Artis - TikTakTuk</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50 text-slate-800">
+
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+            <div>
+                <h1 class="text-3xl font-bold text-slate-900">Daftar Artis</h1>
+                <p class="text-sm text-slate-500 mt-1">Kelola artis yang ada di platform TikTakTuk</p>
+            </div>
+            <button onclick="toggleModal('modal-tambah')" class="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg font-semibold text-sm flex items-center gap-2 transition shadow-sm">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                Tambah Artis
+            </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Total Artis</p>
+                <h2 class="text-3xl font-bold text-slate-800">6</h2>
+            </div>
+            <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Genre</p>
+                <h2 class="text-3xl font-bold text-slate-800">6</h2>
+            </div>
+            <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Tampil di Event</p>
+                <h2 class="text-3xl font-bold text-slate-800">6</h2>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
+            
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold text-slate-800">Tabel Artis</h2>
+                <div class="flex bg-gray-100 p-1 rounded-lg">
+                    <button class="bg-white shadow-sm px-4 py-1.5 rounded-md text-sm font-bold text-green-700">Tabel</button>
+                    <button class="px-4 py-1.5 rounded-md text-sm font-medium text-slate-500 hover:text-slate-700 transition">Daftar</button>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+                <div class="relative w-full max-w-sm">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </div>
+                    <input type="text" class="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg text-sm placeholder-gray-400 focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition" placeholder="Cari nama atau genre...">
+                </div>
+                <span class="text-sm text-slate-500">6 artis ditemukan</span>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse min-w-max">
+                    <thead>
+                        <tr class="bg-gray-50/50">
+                            <th class="py-3 px-4 text-xs font-bold text-slate-400 uppercase tracking-wider border-b border-gray-100">Artis</th>
+                            <th class="py-3 px-4 text-xs font-bold text-slate-400 uppercase tracking-wider border-b border-gray-100">Genre</th>
+                            <th class="py-3 px-4 text-right border-b border-gray-100"></th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        
+                        <tr class="hover:bg-gray-50 transition group">
+                            <td class="py-4 px-4 flex items-center gap-4">
+                                <div class="w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-lg">
+                                    F
+                                </div>
+                                <span class="font-bold text-slate-800">Fourtwnty</span>
+                            </td>
+                            <td class="py-4 px-4">
+                                <span class="bg-green-100 text-green-700 px-3 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider">Indie Folk</span>
+                            </td>
+                            <td class="py-4 px-4 text-right">
+                                <button onclick="toggleModal('modal-edit')" class="p-2 text-slate-400 hover:text-green-600 border border-gray-200 hover:border-green-300 rounded-lg mr-2 transition bg-white shadow-sm">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                                </button>
+                                <button onclick="toggleModal('modal-hapus')" class="p-2 text-red-400 hover:text-red-600 border border-gray-200 hover:border-red-300 rounded-lg transition bg-white shadow-sm">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                </button>
+                            </td>
+                        </tr>
+
+                        <tr class="hover:bg-gray-50 transition group">
+                            <td class="py-4 px-4 flex items-center gap-4">
+                                <div class="w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-lg">
+                                    H
+                                </div>
+                                <span class="font-bold text-slate-800">Hindia</span>
+                            </td>
+                            <td class="py-4 px-4">
+                                <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider">Indie Pop</span>
+                            </td>
+                            <td class="py-4 px-4 text-right">
+                                <button onclick="toggleModal('modal-edit')" class="p-2 text-slate-400 hover:text-green-600 border border-gray-200 hover:border-green-300 rounded-lg mr-2 transition bg-white shadow-sm">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                                </button>
+                                <button onclick="toggleModal('modal-hapus')" class="p-2 text-red-400 hover:text-red-600 border border-gray-200 hover:border-red-300 rounded-lg transition bg-white shadow-sm">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 transition group">
+                            <td class="py-4 px-4 flex items-center gap-4">
+                                <div class="w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-lg">
+                                    T
+                                </div>
+                                <span class="font-bold text-slate-800">Tulus</span>
+                            </td>
+                            <td class="py-4 px-4">
+                                <span class="bg-red-100 text-red-700 px-3 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider">Pop</span>
+                            </td>
+                            <td class="py-4 px-4 text-right">
+                                <button onclick="toggleModal('modal-edit')" class="p-2 text-slate-400 hover:text-green-600 border border-gray-200 hover:border-green-300 rounded-lg mr-2 transition bg-white shadow-sm">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                                </button>
+                                <button onclick="toggleModal('modal-hapus')" class="p-2 text-red-400 hover:text-red-600 border border-gray-200 hover:border-red-300 rounded-lg transition bg-white shadow-sm">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 transition group">
+                            <td class="py-4 px-4 flex items-center gap-4">
+                                <div class="w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-lg">
+                                    N
+                                </div>
+                                <span class="font-bold text-slate-800">Nadin Amizah</span>
+                            </td>
+                            <td class="py-4 px-4">
+                                <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider">Folk</span>
+                            </td>
+                            <td class="py-4 px-4 text-right">
+                                <button onclick="toggleModal('modal-edit')" class="p-2 text-slate-400 hover:text-green-600 border border-gray-200 hover:border-green-300 rounded-lg mr-2 transition bg-white shadow-sm">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                                </button>
+                                <button onclick="toggleModal('modal-hapus')" class="p-2 text-red-400 hover:text-red-600 border border-gray-200 hover:border-red-300 rounded-lg transition bg-white shadow-sm">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 transition group">
+                            <td class="py-4 px-4 flex items-center gap-4">
+                                <div class="w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-lg">
+                                    P
+                                </div>
+                                <span class="font-bold text-slate-800">Pamungkas</span>
+                            </td>
+                            <td class="py-4 px-4">
+                                <span class="bg-purple-100 text-purple-700 px-3 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider">SINGER-SONGWRITER</span>
+                            </td>
+                            <td class="py-4 px-4 text-right">
+                                <button onclick="toggleModal('modal-edit')" class="p-2 text-slate-400 hover:text-green-600 border border-gray-200 hover:border-green-300 rounded-lg mr-2 transition bg-white shadow-sm">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                                </button>
+                                <button onclick="toggleModal('modal-hapus')" class="p-2 text-red-400 hover:text-red-600 border border-gray-200 hover:border-red-300 rounded-lg transition bg-white shadow-sm">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 transition group">
+                            <td class="py-4 px-4 flex items-center gap-4">
+                                <div class="w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-lg">
+                                    R
+                                </div>
+                                <span class="font-bold text-slate-800">Raisa</span>
+                            </td>
+                            <td class="py-4 px-4">
+                                <span class="bg-red-100 text-red-700 px-3 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider">R&B/POP</span>
+                            </td>
+                            <td class="py-4 px-4 text-right">
+                                <button onclick="toggleModal('modal-edit')" class="p-2 text-slate-400 hover:text-green-600 border border-gray-200 hover:border-green-300 rounded-lg mr-2 transition bg-white shadow-sm">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                                </button>
+                                <button onclick="toggleModal('modal-hapus')" class="p-2 text-red-400 hover:text-red-600 border border-gray-200 hover:border-red-300 rounded-lg transition bg-white shadow-sm">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                </table>
+            </div>
+        </div>
+    
+    </main>
+            <div id="modal-tambah" class="fixed inset-0 z-50 hidden flex items-center justify-center">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-gray-900/40 backdrop-blur-sm transition-opacity" onclick="toggleModal('modal-tambah')"></div>
+        
+        <!-- Modal Content -->
+        <div class="relative bg-white w-full max-w-md rounded-2xl shadow-xl p-6 md:p-8 m-4">
+            <!-- Close Button -->
+            <button onclick="toggleModal('modal-tambah')" class="absolute top-6 right-6 text-gray-400 hover:text-gray-600 transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+
+            <h3 class="text-xl font-bold text-slate-800 mb-6">Tambah Artis Baru</h3>
+
+            <form class="space-y-5">
+                <div>
+                    <label class="block text-[13px] font-bold text-slate-500 mb-1.5 uppercase tracking-wide">Nama Artis <span class="text-red-500">*</span></label>
+                    <input type="text" placeholder="cth. Fourtwnty" class="block w-full border border-gray-200 rounded-xl px-4 py-3 text-slate-700 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none placeholder-gray-400">
+                </div>
+                <div>
+                    <label class="block text-[13px] font-bold text-slate-500 mb-1.5 uppercase tracking-wide">Genre </label>
+                    <input type="text" placeholder="cth. Indie Folk" class="block w-full border border-gray-200 rounded-xl px-4 py-3 text-slate-700 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none placeholder-gray-400">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 pt-4">
+                    <button type="button" onclick="toggleModal('modal-tambah')" class="w-full py-3 border border-gray-200 text-slate-700 font-semibold rounded-xl hover:bg-gray-50 transition text-sm">Batal</button>
+                    <!-- Tombol Tambah menggunakan warna biru yang lebih muda (blue-400) sesuai gambar -->
+                    <button type="submit" class="w-full py-3 bg-blue-400 text-white font-semibold rounded-xl hover:bg-blue-500 transition text-sm">Tambah Artis</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="modal-edit" class="fixed inset-0 z-50 hidden flex items-center justify-center">
+        <div class="absolute inset-0 bg-gray-900/40 backdrop-blur-sm transition-opacity" onclick="toggleModal('modal-edit')"></div>
+        
+        <div class="relative bg-white w-full max-w-md rounded-2xl shadow-xl p-6 md:p-8 m-4">
+            <button onclick="toggleModal('modal-edit')" class="absolute top-6 right-6 text-gray-400 hover:text-gray-600 transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+
+            <h3 class="text-xl font-bold text-slate-800 mb-6">Edit Artis</h3>
+
+            <form class="space-y-5">
+                <div>
+                    <label class="block text-[13px] font-bold text-slate-500 mb-1.5 uppercase tracking-wide">Nama Artis <span class="text-red-500">*</span></label>
+                    <input type="text" value="Fourtwnty" class="block w-full border border-gray-200 rounded-xl px-4 py-3 text-slate-700 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-[13px] font-bold text-slate-500 mb-1.5 uppercase tracking-wide"> Genre </label>
+                    <input type="text" value="Indie Folk" class="block w-full border border-gray-200 rounded-xl px-4 py-3 text-slate-700 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 pt-4">
+                    <button type="button" onclick="toggleModal('modal-edit')" class="w-full py-3 border border-gray-200 text-slate-800 font-semibold rounded-xl hover:bg-gray-50 transition text-sm">Batal</button>
+                    <!-- Tombol Simpan menggunakan warna biru yang lebih solid (blue-600) sesuai gambar -->
+                    <button type="submit" class="w-full py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition text-sm">Simpan Perubahan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="modal-hapus" class="fixed inset-0 z-50 hidden flex items-center justify-center">
+        <div class="absolute inset-0 bg-gray-900/40 backdrop-blur-sm transition-opacity" onclick="toggleModal('modal-hapus')"></div>
+        
+        <div class="relative bg-white w-full max-w-[400px] rounded-2xl shadow-xl p-6 md:p-8 m-4">
+            <button onclick="toggleModal('modal-hapus')" class="absolute top-6 right-6 text-gray-400 hover:text-gray-600 transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+
+            <!-- Judul berwarna merah sesuai gambar -->
+            <h3 class="text-xl font-bold text-red-600 mb-3">Hapus Artis</h3>
+            
+            <p class="text-slate-500 text-sm mb-8 leading-relaxed">
+                Apakah Anda yakin ingin menghapus artis ini? Tindakan ini tidak dapat dibatalkan.
+            </p>
+
+            <!-- Layout tombol delete sejajar di kanan -->
+            <div class="flex justify-end gap-3">
+                <button type="button" onclick="toggleModal('modal-hapus')" class="px-5 py-2.5 border border-gray-200 text-slate-800 font-semibold rounded-xl hover:bg-gray-50 transition text-sm">Batal</button>
+                <button type="button" class="px-5 py-2.5 bg-red-600 text-white font-semibold rounded-xl hover:bg-red-700 transition text-sm">Hapus</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        function toggleModal(modalID) {
+            const modal = document.getElementById(modalID);
+            if (modal.classList.contains('hidden')) {
+                // Tampilkan modal
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden'; // Kunci scroll background
+            } else {
+                // Sembunyikan modal
+                modal.classList.add('hidden');
+                document.body.style.overflow = 'auto'; // Kembalikan scroll background
+            }
+        }
+    </script>
+</body>
+</html>
