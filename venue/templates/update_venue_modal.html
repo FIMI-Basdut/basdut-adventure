@@ -1,15 +1,15 @@
 <!-- Modal -->
-<div id="createModal" class="hidden fixed inset-0 z-50 w-full flex items-center justify-center bg-gray-800 bg-opacity-50">
-  <div id="createModalContent" class="bg-white rounded-lg shadow-lg w-5/6 sm:w-3/5 md:w-1/2 lg:w-2/5 xl:w-1/3 max-h-screen overflow-y-auto">
+<div id="updateModal" class="hidden fixed inset-0 z-50 w-full flex items-center justify-center bg-gray-800 bg-opacity-50">
+  <div id="updateModalContent" class="bg-white rounded-lg shadow-lg w-5/6 sm:w-3/5 md:w-1/2 lg:w-2/5 xl:w-1/3 max-h-screen overflow-y-auto">
     <!-- Modal header -->
     <div class="flex items-center justify-between p-4 border-b">
       <div>
         <h3 class="text-xl font-semibold text-gray-900">
-          Tambah Venue Baru
+          Edit Venue
         </h3>
-        <p class="text-sm text-gray-600 mt-1">Rasakan vibes yang seru di venue yang baru!</p>
+        <p class="text-sm text-gray-600 mt-1">Sesuaikan informasi milik venue ini</p>
       </div>
-      <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" onclick="hideCreateVenueModal()">
+      <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" onclick="hideUpdateVenueModal()">
         <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
           <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
         </svg>
@@ -49,17 +49,18 @@
     </div>
     <!-- Modal footer -->
     <div class="flex flex-col sm:flex-row gap-4 p-6 border-t border-gray-200 rounded-b">
-      <button type="button" id="cancelButton" class="order-2 sm:order-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-md font-medium hover:bg-gray-50 transition-colors text-center" onclick="hideCreateVenueModal()">Cancel</button>
+      <button type="button" id="cancelButton" class="order-2 sm:order-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-md font-medium hover:bg-gray-50 transition-colors text-center" onclick="hideUpdateVenueModal()">Cancel</button>
       <button type="submit" id="submitVenue" form="venueForm" class="order-1 sm:order-2 flex-1 bg-blue-600 text-white px-6 py-3 rounded-md font-medium hover:bg-blue-700 transition-colors">Tambah</button>
     </div>
   </div>
 </div>
 
-
+<!-- SCRIPT sama HTML nya masih ngikutin create venue, belum diesesuaiin untuk edit-->
+<!-- referensi modal edit bisa lihat di tugas kelompok pbp-->
 <script>
-  function showCreateVenueModal() {
-      const modal = document.getElementById('createModal');
-      const modalContent = document.getElementById('createModalContent');
+  function showUpdateVenueModal() {
+      const modal = document.getElementById('updateModal');
+      const modalContent = document.getElementById('updateModalContent');
 
       modal.classList.remove('hidden'); 
       setTimeout(() => {
@@ -68,9 +69,9 @@
       }, 50); 
   }
 
-  function hideCreateVenueModal() {
-      const modal = document.getElementById('createModal');
-      const modalContent = document.getElementById('createModalContent');
+  function hideUpdateVenueModal() {
+      const modal = document.getElementById('updateModal');
+      const modalContent = document.getElementById('updateModalContent');
 
       modalContent.classList.remove('opacity-100', 'scale-100');
       modalContent.classList.add('opacity-0', 'scale-95');
@@ -87,7 +88,7 @@
     })
 
     document.getElementById("venueForm").reset();
-    hideCreateVenueModal();
+    hideUpdateVenueModal();
       
     // Show toast notification
     showToast('Venue added successfully!', '', 'success');
