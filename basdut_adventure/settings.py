@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'ticket',
     'order',
     'autentikasi',
+    'promotion',
 ]
 
 MIDDLEWARE = [
