@@ -1,6 +1,7 @@
 from django.urls import path
 from main.views import show_mantap,preview_navbar_admin,preview_navbar_customer,preview_navbar_guest,preview_navbar_organizer
 
+
 app_name = 'main'
 
 urlpatterns = [

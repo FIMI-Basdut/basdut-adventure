@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Penyelenggara</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-slate-800">
+
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- Header -->
+        <div class="bg-slate-800 rounded-2xl shadow-sm p-6 sm:p-8 mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+                <p class="text-slate-500 text-sm font-medium mb-1">Administrator</p>
+                <h1 class="text-3xl font-bold text-white">System Console</h1>
+                <p class="text-sm text-slate-500 mt-2">Pantau dan kelola platform TikTakTuk</p>
+            </div>
+            <div class="flex gap-3">
+                <button class="bg-white px-5 py-2.5 text-black-600 font-semibold rounded-lg hover:bg-green-50 transition shadow-sm text-sm">
+                    Promosi
+                </button>
+            </div>
+        </div>
+
+        <!-- Ringkasan informasi  -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                <div class="flex justify-between items-start mb-4">
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Pengguna</p>
+                    <div class="p-2 bg-blue-50 text-blue-600 rounded-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
+                            <path d="M7 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM14.5 9a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM1.615 16.428a1.224 1.224 0 0 1-.569-1.175 6.002 6.002 0 0 1 11.908 0c.058.467-.172.92-.57 1.174A9.953 9.953 0 0 1 7 18a9.953 9.953 0 0 1-5.385-1.572ZM14.5 16h-.106c.07-.297.088-.611.048-.933a7.47 7.47 0 0 0-1.588-3.755 4.502 4.502 0 0 1 5.874 2.636.818.818 0 0 1-.36.98A7.465 7.465 0 0 1 14.5 16Z" />
+                        </svg>
+                    </div>
+                </div>
+                <div>
+                    <h2 class="text-3xl font-bold text-slate-800">2,543</h2>
+                    <p class="text-xs text-slate-500 mt-1">Pengguna aktif</p>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                <div class="flex justify-between items-start mb-4">
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Acara</p>
+                    <div class="p-2 bg-green-50 text-green-600 rounded-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                        </svg>
+                    </div>
+                </div>
+                <div>
+                    <h2 class="text-3xl font-bold text-slate-800">156</h2>
+                    <p class="text-xs text-slate-500 mt-1">Bulan ini</p>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                <div class="flex justify-between items-start mb-4">
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Omzet Platform</p>
+                    <div class="p-2 bg-purple-50 text-purple-600 rounded-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941" />
+                        </svg>
+                    </div>
+                </div>
+                <div>
+                    <h2 class="text-3xl font-bold text-slate-800">Rp 52.4M</h2>
+                    <p class="text-xs text-slate-500 mt-1">Gross volume</p>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                <div class="flex justify-between items-start mb-4">
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Promosi Aktif</p>
+                    <div class="p-2 bg-orange-50 text-orange-600 rounded-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z" />
+                        </svg>
+
+                    </div>
+                </div>
+                <div>
+                    <h2 class="text-3xl font-bold text-slate-800">3</h2>
+                    <p class="text-xs text-slate-500 mt-1">Running campaigns</p>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            
+            <!-- Informasi Infrastruktur Venue -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col justify-between">
+                <div>
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-bold text-slate-800">Infrastruktur Venue</h3>
+                        <a href="#" class="text-slate-400 hover:text-green-600 transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25" />
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-slate-500">Total Venue Terdaftar</span>
+                            <span class="font-bold text-slate-800">3 Lokasi</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-slate-500">Reserved Seating</span>
+                            <span class="font-bold text-slate-800">2 Venue</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-slate-500">Kapasitas Terbesar</span>
+                            <span class="font-bold text-slate-800">1,000 Kursi</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="w-full mt-8 py-2.5 border border-gray-200 text-slate-700 font-semibold rounded-lg hover:border-green-600 hover:text-green-600 transition text-sm">
+                    Kelola Venue
+                </button>
+            </div>
+
+            <!-- Informasi Marketing & Promosi -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col justify-between">
+                <div>
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-bold text-slate-800">Marketing & Promosi</h3>
+                        <a href="#" class="text-slate-400 hover:text-green-600 transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25" />
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-slate-500">Promo Persentase</span>
+                            <span class="font-bold text-slate-800">1 Aktif</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-slate-500">Promo Potongan Nominal</span>
+                            <span class="font-bold text-slate-800">1 Aktif</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-slate-500">Total Penggunaan</span>
+                            <span class="font-bold text-slate-800">57 Kali</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="w-full mt-8 py-2.5 border border-gray-200 text-slate-700 font-semibold rounded-lg hover:border-green-600 hover:text-green-600 transition text-sm">
+                    Kelola Promosi
+                </button>
+            </div>
+
+        </div>
+
+    </main>
+
+</body>
+</html>
