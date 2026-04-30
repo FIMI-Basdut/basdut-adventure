@@ -14,17 +14,19 @@
 
     <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
 
+        <!-- Header -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
             <div>
                 <h1 class="text-3xl font-bold text-slate-900">Kategori Tiket</h1>
                 <p class="text-sm text-slate-500 mt-1">Kelola kategori dan harga tiket per acara</p>
             </div>
-            <button onclick="toggleModal('modal-tambah')" class="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg font-semibold text-sm flex items-center gap-2 transition shadow-sm">
+            <button onclick="toggleModal('modal-tambah')" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg font-semibold text-sm flex items-center gap-2 transition shadow-sm">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                 Tambah Kategori
             </button>
         </div>
 
+        <!-- Ringkasan Informasi Kategori Tiket -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
                 <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Total Kategori</p>
@@ -40,15 +42,18 @@
             </div>
         </div>
 
+        <!-- Informasi ticket kategori -->
         <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
             
             <div class="flex flex-col sm:flex-row gap-4 items-center mb-6">
+                <!-- Search Bar untuk pencarian kategori-->
                 <div class="relative w-full max-w-sm">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                     </div>
                     <input type="text" class="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg text-sm placeholder-gray-400 focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition" placeholder="Cari nama atau genre...">
                 </div>
+                <!-- DropdownFilter untuk Filter Acara -->
                 <div class="relative inline-block w-48">
                 <select class="block w-full appearance-none bg-white border border-gray-200 text-slate-600 py-2.5 pl-4 pr-10 rounded-xl text-sm font-medium hover:border-gray-300 focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 cursor-pointer transition">
                     <option value="semua">Semua Acara</option>
@@ -65,16 +70,19 @@
                 </div>
             </div>
 
+            <!-- Informasi jumlah kategori yang ditemukan -->
             <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
                 <span class="text-sm text-slate-500">8 kategori ditemukan</span>
                 <div class="flex bg-gray-100 p-1 rounded-lg">
-                    <button class="bg-white shadow-sm px-4 py-1.5 rounded-md text-sm font-bold text-green-700">Tabel</button>
+                    <button class="bg-white shadow-sm px-4 py-1.5 rounded-md text-sm font-bold text-black-700">Tabel</button>
                     <button class="px-4 py-1.5 rounded-md text-sm font-medium text-slate-500 hover:text-slate-700 transition">Daftar</button>
                 </div>
             </div>
 
+            <!-- Tabel Kategori Tiket -->
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse min-w-max">
+                    <!-- Header tabel -->
                     <thead>
                         <tr class="bg-gray-50/50">
                             <th class="py-3 px-4 text-xs font-bold text-slate-400 uppercase tracking-wider border-b border-gray-100">Kategori</th>
@@ -84,6 +92,7 @@
                             <th class="py-3 px-4 text-xs font-bold text-slate-400 uppercase tracking-wider border-b border-gray-100"></th>
                         </tr>
                     </thead>
+                    <!-- Isi tabel Dummy-->
                     <tbody class="divide-y divide-gray-100">
                         
                         <tr class="hover:bg-gray-50 transition group">
@@ -269,13 +278,13 @@
         </div>
 
     </main>
+
+    <!-- Modal Tambah Kategori -->
         <div id="modal-tambah" class="fixed inset-0 z-50 hidden flex items-center justify-center">
-        <!-- Backdrop -->
         <div class="absolute inset-0 bg-gray-900/40 backdrop-blur-sm transition-opacity" onclick="toggleModal('modal-tambah')"></div>
         
-        <!-- Modal Content -->
+        <!-- Form Tambah Kategori -->
         <div class="relative bg-white w-full max-w-md rounded-2xl shadow-xl p-6 md:p-8 m-4">
-            <!-- Close Button -->
             <button onclick="toggleModal('modal-tambah')" class="absolute top-6 right-6 text-gray-400 hover:text-gray-600 transition">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
@@ -283,6 +292,7 @@
             <h3 class="text-xl font-bold text-slate-800 mb-6">Tambah Kategori Baru</h3>
 
             <form class="space-y-5">
+                <!-- Dropdown untuk memilih acara yang sudah ada -->
                 <div>
                     <label class="block text-[13px] font-bold text-slate-500 mb-1.5 uppercase tracking-wide">Acara <span class="text-red-500">*</span></label>
                     <select class="block w-full border border-gray-200 rounded-xl px-4 py-3 text-slate-700 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none appearance-none cursor-pointer">
@@ -308,15 +318,17 @@
 
                 <div class="grid grid-cols-2 gap-4 pt-4">
                     <button type="button" onclick="toggleModal('modal-tambah')" class="w-full py-3 border border-gray-200 text-slate-700 font-semibold rounded-xl hover:bg-gray-50 transition text-sm">Batal</button>
-                    <!-- Tombol Tambah menggunakan warna biru yang lebih muda (blue-400) sesuai gambar -->
                     <button type="submit" class="w-full py-3 bg-blue-400 text-white font-semibold rounded-xl hover:bg-blue-500 transition text-sm">Tambah</button>
                 </div>
             </form>
         </div>
     </div>
+
+    <!-- Modal Edit Kategori -->
     <div id="modal-edit" class="fixed inset-0 z-50 hidden flex items-center justify-center">
         <div class="absolute inset-0 bg-gray-900/40 backdrop-blur-sm transition-opacity" onclick="toggleModal('modal-edit')"></div>
         
+        <!-- Form Edit Kategori -->
         <div class="relative bg-white w-full max-w-md rounded-2xl shadow-xl p-6 md:p-8 m-4">
             <button onclick="toggleModal('modal-edit')" class="absolute top-6 right-6 text-gray-400 hover:text-gray-600 transition">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
@@ -327,9 +339,7 @@
             <form class="space-y-5">
                 <div>
                     <label class="block text-[13px] font-bold text-slate-500 mb-1.5 uppercase tracking-wide">Acara <span class="text-red-500">*</span></label>
-                    <select class="block w-full border border-gray-200 rounded-xl px-4 py-3 text-slate-700 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none appearance-none cursor-pointer">
-                        <option selected>Konser Melodi Senja</option>
-                    </select>
+                    <span class="block w-full border border-gray-200 rounded-xl px-4 py-3 text-slate-700 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none">Reguler</span>
                 </div>
 
                 <div>
@@ -350,35 +360,37 @@
 
                 <div class="grid grid-cols-2 gap-4 pt-4">
                     <button type="button" onclick="toggleModal('modal-edit')" class="w-full py-3 border border-gray-200 text-slate-800 font-semibold rounded-xl hover:bg-gray-50 transition text-sm">Batal</button>
-                    <!-- Tombol Simpan menggunakan warna biru yang lebih solid (blue-600) sesuai gambar -->
                     <button type="submit" class="w-full py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition text-sm">Simpan</button>
                 </div>
             </form>
         </div>
     </div>
+    
+    <!-- Modal Hapus Kategori -->
     <div id="modal-hapus" class="fixed inset-0 z-50 hidden flex items-center justify-center">
         <div class="absolute inset-0 bg-gray-900/40 backdrop-blur-sm transition-opacity" onclick="toggleModal('modal-hapus')"></div>
         
+        <!-- Konfirmasi Hapus Kategori -->
         <div class="relative bg-white w-full max-w-[400px] rounded-2xl shadow-xl p-6 md:p-8 m-4">
             <button onclick="toggleModal('modal-hapus')" class="absolute top-6 right-6 text-gray-400 hover:text-gray-600 transition">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
 
-            <!-- Judul berwarna merah sesuai gambar -->
             <h3 class="text-xl font-bold text-red-600 mb-3">Hapus Kategori</h3>
             
             <p class="text-slate-500 text-sm mb-8 leading-relaxed">
                 Apakah Anda yakin ingin menghapus kategori ini? Tindakan ini tidak dapat dibatalkan.
             </p>
 
-            <!-- Layout tombol delete sejajar di kanan -->
             <div class="flex justify-end gap-3">
                 <button type="button" onclick="toggleModal('modal-hapus')" class="px-5 py-2.5 border border-gray-200 text-slate-800 font-semibold rounded-xl hover:bg-gray-50 transition text-sm">Batal</button>
                 <button type="button" class="px-5 py-2.5 bg-red-600 text-white font-semibold rounded-xl hover:bg-red-700 transition text-sm">Hapus</button>
             </div>
         </div>
     </div>
+
     <script>
+        // Fungsi untuk toggle modal
         function toggleModal(modalID) {
             const modal = document.getElementById(modalID);
             if (modal.classList.contains('hidden')) {
