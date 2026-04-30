@@ -44,6 +44,9 @@ INSTALLED_APPS = [
     'dashboard',
     'artist',
     'ticket_category',
+    'seat',
+    'ticket',
+    'autentikasi',
 ]
 
 MIDDLEWARE = [
