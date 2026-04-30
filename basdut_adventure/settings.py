@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'seat',
     'ticket',
     'autentikasi',
+    'venue',
+    'event',
 ]
 
 MIDDLEWARE = [
