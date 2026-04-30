@@ -25,7 +25,7 @@
                 <h1 class="text-2xl font-bold text-gray-900">Manajemen Venue</h1>
                 <p class="text-sm text-gray-500 mt-1">Kelola lokasi pertunjukan dan kapasitas tempat duduk</p>
             </div>
-            <button class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-full text-sm font-medium transition-colors flex items-center gap-2 shadow-sm">
+            <button onclick="showCreateVenueModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-full text-sm font-medium transition-colors flex items-center gap-2 shadow-sm">
                 <i class="fas fa-plus"></i> Tambah Venue
             </button>
         </div>
@@ -270,6 +270,6 @@
 
         </div>
     </div>
-
+{% include 'create_venue_modal.html' %}
 </body>
 {% endblock content %}
