@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'main',
     'autentikasi',
     'venue',
+    'event',
 ]
 
 MIDDLEWARE = [
