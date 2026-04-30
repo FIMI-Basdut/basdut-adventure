@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+{% block meta %}
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+{% endblock meta %}
+<title>TikTakTuk</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-50">
+    
+    {% include 'navbar.html' %}
+    
+    <main>
+        {% block content %} 
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <h1 class="text-3xl font-bold text-gray-800">Preview Tampilan Frontend</h1>
+            <p class="text-gray-500 mt-2">Cek navbar di atas. Tampilannya otomatis berubah sesuai dengan path URL yang dibuka </p>
+        </div>
+        {% endblock content %}
+    </main>
+
+</body>
+</html>
