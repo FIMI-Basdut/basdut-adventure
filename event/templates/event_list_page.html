@@ -108,6 +108,10 @@
                     <button class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl text-sm font-semibold transition-colors">
                         Beli Tiket
                     </button>
+
+                    <button onclick="showUpdateEventModal()" class="p-6 mt-auto w-full bg-white-600 hover:bg-white-700 text-blue py-3 rounded-xl text-sm font-semibold transition-colors">
+                        Edit Tiket
+                    </button>
                 </div>
             </div>
 
@@ -151,6 +155,10 @@
                     <button class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl text-sm font-semibold transition-colors">
                         Beli Tiket
                     </button>
+
+                    <button onclick="showUpdateEventModal()" class="p-6 mt-auto w-full bg-white-600 hover:bg-white-700 text-blue py-3 rounded-xl text-sm font-semibold transition-colors">
+                        Edit Tiket
+                    </button>
                 </div>
             </div>
 
@@ -190,11 +198,16 @@
                     <button class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl text-sm font-semibold transition-colors">
                         Beli Tiket
                     </button>
+
+                    <button onclick="showUpdateEventModal()" class="p-6 mt-auto w-full bg-white-600 hover:bg-white-700 text-blue py-3 rounded-xl text-sm font-semibold transition-colors">
+                        Edit Tiket
+                    </button>
                 </div>
             </div>
 
         </div>
     </div>
 {% include 'create_event_modal.html' %}
+{% include 'update_event_modal.html' %}
 </body>
 {% endblock content %}
