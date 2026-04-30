@@ -20,9 +20,15 @@
     <div class="max-w-6xl mx-auto">
         
         <!-- Header Section -->
-        <div class="mb-8">
-            <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Jelajahi Acara</h1>
-            <p class="text-gray-500 text-sm">Temukan acara terbaik dan beli tiket favorit Anda</p>
+       <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+            <div>
+                <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-1">Jelajahi Acara</h1>
+                <p class="text-gray-500 text-sm">Temukan acara terbaik dan beli tiket favorit Anda</p>
+            </div>
+            <button onclick="showCreateEventModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-full text-sm font-medium transition-colors flex items-center gap-2 shadow-sm shrink-0">
+                <i class="fas fa-plus"></i> Tambah Acara
+            </button>
+        
         </div>
 
         <!-- Search & Filter Bar -->
@@ -189,6 +195,6 @@
 
         </div>
     </div>
-
+{% include 'create_event_modal.html' %}
 </body>
 {% endblock content %}
