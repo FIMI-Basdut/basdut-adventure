@@ -1,5 +1,6 @@
-from django.urls import path
+from django.urls import include, path
 from main.views import show_mantap
+
 
 app_name = 'main'
 
