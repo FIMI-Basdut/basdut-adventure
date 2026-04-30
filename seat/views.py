@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 
 DUMMY_SEATS = [
     {"id": 1, "section": "WVIP", "row": "A", "number": "1", "venue": "Jakarta Convention Center", "status": "TERISI"},
@@ -25,4 +25,4 @@ def show_seat(request):
     return render(request, 'seat.html', context)
 
 def dummy_seat_action(request):
-    return redirect('main:show_seat')
+    return redirect('seat:show_seat')
