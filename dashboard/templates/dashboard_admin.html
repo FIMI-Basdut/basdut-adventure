@@ -6,7 +6,6 @@
     <title>Dashboard Penyelenggara</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Opsional: Font kustom untuk menyesuaikan tampilan UI modern */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         body {
             font-family: 'Inter', sans-serif;
@@ -18,11 +17,12 @@
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
+        <!-- Header -->
         <div class="bg-slate-800 rounded-2xl shadow-sm p-6 sm:p-8 mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
-                <p class="text-slate-500 text-sm font-medium mb-1">Dashboard Penyelenggara</p>
-                <h1 class="text-3xl font-bold text-white">Selamat Datang, Ilham</h1>
-                <p class="text-sm text-slate-500 mt-2">Kelola 3 acara aktif Anda dari panel ini.</p>
+                <p class="text-slate-500 text-sm font-medium mb-1">Administrator</p>
+                <h1 class="text-3xl font-bold text-white">System Console</h1>
+                <p class="text-sm text-slate-500 mt-2">Pantau dan kelola platform TikTakTuk</p>
             </div>
             <div class="flex gap-3">
                 <button class="bg-white px-5 py-2.5 text-black-600 font-semibold rounded-lg hover:bg-green-50 transition shadow-sm text-sm">
@@ -31,6 +31,7 @@
             </div>
         </div>
 
+        <!-- Ringkasan informasi  -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             
             <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
@@ -38,7 +39,7 @@
                     <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Pengguna</p>
                     <div class="p-2 bg-blue-50 text-blue-600 rounded-lg">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
-                        <path d="M7 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM14.5 9a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM1.615 16.428a1.224 1.224 0 0 1-.569-1.175 6.002 6.002 0 0 1 11.908 0c.058.467-.172.92-.57 1.174A9.953 9.953 0 0 1 7 18a9.953 9.953 0 0 1-5.385-1.572ZM14.5 16h-.106c.07-.297.088-.611.048-.933a7.47 7.47 0 0 0-1.588-3.755 4.502 4.502 0 0 1 5.874 2.636.818.818 0 0 1-.36.98A7.465 7.465 0 0 1 14.5 16Z" />
+                            <path d="M7 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM14.5 9a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM1.615 16.428a1.224 1.224 0 0 1-.569-1.175 6.002 6.002 0 0 1 11.908 0c.058.467-.172.92-.57 1.174A9.953 9.953 0 0 1 7 18a9.953 9.953 0 0 1-5.385-1.572ZM14.5 16h-.106c.07-.297.088-.611.048-.933a7.47 7.47 0 0 0-1.588-3.755 4.502 4.502 0 0 1 5.874 2.636.818.818 0 0 1-.36.98A7.465 7.465 0 0 1 14.5 16Z" />
                         </svg>
                     </div>
                 </div>
@@ -52,7 +53,9 @@
                 <div class="flex justify-between items-start mb-4">
                     <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Acara</p>
                     <div class="p-2 bg-green-50 text-green-600 rounded-lg">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                        </svg>
                     </div>
                 </div>
                 <div>
@@ -65,7 +68,9 @@
                 <div class="flex justify-between items-start mb-4">
                     <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Omzet Platform</p>
                     <div class="p-2 bg-purple-50 text-purple-600 rounded-lg">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941" />
+                        </svg>
                     </div>
                 </div>
                 <div>
@@ -78,7 +83,10 @@
                 <div class="flex justify-between items-start mb-4">
                     <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Promosi Aktif</p>
                     <div class="p-2 bg-orange-50 text-orange-600 rounded-lg">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"></path></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z" />
+                        </svg>
+
                     </div>
                 </div>
                 <div>
@@ -91,12 +99,15 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             
+            <!-- Informasi Infrastruktur Venue -->
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col justify-between">
                 <div>
                     <div class="flex justify-between items-center mb-6">
                         <h3 class="text-lg font-bold text-slate-800">Infrastruktur Venue</h3>
                         <a href="#" class="text-slate-400 hover:text-green-600 transition">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25" />
+                            </svg>
                         </a>
                     </div>
                     <div class="space-y-4">
@@ -119,12 +130,15 @@
                 </button>
             </div>
 
+            <!-- Informasi Marketing & Promosi -->
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col justify-between">
                 <div>
                     <div class="flex justify-between items-center mb-6">
                         <h3 class="text-lg font-bold text-slate-800">Marketing & Promosi</h3>
                         <a href="#" class="text-slate-400 hover:text-green-600 transition">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25" />
+                            </svg>
                         </a>
                     </div>
                     <div class="space-y-4">
