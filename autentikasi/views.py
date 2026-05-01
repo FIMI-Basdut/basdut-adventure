@@ -19,5 +19,27 @@ def login_user(request):
    return render(request, 'login.html', context)
 
 def logout_user(request):
-    logout(request)
-    return redirect('autentikasi:login')
+   logout(request)
+   return redirect('autentikasi:login')
+
+def register_role_selection(request):
+   return render(request, 'register.html')
+
+def register_form(request):
+   role = request.GET.get('role')
+
+   valid_roles = ['pelanggan', 'penyelenggara', 'administrator']
+   if role not in valid_roles:
+      return redirect('autentikasi:register_role_selection')
+
+   context = {
+      'role': role
+   }
+   return render(request, 'register_form.html', context)
+
+def register_action(request):
+   if request.method == "POST":
+      role = request.POST.get('role')
+      username = request.POST.get('username')
+        
+   return redirect('autentikasi:login')
