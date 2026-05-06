@@ -1,0 +1,150 @@
+<!-- Modal Container -->
+<div id="updateEventModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8 bg-black bg-opacity-50 transition-opacity duration-150">
+
+    <!-- Modal Content -->
+    <div id="updateEventModalContent" class="bg-white w-full max-w-4xl rounded-2xl shadow-xl p-6 md:p-8 relative transform transition-all duration-150 opacity-0 scale-95 overflow-y-auto max-h-[90vh]">
+        
+        <!-- Header & Tombol Close -->
+        <div class="flex justify-between items-center mb-8">
+            <h2 class="text-xl font-bold text-gray-800">Edit Acara</h2>
+            <button onclick="hideUpdateEventModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                <i class="far fa-times-circle text-2xl"></i>
+            </button>
+        </div>
+
+        <!-- form -->
+        <form id="eventForm">
+            <!-- Grid Layout untuk Form -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                
+                <!-- kiri -->
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-wide mb-2">Judul Acara (Event_Title)</label>
+                        <input type="text" name="event_title" placeholder="cth. Konser Melodi Senja" 
+                            class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-700 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors placeholder-gray-400">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-wide mb-2">Tanggal (Date)</label>
+                            <input type="date" name="event_date"
+                                class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-700 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-wide mb-2">Waktu (Time)</label>
+                            <input type="time" name="event_time"
+                                class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-700 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-wide mb-2">Venue (Venue_ID)</label>
+                        <select name="venue_id" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-700 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors appearance-none bg-white">
+                            <option>Jakarta Convention Center</option>
+                            <option>Taman Impian Jayakarta</option>
+                            <option>Bandung Hall Center</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-wide mb-2">Artis (Event_Artist)</label>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="border border-gray-200 text-gray-600 px-4 py-1.5 rounded-full text-xs font-medium bg-white">The Weeknd</span>
+                            <span class="border border-gray-200 text-gray-600 px-4 py-1.5 rounded-full text-xs font-medium bg-white">BTS</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- kanan -->
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-wide mb-2">Kategori Tiket (Ticket_Category)</label>
+                        <div class="bg-gray-50 border border-gray-100 rounded-xl p-4 relative">
+                            <div class="flex items-center gap-3 mb-3">
+                                <input type="text" value="Regular" placeholder="Nama Kategori" name="ticket_category"
+                                    class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-700 focus:outline-none focus:border-blue-500">
+                                <button type="button" class="text-red-400 hover:text-red-600 transition-colors">
+                                    <i class="far fa-times-circle text-lg"></i>
+                                </button>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <input type="number" value="100000" placeholder="Harga" name="ticket_price"
+                                    class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-700 focus:outline-none focus:border-blue-500">
+                                <input type="number" value="100" placeholder="Kuota" name="ticket_quota"
+                                    class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-700 focus:outline-none focus:border-blue-500">
+                            </div>
+                        </div>
+                        <button type="button" class="mt-3 text-blue-500 hover:text-blue-700 text-xs font-bold flex items-center gap-1.5 transition-colors">
+                            <i class="fas fa-plus"></i> Tambah Kategori
+                        </button>
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-wide mb-2">Deskripsi</label>
+                        <textarea placeholder="Deskripsi acara..." name="event_description"
+                            class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-700 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors resize-none h-32"></textarea>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div class="grid grid-cols-2 gap-4 mt-10 pt-2 border-t border-gray-200">
+            <button onclick="hideUpdateEventModal()" type="button" class="w-full border border-gray-200 text-gray-800 font-bold py-3.5 rounded-xl text-sm hover:bg-gray-50 transition-colors">
+                Batal
+            </button>
+            <button type="submit" form="eventForm" class="w-full bg-[#82a4fc] hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl text-sm transition-colors shadow-sm">
+                Buat Acara
+            </button>
+        </div>
+
+    </div>
+</div>
+
+<script>
+  function showUpdateEventModal() {
+      const modal = document.getElementById('updateEventModal');
+      const modalContent = document.getElementById('updateEventModalContent');
+
+      modal.classList.remove('hidden'); 
+      setTimeout(() => {
+        modalContent.classList.remove('opacity-0', 'scale-95');
+        modalContent.classList.add('opacity-100', 'scale-100');
+      }, 50); 
+  }
+
+  function hideUpdateEventModal() {
+      const modal = document.getElementById('updateEventModal');
+      const modalContent = document.getElementById('updateEventModalContent');
+
+      modalContent.classList.remove('opacity-100', 'scale-100');
+      modalContent.classList.add('opacity-0', 'scale-95');
+
+      setTimeout(() => {
+        modal.classList.add('hidden');
+      }, 150); 
+  }
+
+  async function addEventEntry() {
+    await fetch("{% url 'event:event_list' %}", {
+      method: "POST",
+      body: new FormData(document.querySelector('#eventForm')),
+    })
+
+    document.getElementById("eventForm").reset();
+    hideUpdateEventModal();
+      
+    // Show toast notification
+    showToast('Event added successfully!', '', 'success');
+
+    // Dispatch custom event to notify main.html about new data
+    document.dispatchEvent(new CustomEvent('eventAdded'));
+
+    return false;
+  }
+
+  document.getElementById("eventForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    addEventEntry();
+  })
+</script>

@@ -46,7 +46,11 @@ INSTALLED_APPS = [
     'ticket_category',
     'seat',
     'ticket',
+    'order',
     'autentikasi',
+    'promotion',
+    'venue',
+    'event',
 ]
 
 MIDDLEWARE = [
