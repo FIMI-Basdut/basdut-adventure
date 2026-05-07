@@ -22,45 +22,45 @@
             </div>
         </div>
 
-        <!-- Ringkasan informasi Artis -->
+        <!-- Ringkasan Informasi Artis -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
                 <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Total Artis</p>
-                <h2 class="text-3xl font-bold text-slate-800">6</h2>
+                <h2 class="text-3xl font-bold text-slate-800">{{ total_artis }}</h2>
             </div>
             <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
-                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Genre</p>
-                <h2 class="text-3xl font-bold text-slate-800">6</h2>
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Genre Terdaftar</p>
+                <h2 class="text-3xl font-bold text-slate-800">{{ total_genre }}</h2>
             </div>
             <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
                 <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Tampil di Event</p>
-                <h2 class="text-3xl font-bold text-slate-800">6</h2>
+                <h2 class="text-3xl font-bold text-slate-800">-</h2>
             </div>
         </div>
 
-        <!-- Informasi daftar Artis -->
+        <!-- Informasi Artis -->
         <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
             
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-xl font-bold text-slate-800">Tabel Artis</h2>
                 <div class="flex bg-gray-100 p-1 rounded-lg">
-                    <button class="bg-white shadow-sm px-4 py-1.5 rounded-md text-sm font-bold text-black-700">Tabel</button>
+                    <button class="bg-white shadow-sm px-4 py-1.5 rounded-md text-sm font-bold text-slate-800">Tabel</button>
                     <button class="px-4 py-1.5 rounded-md text-sm font-medium text-slate-500 hover:text-slate-700 transition">Daftar</button>
                 </div>
             </div>
 
-            <!-- Search bar untuk pencarian artis -->
+            <!-- Search Bar untuk pencarian Artis-->
             <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
                 <div class="relative w-full max-w-sm">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                     </div>
-                    <input type="text" class="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg text-sm placeholder-gray-400 focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition" placeholder="Cari nama atau genre...">
+                    <input type="text" id="searchInput" onkeyup="searchTable()" class="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg text-sm placeholder-gray-400 focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition" placeholder="Cari nama atau genre...">
                 </div>
-                <span class="text-sm text-slate-500">6 artis ditemukan</span>
+                <span id="searchCount" class="text-sm text-slate-500">{{ total_artis }} artis ditemukan</span>
             </div>
 
-            <!-- Tabel daftar artis -->
+            <!-- Tabel Artis -->
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse min-w-max">
                     <!-- Header tabel -->
@@ -68,97 +68,63 @@
                         <tr class="bg-gray-50/50">
                             <th class="py-3 px-4 text-xs font-bold text-slate-400 uppercase tracking-wider border-b border-gray-100">Artis</th>
                             <th class="py-3 px-4 text-xs font-bold text-slate-400 uppercase tracking-wider border-b border-gray-100">Genre</th>
-                            <th class="py-3 px-4 text-right border-b border-gray-100"></th>
-                        </tr>
+                        </tr>   
                     </thead>
-                    <!-- Isi tabel dummy -->
-                    <tbody class="divide-y divide-gray-100">
+                    <!-- Isi tabel-->
+                    <tbody id="artistTable" class="divide-y divide-gray-100">
                         
+                        {% for artis in artists %}
                         <tr class="hover:bg-gray-50 transition group">
                             <td class="py-4 px-4 flex items-center gap-4">
                                 <div class="w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-lg">
-                                    F
+                                    {{ artis.name|first|upper }}
                                 </div>
-                                <span class="font-bold text-slate-800">Fourtwnty</span>
+                                <span class="font-bold text-slate-800">{{ artis.name }}</span>
                             </td>
                             <td class="py-4 px-4">
-                                <span class="bg-green-100 text-green-700 px-3 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider">Indie Folk</span>
-                            </td>
-                            <td class="py-4 px-4 text-right">
+                                {% if artis.genre %}
+                                    <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider">{{ artis.genre }}</span>
+                                {% else %}
+                                    <span class="text-slate-400 text-sm italic">Belum ada genre</span>
+                                {% endif %}
                             </td>
                         </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="3" class="py-8 text-center text-slate-500">Belum ada artis yang terdaftar.</td>
+                        </tr>
+                        {% endfor %}
 
-                        <tr class="hover:bg-gray-50 transition group">
-                            <td class="py-4 px-4 flex items-center gap-4">
-                                <div class="w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-lg">
-                                    H
-                                </div>
-                                <span class="font-bold text-slate-800">Hindia</span>
-                            </td>
-                            <td class="py-4 px-4">
-                                <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider">Indie Pop</span>
-                            </td>
-                            <td class="py-4 px-4 text-right">
-                            </td>
-                        </tr>
-                        <tr class="hover:bg-gray-50 transition group">
-                            <td class="py-4 px-4 flex items-center gap-4">
-                                <div class="w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-lg">
-                                    T
-                                </div>
-                                <span class="font-bold text-slate-800">Tulus</span>
-                            </td>
-                            <td class="py-4 px-4">
-                                <span class="bg-red-100 text-red-700 px-3 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider">Pop</span>
-                            </td>
-                            <td class="py-4 px-4 text-right">
-                            </td>
-                        </tr>
-                        <tr class="hover:bg-gray-50 transition group">
-                            <td class="py-4 px-4 flex items-center gap-4">
-                                <div class="w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-lg">
-                                    N
-                                </div>
-                                <span class="font-bold text-slate-800">Nadin Amizah</span>
-                            </td>
-                            <td class="py-4 px-4">
-                                <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider">Folk</span>
-                            </td>
-                            <td class="py-4 px-4 text-right">
-                            </td>
-                        </tr>
-                        <tr class="hover:bg-gray-50 transition group">
-                            <td class="py-4 px-4 flex items-center gap-4">
-                                <div class="w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-lg">
-                                    P
-                                </div>
-                                <span class="font-bold text-slate-800">Pamungkas</span>
-                            </td>
-                            <td class="py-4 px-4">
-                                <span class="bg-purple-100 text-purple-700 px-3 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider">SINGER-SONGWRITER</span>
-                            </td>
-                            <td class="py-4 px-4 text-right">
-                            </td>
-                        </tr>
-                        <tr class="hover:bg-gray-50 transition group">
-                            <td class="py-4 px-4 flex items-center gap-4">
-                                <div class="w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-lg">
-                                    R
-                                </div>
-                                <span class="font-bold text-slate-800">Raisa</span>
-                            </td>
-                            <td class="py-4 px-4">
-                                <span class="bg-red-100 text-red-700 px-3 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider">R&B/POP</span>
-                            </td>
-                            <td class="py-4 px-4 text-right">
-                            </td>
-                        </tr>
-                        </tbody>
+                    </tbody>
                 </table>
             </div>
         </div>
-
     </main>
+    <script>
+        // Fungsi untuk Search Bar
+        function searchTable() {
+            let input = document.getElementById("searchInput").value.toLowerCase();
+            let tableBody = document.getElementById("artistTable");
+            let rows = tableBody.querySelectorAll("tr.group"); 
+            let count = 0;
 
+            rows.forEach(row => {
+                // Ambil teks dari kolom Nama (index 0) dan kolom Genre (index 1)
+                let nama = row.cells[0].textContent.toLowerCase();
+                let genre = row.cells[1].textContent.toLowerCase();
+
+                // Cek apakah input cocok dengan nama atau genre
+                if (nama.includes(input) || genre.includes(input)) {
+                    row.style.display = ""; 
+                    count++;
+                } else {
+                    row.style.display = "none"; 
+                }
+            });
+
+            // Update teks jumlah artis yang ditemukan
+            document.getElementById("searchCount").innerText = count + " artis ditemukan";
+        }
+    </script>
 </body>
 </html>
