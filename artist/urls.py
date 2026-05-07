@@ -5,7 +5,7 @@ app_name = 'artist'
 
 urlpatterns = [
     # URL Publik / Non-Admin
-    path('/', views.daftar_artis, name='daftar_artis'),
+    path('', views.daftar_artis, name='daftar_artis'),
 
     # URL Khusus Admin
     path('admin/', views.daftar_artis_admin, name='daftar_artis_admin'),
