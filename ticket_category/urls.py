@@ -1,9 +1,14 @@
-from django.urls import include, path
-from ticket_category.views import show_tiket_kategori, show_tiket_kategori_admin
+from django.urls import path
+from . import views
 
 app_name = 'ticket_category'
 
 urlpatterns = [
-    path('', show_tiket_kategori, name='tiket_kategori'),
-    path('admin/', show_tiket_kategori_admin, name='tiket_kategori_admin'),
+    # URL Publik / Non-Admin
+    path('', views.daftar_tiket_kategori, name='daftar_tiket_kategori'),
+    
+    # URL Khusus Admin
+    path('admin/', views.daftar_tiket_kategori_admin, name='daftar_tiket_kategori_admin'),
+    path('admin/edit/<uuid:id>/', views.edit_tiket_kategori, name='edit_tiket_kategori'),
+    path('admin/hapus/<uuid:id>/', views.hapus_tiket_kategori, name='hapus_tiket_kategori'),
 ]
