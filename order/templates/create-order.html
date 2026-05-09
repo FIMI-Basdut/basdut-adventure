@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Checkout Tiket</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 font-sans">
+
+    {% include 'navbar.html' %}
+
+  <div class="max-w-6xl mx-auto p-6">
+
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-xl font-semibold">Checkout Tiket</h2>
+      <div class="text-sm text-gray-500">
+        <span class="text-blue-600 font-medium">Pilih</span> →
+        Bayar → Selesai
+      </div>
+    </div>
+
+    <!-- Main Layout -->
+    <div class="grid grid-cols-3 gap-6">
+
+      <!-- LEFT SIDE -->
+      <div class="col-span-2 space-y-6">
+
+        <!-- Event Card -->
+        <div class="bg-white p-5 rounded-xl shadow-sm flex items-center gap-4">
+          <div class="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center text-white text-xl">
+            🎵
+          </div>
+          <div>
+            <h3 class="font-semibold">After Hours Til Dawn Tour</h3>
+            <p class="text-sm text-gray-500">2026-11-14 · Bandung</p>
+          </div>
+        </div>
+
+        <!-- Ticket Selection -->
+        <div class="bg-white p-5 rounded-xl shadow-sm">
+          <h3 class="font-semibold mb-4">Pilih Kategori Tiket</h3>
+
+          <div class="space-y-3">
+
+            <div class="flex justify-between p-3 rounded-lg hover:bg-gray-50 cursor-pointer">
+              <div>
+                <p class="font-medium">VVIP</p>
+                <p class="text-sm text-gray-500">Kuota: 50 tiket</p>
+              </div>
+              <span class="font-medium">Rp 1,500,000</span>
+            </div>
+
+            <div class="flex justify-between p-3 rounded-lg hover:bg-gray-50 cursor-pointer">
+              <div>
+                <p class="font-medium">VIP</p>
+                <p class="text-sm text-gray-500">Kuota: 150 tiket</p>
+              </div>
+              <span class="font-medium">Rp 750,000</span>
+            </div>
+
+            <!-- SELECTED -->
+            <div class="flex justify-between p-3 rounded-lg border-2 border-blue-500 bg-blue-50 cursor-pointer">
+              <div>
+                <p class="font-medium">Category 2</p>
+                <p class="text-sm text-gray-500">Kuota: 600 tiket</p>
+              </div>
+              <span class="font-medium text-blue-600">Rp 250,000 ✓</span>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Bottom Grid -->
+        <div class="grid grid-cols-2 gap-6">
+
+          <!-- Quantity -->
+          <div class="bg-white p-5 rounded-xl shadow-sm">
+            <h4 class="font-semibold mb-3">Jumlah Tiket</h4>
+
+            <div class="flex items-center gap-3">
+              <button class="px-3 py-1 bg-gray-200 rounded">-</button>
+              <span class="font-medium">5</span>
+              <button class="px-3 py-1 bg-gray-200 rounded">+</button>
+            </div>
+
+            <p class="text-xs text-gray-400 mt-2">Max 10 tiket per transaksi</p>
+          </div>
+
+          <!-- Seats -->
+          <div class="bg-white p-5 rounded-xl shadow-sm">
+            <h4 class="font-semibold mb-3">Pilih Kursi</h4>
+
+            <div class="grid grid-cols-4 gap-2">
+              <button class="border rounded py-1">A1</button>
+              <button class="border rounded py-1">A2</button>
+              <button class="border rounded py-1">A3</button>
+              <button class="border rounded py-1">A4</button>
+              <button class="border rounded py-1">B1</button>
+              <button class="border rounded py-1">B2</button>
+              <button class="border rounded py-1">B3</button>
+              <button class="border rounded py-1">B4</button>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- Promo -->
+        <div class="bg-white p-5 rounded-xl shadow-sm">
+          <h4 class="font-semibold mb-3">Kode Promo</h4>
+
+          <div class="flex gap-2">
+            <input class="flex-1 border rounded px-3 py-2 text-sm"
+                   placeholder="CONTOH: TIKTAK20"/>
+            <button class="px-4 bg-gray-200 rounded">Terapkan</button>
+          </div>
+
+          <p class="text-xs text-red-500 mt-2">Kode promo tidak valid.</p>
+        </div>
+
+      </div>
+
+      <!-- RIGHT SIDE -->
+      <div class="bg-white p-5 rounded-xl shadow-sm h-fit">
+
+        <h3 class="font-semibold mb-4">Ringkasan Pesanan</h3>
+
+        <div class="text-sm text-gray-600 space-y-2">
+          <div class="flex justify-between">
+            <span>Category 2 × 5</span>
+            <span>Rp 1,250,000</span>
+          </div>
+
+          <div class="flex justify-between">
+            <span>Biaya Layanan</span>
+            <span>Rp 200,000</span>
+          </div>
+        </div>
+
+        <div class="border-t my-4"></div>
+
+        <div class="flex justify-between font-semibold text-lg">
+          <span>Total</span>
+          <span>Rp 1,450,000</span>
+        </div>
+
+        <button class="w-full mt-4 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700">
+          Bayar Sekarang
+        </button>
+
+        <p class="text-xs text-gray-400 text-center mt-2">
+          Konfirmasi tiket akan dikirim ke email
+        </p>
+
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>
