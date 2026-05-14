@@ -90,7 +90,7 @@ def run_seed():
     print("6. Seeding Transaksi (Orders, Tiket, Relasi Kursi & Promo)...")
 
     order1 = TicketOrder.objects.create(
-        order_date=now, payment_status="PAID", total_amount=2400000.00, customer=customer1 
+        order_date=now, payment_status="PAID", total_amount=5, customer=customer1 
     )
     OrderPromotion.objects.create(order=order1, promotion=promo_pct)
 
@@ -101,7 +101,7 @@ def run_seed():
     t2.seats.add(seat2)
 
     order2 = TicketOrder.objects.create(
-        order_date=now, payment_status="PAID", total_amount=450000.00, customer=customer1 
+        order_date=now, payment_status="PAID", total_amount=4, customer=customer1 
     )
     OrderPromotion.objects.create(order=order2, promotion=promo_nom)
     t3 = Ticket.objects.create(ticket_code="TULUS-FEST-001", tcategory=cat_fest, torder=order2)
