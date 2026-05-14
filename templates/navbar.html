@@ -11,43 +11,50 @@
             <!-- MENU DINAMIS (Jarak dirapatkan jadi space-x-2 atau space-x-4) -->
             <div class="hidden md:flex flex-1 items-center justify-start space-x-2 lg:space-x-4">
                 
+                {% if request.session.is_authenticated %}
+
+                    <!-- ADMIN -->
+                    {% if request.session.role == 'Admin' %}
+                        <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Dashboard</a>
+                        <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Manajemen Venue</a>
+                        <a href="{% url 'seat:show_seat' %}" class="whitespace-nowrap text-sm py-5 border-b-2 transition-colors {% if '/seats/' in request.path %}text-blue-600 font-semibold border-blue-600{% else %}text-gray-500 hover:text-blue-600 font-medium border-transparent{% endif %}">Manajemen Kursi</a>
+                        <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Kategori Tiket</a>
+                        <a href="{% url 'ticket:show_ticket' %}" class="whitespace-nowrap text-sm py-5 border-b-2 transition-colors {% if '/tickets/' in request.path %}text-blue-600 font-semibold border-blue-600{% else %}text-gray-500 hover:text-blue-600 font-medium border-transparent{% endif %}">Manajemen Tiket</a>
+                        <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Semua Order</a>
+
+                    <!-- ORGANIZER -->
+                    {% elif request.session.role == 'Organizer' %}
+                        <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Dashboard</a>
+                        <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Event Saya</a>
+                        <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Manajemen Venue</a>
+                        <a href="{% url 'seat:show_seat' %}" class="whitespace-nowrap text-sm py-5 border-b-2 transition-colors {% if '/seats/' in request.path %}text-blue-600 font-semibold border-blue-600{% else %}text-gray-500 hover:text-blue-600 font-medium border-transparent{% endif %}">Manajemen Kursi</a>
+                        <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Kategori Tiket</a>
+                        <a href="{% url 'ticket:show_ticket' %}" class="whitespace-nowrap text-sm py-5 border-b-2 transition-colors {% if '/tickets/' in request.path %}text-blue-600 font-semibold border-blue-600{% else %}text-gray-500 hover:text-blue-600 font-medium border-transparent{% endif %}">Manajemen Tiket</a>
+                        <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Semua Order</a>
+                        <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Tiket (Aset)</a>
+                        <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Order (Aset)</a>
+                        <a href="autentikasi/logout" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-red-500 hover:text-red-600 font-medium transition-colors">Logout</a>
+
+                    <!-- CUSTOMER -->
+                    {% elif request.session.role == 'Customer' %}
+                        <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Dashboard</a>
+                        <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Tiket Saya</a>
+                        <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Pesanan</a>
+                        <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Cari Event</a>
+                        <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Promosi</a>
+                        <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Venue</a>
+                        <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Artis</a>
+                        <a href="/logout" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-red-500 hover:text-red-600 font-medium transition-colors">Logout</a>
+                    {% endif %}
+
+                {% else %}
+
                 <!-- GUEST -->
-                {% if not role %}
-                    <a href="/autentikasi/login" class="whitespace-nowrap text-sm py-5 border-b-2 transition-colors {% if '/login' in request.path %}text-blue-600 font-semibold border-blue-600{% else %}text-gray-500 hover:text-blue-600 font-medium border-transparent{% endif %}">Login</a>
-                    <a href="/autentikasi/register" class="whitespace-nowrap text-sm py-5 border-b-2 transition-colors {% if '/register' in request.path %}text-blue-600 font-semibold border-blue-600{% else %}text-gray-500 hover:text-blue-600 font-medium border-transparent{% endif %}">Registrasi</a>
+                <a href="/autentikasi/login" class="whitespace-nowrap text-sm py-5 border-b-2 transition-colors {% if '/login' in request.path %}text-blue-600 font-semibold border-blue-600{% else %}text-gray-500 hover:text-blue-600 font-medium border-transparent{% endif %}">Login</a>
+                <a href="/autentikasi/register" class="whitespace-nowrap text-sm py-5 border-b-2 transition-colors {% if '/register' in request.path %}text-blue-600 font-semibold border-blue-600{% else %}text-gray-500 hover:text-blue-600 font-medium border-transparent{% endif %}">Registrasi</a>
 
-                <!-- ADMIN -->
-                {% elif role == 'admin' %}
-                    <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Dashboard</a>
-                    <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Manajemen Venue</a>
-                    <a href="{% url 'seat:show_seat' %}" class="whitespace-nowrap text-sm py-5 border-b-2 transition-colors {% if '/seats/' in request.path %}text-blue-600 font-semibold border-blue-600{% else %}text-gray-500 hover:text-blue-600 font-medium border-transparent{% endif %}">Manajemen Kursi</a>
-                    <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Kategori Tiket</a>
-                    <a href="{% url 'ticket:show_ticket' %}" class="whitespace-nowrap text-sm py-5 border-b-2 transition-colors {% if '/tickets/' in request.path %}text-blue-600 font-semibold border-blue-600{% else %}text-gray-500 hover:text-blue-600 font-medium border-transparent{% endif %}">Manajemen Tiket</a>
-                    <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Semua Order</a>
-
-                <!-- ORGANIZER -->
-                {% elif role == 'organizer' %}
-                    <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Dashboard</a>
-                    <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Event Saya</a>
-                    <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Manajemen Venue</a>
-                    <a href="{% url 'seat:show_seat' %}" class="whitespace-nowrap text-sm py-5 border-b-2 transition-colors {% if '/seats/' in request.path %}text-blue-600 font-semibold border-blue-600{% else %}text-gray-500 hover:text-blue-600 font-medium border-transparent{% endif %}">Manajemen Kursi</a>
-                    <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Kategori Tiket</a>
-                    <a href="{% url 'ticket:show_ticket' %}" class="whitespace-nowrap text-sm py-5 border-b-2 transition-colors {% if '/tickets/' in request.path %}text-blue-600 font-semibold border-blue-600{% else %}text-gray-500 hover:text-blue-600 font-medium border-transparent{% endif %}">Manajemen Tiket</a>
-                    <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Semua Order</a>
-                    <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Tiket (Aset)</a>
-                    <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Order (Aset)</a>
-
-                <!-- CUSTOMER -->
-                {% elif role == 'customer' %}
-                    <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Dashboard</a>
-                    <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Tiket Saya</a>
-                    <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Pesanan</a>
-                    <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Cari Event</a>
-                    <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Promosi</a>
-                    <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Venue</a>
-                    <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Artis</a>
-                    <a href="/logout" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-red-500 hover:text-red-600 font-medium transition-colors">Logout</a>
                 {% endif %}
+                
             </div>
             
             <!-- PROFIL -->
