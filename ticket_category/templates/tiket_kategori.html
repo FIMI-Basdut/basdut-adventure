@@ -72,7 +72,7 @@
                         {% for cat in categories %}
                         <tr class="hover:bg-gray-50 transition group">
                             <td class="py-4 px-4 font-bold text-slate-800">{{ cat.category_name }}</td>
-                            <td class="py-4 px-4 text-slate-500 font-medium text-sm">{{ cat.event_name }}</td>
+                            <td class="py-4 px-4 text-slate-500 font-medium text-sm">{{ cat.event.event_title }}</td>
                             <td class="py-4 px-4 font-bold text-blue-600">Rp {{ cat.price|floatformat:0 }}</td>
                             <td class="py-4 px-4 text-slate-600 text-sm">{{ cat.quota }} tiket</td>
                         </tr>

@@ -89,11 +89,11 @@
                         {% for cat in categories %}
                         <tr class="hover:bg-gray-50 transition group">
                             <td class="py-4 px-4 font-bold text-slate-800">{{ cat.category_name }}</td>
-                            <td class="py-4 px-4 text-slate-500 font-medium text-sm">{{ cat.event_name }}</td>
+                            <td class="py-4 px-4 text-slate-500 font-medium text-sm">{{ cat.event.event_title }}</td>
                             <td class="py-4 px-4 font-bold text-blue-600">Rp {{ cat.price|floatformat:0 }}</td>
                             <td class="py-4 px-4 text-slate-600 text-sm">{{ cat.quota }} tiket</td>
                             <td class="py-4 px-4 text-right">
-                                <button onclick="openEditModal('{{ cat.id }}', '{{ cat.event_name|escapejs }}', '{{ cat.category_name|escapejs }}', '{{ cat.price }}', '{{ cat.quota }}')" class="p-2 text-slate-400 hover:text-green-600 border border-gray-200 hover:border-green-300 rounded-lg mr-2 transition bg-white shadow-sm">
+                                <button onclick="openEditModal('{{ cat.id }}', '{{ cat.event.event_id }}', '{{ cat.category_name|escapejs }}', '{{ cat.price }}', '{{ cat.quota }}')" class="p-2 text-slate-400 hover:text-green-600 border border-gray-200 hover:border-green-300 rounded-lg mr-2 transition bg-white shadow-sm">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
                                 </button>
                                 <button onclick="openDeleteModal('{{ cat.id }}')" class="p-2 text-red-400 hover:text-red-600 border border-gray-200 hover:border-red-300 rounded-lg transition bg-white shadow-sm">
@@ -122,7 +122,12 @@
                 {% csrf_token %}
                 <div>
                     <label class="block text-[13px] font-bold text-slate-500 mb-1.5 uppercase tracking-wide">Acara <span class="text-red-500">*</span></label>
-                    <input type="text" name="event_name" required placeholder="cth. Konser Rock" maxlength="255" class="block w-full border border-gray-200 rounded-xl px-4 py-3 text-slate-700 text-sm focus:border-blue-500 outline-none">
+                    <select name="event_id" required class="block w-full border border-gray-200 rounded-xl px-4 py-3 text-slate-700 text-sm focus:border-blue-500 outline-none bg-white cursor-pointer">
+                        <option value="" disabled selected>-- Pilih Acara --</option>
+                        {% for evt in events %}
+                            <option value="{{ evt.event_id }}">{{ evt.event_title }}</option>
+                        {% endfor %}
+                    </select>
                 </div>
                 <div>
                     <label class="block text-[13px] font-bold text-slate-500 mb-1.5 uppercase tracking-wide">Nama Kategori <span class="text-red-500">*</span></label>
@@ -157,7 +162,11 @@
                 {% csrf_token %}
                 <div>
                     <label class="block text-[13px] font-bold text-slate-500 mb-1.5 uppercase tracking-wide">Acara <span class="text-red-500">*</span></label>
-                    <input type="text" id="edit-event" name="event_name" required placeholder="cth. Konser Rock" maxlength="255" class="block w-full border border-gray-200 rounded-xl px-4 py-3 text-slate-700 text-sm focus:border-blue-500 outline-none">
+                    <select id="edit-event" name="event_id" required class="block w-full border border-gray-200 rounded-xl px-4 py-3 text-slate-700 text-sm focus:border-blue-500 outline-none bg-white cursor-pointer">
+                        {% for evt in events %}
+                            <option value="{{ evt.event_id }}">{{ evt.event_title }}</option>
+                        {% endfor %}
+                    </select>
                 </div>
                 <div>
                     <label class="block text-[13px] font-bold text-slate-500 mb-1.5 uppercase tracking-wide">Nama Kategori <span class="text-red-500">*</span></label>
@@ -204,10 +213,10 @@
             document.body.style.overflow = modal.classList.contains('hidden') ? 'auto' : 'hidden';
         }
 
-        function openEditModal(id, eventName, name, price, quota) {
+        function openEditModal(id, eventId, name, price, quota) {
             document.getElementById('edit-form').action = `/ticket_category/admin/edit/${id}/`; 
             
-            document.getElementById('edit-event').value = eventName;
+            document.getElementById('edit-event').value = eventId;
             document.getElementById('edit-name').value = name;
             document.getElementById('edit-price').value = parseFloat(price.replace(/,/g, '')); 
             document.getElementById('edit-quota').value = quota;
