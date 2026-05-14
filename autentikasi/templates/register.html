@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block meta %}
+<title>Register</title>
+{% endblock meta %}
+
+{% block content %}
+<div class="form-style">
+  <div class="min-h-screen bg-gray-50 flex items-center justify-center p-8">
+    <div class="max-w-md w-full relative z-10">
+      <div class="bg-white border border-gray-200 rounded-lg p-8 shadow-sm">
+      
+      <div class="text-center mb-10">
+        <div class="inline-block bg-blue-600 text-white font-bold text-xl rounded p-3 mb-4">TT</div>
+        <h2 class="text-2xl font-semibold text-gray-900 mb-2">TikTakTuk</h2>
+        <p class="text-gray-500">Daftar untuk Memulai</p>
+      </div>
+
+      {% if messages %}
+        <div class="mb-6">
+          {% for message in messages %}
+            <div 
+              class="
+                px-4 py-3 rounded text-sm border
+                {% if message.tags == 'success' %}
+                  bg-green-50 border-green-200 text-green-700
+                {% elif message.tags == 'error' %}
+                  bg-red-50 border-red-200 text-red-700
+                {% else %}
+                  bg-gray-50 border-gray-200 text-gray-700
+                {% endif %}
+              ">
+              {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <div class="mb-10 p-5 rounded border border-gray-200 bg-white">
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">Jenis Pengguna</h3>
+        <p class="text-sm text-gray-500 mb-5">Pilih jenis akun yang sesuai dengan kebutuhan Anda</p>
+
+        <div class="space-y-4">
+          <a href="{% url 'autentikasi:register_form' %}?role=pelanggan" class="block p-5 rounded-lg border border-gray-200 hover:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white shadow-sm flex items-start gap-4 transition duration-200">
+            <div class="flex-shrink-0 size-12 rounded-full bg-blue-100 flex items-center justify-center">
+              <svg class="size-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+              </svg>
+            </div>
+            <div>
+              <h4 class="font-semibold text-gray-900">Pelanggan</h4>
+              <p class="text-sm text-gray-600">Beli dan kelola tiket untuk acara favorit Anda</p>
+            </div>
+          </a>
+
+          <a href="{% url 'autentikasi:register_form' %}?role=penyelenggara" class="block p-5 rounded-lg border border-gray-200 hover:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white shadow-sm flex items-start gap-4 transition duration-200">
+            <div class="flex-shrink-0 size-12 rounded-full bg-orange-100 flex items-center justify-center">
+              <svg class="size-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L5.605 15.12a2 2 0 00-1.022.547l-1.022.547-1.022 1.022a2 2 0 00.547 3.066l1.022.547 1.022 1.022a2 2 0 003.066-.547l.547-1.022 1.022-1.022a2 2 0 00-.547-3.066l-1.022-.547zm0 0l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L5.605 15.12m13.823 0l2.387.477m0 0l1.022-.547a2 2 0 013.066.547l1.022.547a2 2 0 01.547 3.066l-1.022.547a2 2 0 01-3.066-.547l-1.022-.547a2 2 0 01-.547-3.066"></path>
+              </svg>
+            </div>
+            <div>
+              <h4 class="font-semibold text-gray-900">Penyelenggara</h4>
+              <p class="text-sm text-gray-600">Buat dan kelola acara serta venue Anda</p>
+            </div>
+          </a>
+
+          <a href="{% url 'autentikasi:register_form' %}?role=administrator" class="block p-5 rounded-lg border border-gray-200 hover:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white shadow-sm flex items-start gap-4 transition duration-200">
+            <div class="flex-shrink-0 size-12 rounded-full bg-blue-100 flex items-center justify-center">
+              <svg class="size-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+              </svg>
+            </div>
+            <div>
+              <h4 class="font-semibold text-gray-900">Administrator</h4>
+              <p class="text-sm text-gray-600">Kelola sistem dan pantau aktivitas platform</p>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="mt-6 text-center border-t pt-6 border-gray-100">
+        <p class="text-gray-500 text-sm">
+          Sudah punya akun? 
+          <a href="{% url 'autentikasi:login' %}" class="text-blue-600 hover:text-blue-700 font-medium">
+            Login di sini
+          </a>
+        </p>
+      </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
