@@ -7,13 +7,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-        body {
-            font-family: 'Inter', sans-serif;
-        }
+        body { font-family: 'Inter', sans-serif; }
     </style>
 </head>
 <body class="bg-gray-50 text-slate-800">
-
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
@@ -44,8 +41,8 @@
                     </div>
                 </div>
                 <div>
-                    <h2 class="text-3xl font-bold text-slate-800">2,543</h2>
-                    <p class="text-xs text-slate-500 mt-1">Pengguna aktif</p>
+                    <h2 class="text-3xl font-bold text-slate-800">{{ total_users }}</h2>
+                    <p class="text-xs text-slate-500 mt-1">Akun terdaftar</p>
                 </div>
             </div>
 
@@ -59,8 +56,8 @@
                     </div>
                 </div>
                 <div>
-                    <h2 class="text-3xl font-bold text-slate-800">156</h2>
-                    <p class="text-xs text-slate-500 mt-1">Bulan ini</p>
+                    <h2 class="text-3xl font-bold text-slate-800">{{ total_events }}</h2>
+                    <p class="text-xs text-slate-500 mt-1">Keseluruhan event</p>
                 </div>
             </div>
 
@@ -74,7 +71,7 @@
                     </div>
                 </div>
                 <div>
-                    <h2 class="text-3xl font-bold text-slate-800">Rp 52.4M</h2>
+                    <h2 class="text-3xl font-bold text-slate-800">{{ total_omzet }}</h2>
                     <p class="text-xs text-slate-500 mt-1">Gross volume</p>
                 </div>
             </div>
@@ -86,11 +83,10 @@
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z" />
                         </svg>
-
                     </div>
                 </div>
                 <div>
-                    <h2 class="text-3xl font-bold text-slate-800">3</h2>
+                    <h2 class="text-3xl font-bold text-slate-800">{{ active_promos }}</h2>
                     <p class="text-xs text-slate-500 mt-1">Running campaigns</p>
                 </div>
             </div>
@@ -98,30 +94,24 @@
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            
-            <!-- Informasi Infrastruktur Venue -->
+            <!-- Informasi Venue -->
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col justify-between">
                 <div>
                     <div class="flex justify-between items-center mb-6">
                         <h3 class="text-lg font-bold text-slate-800">Infrastruktur Venue</h3>
-                        <a href="#" class="text-slate-400 hover:text-green-600 transition">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25" />
-                            </svg>
-                        </a>
                     </div>
                     <div class="space-y-4">
                         <div class="flex justify-between items-center text-sm">
                             <span class="text-slate-500">Total Venue Terdaftar</span>
-                            <span class="font-bold text-slate-800">3 Lokasi</span>
+                            <span class="font-bold text-slate-800">{{ total_venues }} Lokasi</span>
                         </div>
                         <div class="flex justify-between items-center text-sm">
                             <span class="text-slate-500">Reserved Seating</span>
-                            <span class="font-bold text-slate-800">2 Venue</span>
+                            <span class="font-bold text-slate-800">{{ reserved_seating_venues }} Venue</span>
                         </div>
                         <div class="flex justify-between items-center text-sm">
                             <span class="text-slate-500">Kapasitas Terbesar</span>
-                            <span class="font-bold text-slate-800">1,000 Kursi</span>
+                            <span class="font-bold text-slate-800">{{ max_capacity }} Kursi</span>
                         </div>
                     </div>
                 </div>
@@ -135,24 +125,19 @@
                 <div>
                     <div class="flex justify-between items-center mb-6">
                         <h3 class="text-lg font-bold text-slate-800">Marketing & Promosi</h3>
-                        <a href="#" class="text-slate-400 hover:text-green-600 transition">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25" />
-                            </svg>
-                        </a>
                     </div>
                     <div class="space-y-4">
                         <div class="flex justify-between items-center text-sm">
                             <span class="text-slate-500">Promo Persentase</span>
-                            <span class="font-bold text-slate-800">1 Aktif</span>
+                            <span class="font-bold text-slate-800">{{ promo_percentage }} Terdaftar</span>
                         </div>
                         <div class="flex justify-between items-center text-sm">
                             <span class="text-slate-500">Promo Potongan Nominal</span>
-                            <span class="font-bold text-slate-800">1 Aktif</span>
+                            <span class="font-bold text-slate-800">{{ promo_nominal }} Terdaftar</span>
                         </div>
                         <div class="flex justify-between items-center text-sm">
                             <span class="text-slate-500">Total Penggunaan</span>
-                            <span class="font-bold text-slate-800">57 Kali</span>
+                            <span class="font-bold text-slate-800">{{ total_promo_usage }} Kali</span>
                         </div>
                     </div>
                 </div>
