@@ -1,62 +1,123 @@
 from django.shortcuts import render, redirect
+from django.db import connection, InternalError, DatabaseError
+from django.contrib import messages
+import uuid
 
-DUMMY_TICKETS = [
-    {
-        "id": 1, "code": "TTK-EVT001-WVIP-001", "event": "Konser Melodi Senja", 
-        "status": "VALID", "category": "WVIP", "date": "2026-05-15 19:00", 
-        "price": "Rp 1.500.000", "venue": "Jakarta Convention Center", 
-        "order": "ord_001", "seat": "WVIP A-1", "customer": "Budi Santoso"
-    },
-    {
-        "id": 2, "code": "TTK-EVT001-VIP-045", "event": "Konser Melodi Senja", 
-        "status": "TERPAKAI", "category": "VIP", "date": "2026-05-15 19:00", 
-        "price": "Rp 750.000", "venue": "Jakarta Convention Center", 
-        "order": "ord_002", "seat": "VIP B-15", "customer": "Siti Aminah"
-    },
-    {
-        "id": 3, "code": "TTK-EVT002-GEN-102", "event": "Festival Seni Budaya", 
-        "status": "VALID", "category": "General Admission", "date": "2026-05-22 10:00", 
-        "price": "Rp 150.000", "venue": "Taman Impian Jayakarta", 
-        "order": "ord_005", "seat": "FESTIVAL", "customer": "Izzudin Abdul Rasyid"
-    },
-    {
-        "id": 4, "code": "TTK-EVT002-GEN-103", "event": "Festival Seni Budaya", 
-        "status": "TERPAKAI", "category": "General Admission", "date": "2026-05-22 10:00", 
-        "price": "Rp 150.000", "venue": "Taman Impian Jayakarta", 
-        "order": "ord_005", "seat": "FESTIVAL", "customer": "Izzudin Abdul Rasyid"
-    },
-    {
-        "id": 5, "code": "TTK-EVT003-VVIP-005", "event": "Malam Akustik Bandung", 
-        "status": "VALID", "category": "VVIP", "date": "2026-06-10 18:00", 
-        "price": "Rp 2.000.000", "venue": "Bandung Hall Center", 
-        "order": "ord_008", "seat": "VVIP A-5", "customer": "Dita Karyadi"
-    },
-    {
-        "id": 6, "code": "TTK-EVT001-CAT1-022", "event": "Konser Melodi Senja", 
-        "status": "DIBATALKAN", "category": "Category 1", "date": "2026-05-15 19:00", 
-        "price": "Rp 450.000", "venue": "Jakarta Convention Center", 
-        "order": "ord_010", "seat": "Category 1 C-22", "customer": "Bobon Rintarto"
-    },
-    {
-        "id": 7, "code": "TTK-EVT004-WVIP-001", "event": "Rock Legends Tour", 
-        "status": "VALID", "category": "WVIP", "date": "2026-08-15 20:00", 
-        "price": "Rp 2.500.000", "venue": "ICE BSD City", 
-        "order": "ord_012", "seat": "WVIP A-1", "customer": "Rina Gunawan"
-    }
-]
+
+def execute_query(query, params=None, fetch=False):
+    with connection.cursor() as cursor:
+        cursor.execute("SET search_path TO TikTakTuk;")
+        cursor.execute(query, params)
+        if fetch:
+            columns = [col[0] for col in cursor.description]
+            return [dict(zip(columns, row)) for row in cursor.fetchall()]
+        return None
 
 def show_ticket(request):
-    total_tickets = len(DUMMY_TICKETS)
-    valid_tickets = sum(1 for t in DUMMY_TICKETS if t["status"] == "VALID")
-    used_tickets = sum(1 for t in DUMMY_TICKETS if t["status"] == "TERPAKAI")
+    # Query untuk mengambil data gabungan dari TICKET, EVENT, CATEGORY, ORDER, CUSTOMER, dan SEAT
+    query_tickets = """
+        SELECT 
+            t.ticket_id, 
+            t.ticket_code AS code,
+            e.event_title AS event,
+            tc.category_name AS category,
+            TO_CHAR(e.event_datetime, 'YYYY-MM-DD HH24:MI') AS date,
+            tc.price,
+            v.venue_name AS venue,
+            o.order_id AS order,
+            c.full_name AS customer,
+            COALESCE(s.section || ' ' || s.row_number || '-' || s.seat_number, 'Tanpa Kursi (Festival)') AS seat,
+            o.payment_status AS status
+        FROM TICKET t
+        JOIN TICKET_CATEGORY tc ON t.tcategory_id = tc.category_id
+        JOIN EVENT e ON tc.tevent_id = e.event_id
+        JOIN VENUE v ON e.venue_id = v.venue_id
+        JOIN TICKET_ORDER o ON t.torder_id = o.order_id
+        JOIN CUSTOMER c ON o.customer_id = c.customer_id
+        LEFT JOIN HAS_RELATIONSHIP hr ON t.ticket_id = hr.ticket_id
+        LEFT JOIN SEAT s ON hr.seat_id = s.seat_id
+        ORDER BY e.event_datetime DESC;
+    """
+    tickets = execute_query(query_tickets, fetch=True) or []
+
+    # Perhitungan statistik berdasarkan payment_status dari TICKET_ORDER
+    total_tickets = len(tickets)
+    valid_tickets = sum(1 for t in tickets if t['status'] == 'Lunas')
+    used_tickets = sum(1 for t in tickets if t['status'] == 'Pending') # Asumsi
+
+    # Data dropdown untuk Form Create
+    orders = execute_query("SELECT o.order_id, c.full_name FROM TICKET_ORDER o JOIN CUSTOMER c ON o.customer_id = c.customer_id;", fetch=True)
+    categories = execute_query("SELECT tc.category_id, tc.category_name, e.event_title FROM TICKET_CATEGORY tc JOIN EVENT e ON tc.tevent_id = e.event_id;", fetch=True)
+    
+    # Hanya ambil kursi yang belum terisi di HAS_RELATIONSHIP
+    query_seats = """
+        SELECT s.seat_id, s.section, s.row_number, s.seat_number, v.venue_name 
+        FROM SEAT s 
+        JOIN VENUE v ON s.venue_id = v.venue_id 
+        WHERE s.seat_id NOT IN (SELECT seat_id FROM HAS_RELATIONSHIP);
+    """
+    seats = execute_query(query_seats, fetch=True)
 
     context = {
-        "tickets": DUMMY_TICKETS,
+        "tickets": tickets,
         "total_tickets": total_tickets,
         "valid_tickets": valid_tickets,
         "used_tickets": used_tickets,
+        "orders": orders,
+        "categories": categories,
+        "seats": seats
     }
     return render(request, 'ticket.html', context)
 
-def dummy_ticket_action(request):
+def ticket_action(request):
+    if request.method == 'POST':
+        action_type = request.POST.get('action_type')
+        
+        try:
+            if action_type == 'create':
+                ticket_id = str(uuid.uuid4())
+                # Generate unique ticket code
+                ticket_code = f"TTK-{str(uuid.uuid4())[:8].upper()}" 
+                tcategory_id = request.POST.get('category')
+                torder_id = request.POST.get('order')
+                seat_id = request.POST.get('seat')
+                
+                # Insert TICKET (Trigger check_ticket_quota akan berjalan di sini)
+                query_ticket = "INSERT INTO TICKET (ticket_id, ticket_code, tcategory_id, torder_id) VALUES (%s, %s, %s, %s);"
+                execute_query(query_ticket, [ticket_id, ticket_code, tcategory_id, torder_id])
+
+                # Insert ke HAS_RELATIONSHIP jika kursi dipilih
+                if seat_id:
+                    query_rel = "INSERT INTO HAS_RELATIONSHIP (seat_id, ticket_id) VALUES (%s, %s);"
+                    execute_query(query_rel, [seat_id, ticket_id])
+
+                messages.success(request, "Tiket berhasil dibuat!")
+
+            elif action_type == 'update':
+                # Mengubah status pada tabel TICKET_ORDER (karena tabel TICKET tidak punya kolom status)
+                ticket_id = request.POST.get('ticket_id')
+                new_status = request.POST.get('status')
+                
+                query_update = """
+                    UPDATE TICKET_ORDER 
+                    SET payment_status = %s 
+                    WHERE order_id = (SELECT torder_id FROM TICKET WHERE ticket_id = %s);
+                """
+                execute_query(query_update, [new_status, ticket_id])
+                messages.success(request, f"Status tiket berhasil diperbarui menjadi {new_status}.")
+
+            elif action_type == 'delete':
+                ticket_id = request.POST.get('ticket_id')
+                execute_query("DELETE FROM TICKET WHERE ticket_id = %s;", [ticket_id])
+                messages.success(request, "Tiket berhasil dihapus.")
+
+        except DatabaseError as e:
+            # Menangkap error dari PostgreSQL dan memotong bagian "CONTEXT:"
+            error_msg = str(e).split('CONTEXT:')[0].strip()
+            messages.error(request, error_msg)
+            
+        except Exception as e:
+            messages.error(request, f"Terjadi kesalahan sistem: {str(e)}")
+            
     return redirect('ticket:show_ticket')
+            
