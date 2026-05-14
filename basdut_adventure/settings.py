@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 import os
+import dj_database_url
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -90,17 +91,11 @@ WSGI_APPLICATION = 'basdut_adventure.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',          
-        'USER': 'postgres',          
-        'PASSWORD': 'postgres', 
-        'HOST': 'localhost',         
-        'PORT': '5432',              
-        'OPTIONS': {
-            'options': '-c search_path=tiktaktuk,public'
-        },
-    }
+    'default': dj_database_url.config(
+        default=os.getenv("DATABASE_URL"),
+        conn_max_age=0, 
+        ssl_require=True
+    )
 }
 
 DATABASE_URL = os.getenv("DATABASE_URL")
