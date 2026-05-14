@@ -1,28 +1,52 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.hashers import check_password
+from django.contrib.auth.models import User
 from django.contrib import messages
 from basdut_adventure.db import get_connection
 
 import uuid
 
-
 def login_user(request):
    if request.method == 'POST':
-      form = AuthenticationForm(data=request.POST)
+      username = request.POST.get('username')
+      password = request.POST.get('password')
+      
+      # Pure SQL Query
+      with get_connection().cursor() as cur:
+         cur.execute(
+            """
+            SELECT UA.user_id, UA.username, UA.password, R.role_name
+            FROM User_Account as UA
+            JOIN Account_Role as AR ON UA.user_id = AR.user_id
+            JOIN Role as R ON AR.role_id = R.role_id
+            WHERE UA.username = %s
+            """, 
+            [username]
+         )
+         row = cur.fetchone()
+         
+      if row:
+         user_id, db_username, db_password, db_role = row
 
-      if form.is_valid():
-            user = form.get_user()
-            login(request, user)
+         if password == db_password:
+            # masukan data di session
+            request.session['user_id'] = str(user_id) 
+            request.session['username'] = db_username
+            request.session['role'] = db_role
+            request.session['is_authenticated'] = True 
+            
             return redirect('main:mantap')
-
-   else:
-      form = AuthenticationForm(request)
-   context = {'form': form}
-   return render(request, 'login.html', context)
+         else:
+            messages.error(request, "Invalid password")
+      else:
+         messages.error(request, "User does not exist.")
+         
+   return render(request, 'login.html')
 
 def logout_user(request):
-   logout(request)
+   request.session.flush()
    return redirect('autentikasi:login')
 
 def register_role_selection(request):
@@ -107,6 +131,7 @@ def register_action(request):
             raise
          
          finally:
+            messages.success(request, 'Your account has been successfully created!')
             conn.close()
          
       elif role == 'penyelenggara':
@@ -165,6 +190,7 @@ def register_action(request):
             raise
          
          finally:
+            messages.success(request, 'Your account has been successfully created!')
             conn.close()
          
         
