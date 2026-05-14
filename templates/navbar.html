@@ -13,8 +13,8 @@
                 
                 <!-- GUEST -->
                 {% if not role %}
-                    <a href="/login" class="whitespace-nowrap text-sm py-5 border-b-2 transition-colors {% if '/login' in request.path %}text-blue-600 font-semibold border-blue-600{% else %}text-gray-500 hover:text-blue-600 font-medium border-transparent{% endif %}">Login</a>
-                    <a href="/register" class="whitespace-nowrap text-sm py-5 border-b-2 transition-colors {% if '/register' in request.path %}text-blue-600 font-semibold border-blue-600{% else %}text-gray-500 hover:text-blue-600 font-medium border-transparent{% endif %}">Registrasi</a>
+                    <a href="/autentikasi/login" class="whitespace-nowrap text-sm py-5 border-b-2 transition-colors {% if '/login' in request.path %}text-blue-600 font-semibold border-blue-600{% else %}text-gray-500 hover:text-blue-600 font-medium border-transparent{% endif %}">Login</a>
+                    <a href="/autentikasi/register" class="whitespace-nowrap text-sm py-5 border-b-2 transition-colors {% if '/register' in request.path %}text-blue-600 font-semibold border-blue-600{% else %}text-gray-500 hover:text-blue-600 font-medium border-transparent{% endif %}">Registrasi</a>
 
                 <!-- ADMIN -->
                 {% elif role == 'admin' %}
