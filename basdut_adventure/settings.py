@@ -40,7 +40,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'main'
+    'main',
+    'dashboard',
+    'artist',
+    'ticket_category',
+    'seat',
+    'ticket',
+    'order',
+    'autentikasi',
+    'promotion',
+    'venue',
+    'event',
 ]
 
 MIDDLEWARE = [

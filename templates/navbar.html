@@ -1,0 +1,70 @@
+<nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
+    <!-- Ubah max-w-7xl menjadi w-full agar menggunakan seluruh lebar monitor -->
+    <div class="w-full mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+            
+            <!-- LOGO -->
+            <div class="flex items-center flex-shrink-0 pr-4 lg:pr-8">
+                <span class="text-2xl font-extrabold text-blue-600 tracking-tight">TikTakTuk</span>
+            </div>
+            
+            <!-- MENU DINAMIS (Jarak dirapatkan jadi space-x-2 atau space-x-4) -->
+            <div class="hidden md:flex flex-1 items-center justify-start space-x-2 lg:space-x-4">
+                
+                <!-- GUEST -->
+                {% if not role %}
+                    <a href="/login" class="whitespace-nowrap text-sm py-5 border-b-2 transition-colors {% if '/login' in request.path %}text-blue-600 font-semibold border-blue-600{% else %}text-gray-500 hover:text-blue-600 font-medium border-transparent{% endif %}">Login</a>
+                    <a href="/register" class="whitespace-nowrap text-sm py-5 border-b-2 transition-colors {% if '/register' in request.path %}text-blue-600 font-semibold border-blue-600{% else %}text-gray-500 hover:text-blue-600 font-medium border-transparent{% endif %}">Registrasi</a>
+
+                <!-- ADMIN -->
+                {% elif role == 'admin' %}
+                    <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Dashboard</a>
+                    <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Manajemen Venue</a>
+                    <a href="{% url 'seat:show_seat' %}" class="whitespace-nowrap text-sm py-5 border-b-2 transition-colors {% if '/seats/' in request.path %}text-blue-600 font-semibold border-blue-600{% else %}text-gray-500 hover:text-blue-600 font-medium border-transparent{% endif %}">Manajemen Kursi</a>
+                    <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Kategori Tiket</a>
+                    <a href="{% url 'ticket:show_ticket' %}" class="whitespace-nowrap text-sm py-5 border-b-2 transition-colors {% if '/tickets/' in request.path %}text-blue-600 font-semibold border-blue-600{% else %}text-gray-500 hover:text-blue-600 font-medium border-transparent{% endif %}">Manajemen Tiket</a>
+                    <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Semua Order</a>
+
+                <!-- ORGANIZER -->
+                {% elif role == 'organizer' %}
+                    <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Dashboard</a>
+                    <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Event Saya</a>
+                    <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Manajemen Venue</a>
+                    <a href="{% url 'seat:show_seat' %}" class="whitespace-nowrap text-sm py-5 border-b-2 transition-colors {% if '/seats/' in request.path %}text-blue-600 font-semibold border-blue-600{% else %}text-gray-500 hover:text-blue-600 font-medium border-transparent{% endif %}">Manajemen Kursi</a>
+                    <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Kategori Tiket</a>
+                    <a href="{% url 'ticket:show_ticket' %}" class="whitespace-nowrap text-sm py-5 border-b-2 transition-colors {% if '/tickets/' in request.path %}text-blue-600 font-semibold border-blue-600{% else %}text-gray-500 hover:text-blue-600 font-medium border-transparent{% endif %}">Manajemen Tiket</a>
+                    <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Semua Order</a>
+                    <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Tiket (Aset)</a>
+                    <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Order (Aset)</a>
+
+                <!-- CUSTOMER -->
+                {% elif role == 'customer' %}
+                    <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Dashboard</a>
+                    <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Tiket Saya</a>
+                    <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Pesanan</a>
+                    <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Cari Event</a>
+                    <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Promosi</a>
+                    <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Venue</a>
+                    <a href="#" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-medium transition-colors">Artis</a>
+                    <a href="/logout" class="whitespace-nowrap text-sm py-5 border-b-2 border-transparent text-red-500 hover:text-red-600 font-medium transition-colors">Logout</a>
+                {% endif %}
+            </div>
+            
+            <!-- PROFIL -->
+            <div class="flex items-center flex-shrink-0 pl-4 border-l border-gray-100 ml-2 lg:ml-4">
+                {% if role %}
+                <div class="flex items-center gap-2 lg:gap-3">
+                    <div class="text-right hidden md:block">
+                        <p class="text-sm font-semibold text-gray-700 leading-tight">{{ username }}</p>
+                        <p class="text-xs text-gray-500 capitalize">{{ role }}</p>
+                    </div>
+                    <div class="h-9 w-9 lg:h-10 lg:w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-lg">
+                        {{ username|first|upper|default:"P" }}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            
+        </div>
+    </div>
+</nav>
