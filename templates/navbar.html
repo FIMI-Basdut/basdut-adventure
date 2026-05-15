@@ -17,23 +17,31 @@
                         <a href="{% url 'ticket_category:tiket_kategori_admin' %}" class="nav-link">Kategori Tiket</a>
                         <a href="{% url 'ticket:show_ticket' %}" class="nav-link">Manajemen Tiket</a>
                         <a href="{% url 'order:show_order_list' %}" class="nav-link">Semua Order</a>
-                        <a href="{% url 'artist:daftar_artist_admin' %}" class="nav-link">Daftar Artis</a>
+                        <a href="#" class="nav-link">Tiket (Aset)</a>
+                        <a href="#" class="nav-link">Order (Aset)</a>
+                        <a href="#" class="nav-link">Profile</a>
 
                     {% elif request.session.role == 'Organizer' %}
                         <a href="{% url 'dashboard:dashboard_organizer' %}" class="nav-link">Dashboard</a>
                         <a href="{% url 'event:event_list' %}" class="nav-link">Event Saya</a>
                         <a href="{% url 'venue:venue_list' %}" class="nav-link">Manajemen Venue</a>
                         <a href="{% url 'seat:show_seat' %}" class="nav-link">Manajemen Kursi</a>
+                        <a href="{% url 'ticket_category:tiket_kategori' %}" class="nav-link">Kategori Tiket</a>
                         <a href="{% url 'ticket:show_ticket' %}" class="nav-link">Manajemen Tiket</a>
-                        <a href="{% url 'order:show_order_list' %}" class="nav-link">Order (Aset)</a>
+                        <a href="{% url 'order:show_order_list' %}" class="nav-link">Semua Order</a>
+                        <a href="#" class="nav-link">Tiket (Aset)</a>
+                        <a href="#" class="nav-link">Order (Aset)</a>
+                        <a href="{% url 'dashboard:profile_organizer' %}" class="nav-link">Profile</a>
 
                     {% elif request.session.role == 'Customer' %}
                         <a href="{% url 'dashboard:dashboard_customer' %}" class="nav-link">Dashboard</a>
                         <a href="{% url 'ticket:show_ticket' %}" class="nav-link">Tiket Saya</a>
+                        <a href="{% url 'order:show_order_list' %}" class="nav-link">Pesanan</a>
                         <a href="{% url 'event:event_list' %}" class="nav-link">Cari Event</a>
                         <a href="{% url 'promotion:show_promotions' %}" class="nav-link">Promosi</a>
                         <a href="{% url 'venue:venue_list' %}" class="nav-link">Venue</a>
                         <a href="{% url 'artist:daftar_artist' %}" class="nav-link">Artis</a>
+                        <a href="{% url 'dashboard:profile_customer' %}" class="nav-link">Profile</a>
                     {% endif %}
 
                     <a href="{% url 'autentikasi:logout' %}" class="whitespace-nowrap text-sm py-5 text-red-500 hover:text-red-600 font-medium transition-colors">Logout</a>

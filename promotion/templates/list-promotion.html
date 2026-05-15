@@ -33,7 +33,7 @@
 
         {% if messages %}
         <div class="mt-6">
-          {% for message in messages %}
+            {% for message in messages %}
             <div 
               class="
                 px-4 py-3 rounded-md text-sm border
@@ -45,11 +45,11 @@
                   bg-gray-50 border-gray-200 text-gray-700
                 {% endif %}
               ">
-              {{ message }}
+                {{ message }}
+                </div>
+            {% endfor %}
             </div>
-          {% endfor %}
-        </div>
-      {% endif %}
+        {% endif %}
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
