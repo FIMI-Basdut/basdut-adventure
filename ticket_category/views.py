@@ -6,11 +6,7 @@ from django.utils import timezone
 from basdut_adventure.db import get_connection
 from basdut_adventure.decorators import login_required
 
-@login_required
 def daftar_tiket_kategori(request):
-    role= request.session.get('role')
-    if role != 'Customer' and role != 'Organizer':
-        return redirect('main:mantap')
     with get_connection() as conn:
         with conn.cursor() as cursor:
             cursor.execute(
@@ -104,7 +100,7 @@ def daftar_tiket_kategori_admin(request):
                         """,
                         [id_category, category_name, price, quota, event_id]
                     )
-            messages.success(request, 'Daftar ticket_category diperbarui.')
+            messages.success(request, 'Daftar ticket category diperbarui.')
         
         return redirect('ticket_category:daftar_tiket_kategori_admin')
     with get_connection() as conn:
@@ -216,7 +212,7 @@ def edit_tiket_kategori(request, id):
                         """,
                         [category_name, price, quota, event_id, id]
                     )
-            messages.success(request, 'Daftar ticket_category diperbarui.')
+            messages.success(request, 'Daftar ticket category diperbarui.')
 
     return redirect('ticket_category:daftar_tiket_kategori_admin')
 

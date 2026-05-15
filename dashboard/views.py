@@ -498,34 +498,31 @@ def show_profile_organizer(request):
         new_password = request.POST.get('new_password')
         confirm_password = request.POST.get('confirm_password')
 
-        if new_password != confirm_password:
-            context['error'] = 'Password baru dan konfirmasi password tidak cocok.'
-        else:
-            with get_connection() as conn:
-                with conn.cursor() as cursor:
+        with get_connection() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(
+                    """
+                    SET search_path TO tiktaktuk, public
+                    """
+                )
+                cursor.execute(
+                    "SELECT password FROM USER_ACCOUNT WHERE user_id = %s",
+                    [user_id]
+                )
+                row = cursor.fetchone()
+                
+                if row and row[0] != old_password or new_password != confirm_password:
+                    context['error'] = 'Password lama atau konfirmasi password salah.'
+                else:
                     cursor.execute(
                         """
-                        SET search_path TO tiktaktuk, public
-                        """
+                        UPDATE USER_ACCOUNT
+                        SET password = %s
+                        WHERE user_id = %s
+                        """,
+                        [new_password, user_id]
                     )
-                    cursor.execute(
-                        "SELECT password FROM USER_ACCOUNT WHERE user_id = %s",
-                        [user_id]
-                    )
-                    row = cursor.fetchone()
-                    
-                    if row and row[0] != old_password:
-                        context['error'] = 'Password lama salah.'
-                    else:
-                        cursor.execute(
-                            """
-                            UPDATE USER_ACCOUNT
-                            SET password = %s
-                            WHERE user_id = %s
-                            """,
-                            [new_password, user_id]
-                        )
-                        context['success'] = 'Password berhasil diubah!'
+                    context['success'] = 'Password berhasil diubah!'
     with get_connection() as conn:
         with conn.cursor() as cursor:
             cursor.execute(

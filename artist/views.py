@@ -9,9 +9,6 @@ from basdut_adventure.decorators import login_required
 # VIEWS UNTUK NON-ADMIN (R - Artist)
 @login_required
 def daftar_artis(request):
-    role= request.session.get('role')
-    if role != 'Customer' and role != 'Organizer':
-        return redirect('main:mantap')
     with get_connection() as conn:
         with conn.cursor() as cursor:
             cursor.execute(
