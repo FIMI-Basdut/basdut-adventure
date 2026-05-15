@@ -15,13 +15,13 @@ def execute_query(query, params=None, fetch=False):
             return [dict(zip(columns, row)) for row in cursor.fetchall()]
         return None
 
-# Gunakan decorator untuk memastikan user harus login
+
+
 @login_required
 def show_ticket(request):
     role = request.session.get('role')
     user_id = request.session.get('user_id')
 
-    # Query dasar untuk mengambil data gabungan
     query_tickets = """
         SELECT 
             t.ticket_id, 
@@ -33,7 +33,7 @@ def show_ticket(request):
             v.venue_name AS venue,
             o.order_id AS order,
             c.full_name AS customer,
-            COALESCE(s.section || ' ' || s.row_number || '-' || s.seat_number, 'Tanpa Kursi (Festival)') AS seat,
+            COALESCE(s.section || ' — Baris ' || s.row_number || ', No. ' || s.seat_number, 'Tanpa Kursi (Festival)') AS seat,
             o.payment_status AS status
         FROM TICKET t
         JOIN TICKET_CATEGORY tc ON t.tcategory_id = tc.category_id
@@ -46,16 +46,15 @@ def show_ticket(request):
     """
     
     params = []
-    
-    # FILTER ROLE: Jika Customer, cari tiket yang user_id-nya sama dengan session login
     if role == 'Customer':
         query_tickets += " WHERE c.user_id = %s "
         params.append(user_id)
         
-    query_tickets += " ORDER BY e.event_datetime DESC;"
+    query_tickets += " ORDER BY t.ticket_id DESC;" 
     
     tickets = execute_query(query_tickets, params, fetch=True) or []
 
+    # Statistik (Total, Lunas, Pending)
     total_tickets = len(tickets)
     valid_tickets = sum(1 for t in tickets if t['status'] == 'Lunas')
     used_tickets = sum(1 for t in tickets if t['status'] == 'Pending') 
@@ -67,23 +66,48 @@ def show_ticket(request):
         "used_tickets": used_tickets,
     }
 
-    # PISAHKAN RENDER HTML:
-    # Jika role bukan Customer (misal Admin, Administrator, Organizer)
+
+
     if role != 'Customer':
-        context['orders'] = execute_query("SELECT o.order_id, c.full_name FROM TICKET_ORDER o JOIN CUSTOMER c ON o.customer_id = c.customer_id;", fetch=True) or []
-        context['categories'] = execute_query("SELECT tc.category_id, tc.category_name, e.event_title FROM TICKET_CATEGORY tc JOIN EVENT e ON tc.tevent_id = e.event_id;", fetch=True) or []
         
-        query_seats = """
-            SELECT s.seat_id, s.section, s.row_number, s.seat_number, v.venue_name 
-            FROM SEAT s 
-            JOIN VENUE v ON s.venue_id = v.venue_id 
-            WHERE s.seat_id NOT IN (SELECT seat_id FROM HAS_RELATIONSHIP);
+      
+        query_orders = """
+            SELECT DISTINCT o.order_id, c.full_name, e.event_title, e.event_id 
+            FROM TICKET_ORDER o 
+            JOIN CUSTOMER c ON o.customer_id = c.customer_id
+            LEFT JOIN TICKET t ON t.torder_id = o.order_id 
+            LEFT JOIN TICKET_CATEGORY tc ON t.tcategory_id = tc.category_id
+            LEFT JOIN EVENT e ON tc.tevent_id = e.event_id;
         """
-        context['seats'] = execute_query(query_seats, fetch=True) or []
         
+        
+        query_categories = """
+            SELECT tc.category_id, tc.category_name, tc.price, tc.tevent_id AS event_id,
+                   tc.quota AS kuota,
+                   (SELECT COUNT(*) FROM TICKET WHERE tcategory_id = tc.category_id) AS terpakai
+            FROM TICKET_CATEGORY tc;
+        """
+
+        query_seats = """
+            SELECT s.seat_id, s.section, s.row_number, s.seat_number, e.event_id 
+            FROM SEAT s 
+            JOIN VENUE v ON s.venue_id = v.venue_id
+            JOIN EVENT e ON e.venue_id = v.venue_id
+            WHERE s.seat_id NOT IN (
+                SELECT hr.seat_id 
+                FROM HAS_RELATIONSHIP hr
+                JOIN TICKET t ON hr.ticket_id = t.ticket_id
+                JOIN TICKET_CATEGORY tc ON t.tcategory_id = tc.category_id
+                WHERE tc.tevent_id = e.event_id
+            );
+        """
+        
+        context['orders'] = execute_query(query_orders, fetch=True) or []
+        context['categories'] = execute_query(query_categories, fetch=True) or []
+        context['seats'] = execute_query(query_seats, fetch=True) or []
+        context['role'] = role
         return render(request, 'ticket.html', context)
-    
-    # Jika Customer, langsung render tampilan Card style (ticket_customer.html)
+
     else:
         return render(request, 'ticket_customer.html', context)
 
@@ -92,9 +116,12 @@ def show_ticket(request):
 def ticket_action(request):
     role = request.session.get('role')
     
-    # BLOKIR CUSTOMER: Jika memaksa masuk via aksi POST
     if role == 'Customer':
         messages.error(request, "Aksi diblokir! Customer tidak diizinkan memodifikasi data tiket.")
+        return redirect('ticket:show_ticket')
+    
+    if role == 'Organizer':
+        messages.error(request, "Aksi diblokir! Organizer tidak diizinkan memodifikasi data tiket.")
         return redirect('ticket:show_ticket')
 
     if request.method == 'POST':

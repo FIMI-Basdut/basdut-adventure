@@ -93,7 +93,6 @@
                         </p>
                     </div>
                 </div>
-
                 <div class="mt-6 pt-4 border-t border-gray-100 flex gap-4">
                     <button onclick="openEditModal('{{ ticket.ticket_id }}')" class="text-sm font-medium text-gray-600 hover:text-blue-600 flex items-center gap-1 transition-colors">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
@@ -109,47 +108,56 @@
         </div>
     </main>
 
+    
     <div id="ticketModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 hidden flex items-center justify-center z-50 transition-opacity">
         <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="text-lg font-bold text-gray-900">Form Tambah Tiket</h3>
                 <button onclick="toggleModal('ticketModal')" class="text-gray-400 hover:text-red-500">✕</button>
             </div>
+            
             <form action="{% url 'ticket:ticket_action' %}" method="POST">
                 {% csrf_token %}
                 <input type="hidden" name="action_type" value="create">
+                
                 <div class="space-y-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Pilih Order Pelanggan</label>
-                        <select name="order" class="w-full border border-gray-300 rounded-lg p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500" required>
+                        <select name="order" id="selectOrder" class="w-full border border-gray-300 rounded-lg p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500" required onchange="filterData()">
                             <option value="" disabled selected>-- Pilih Order --</option>
                             {% for o in orders %}
-                                <option value="{{ o.order_id }}">{{ o.full_name }} (Order ID: {{ o.order_id|slice:":8" }})</option>
+                                <option value="{{ o.order_id }}" data-event-id="{{ o.event_id }}">
+                                    {{ o.order_id|slice:":8" }} — {{ o.full_name }} — {{ o.event_title }}
+                                </option>
                             {% endfor %}
                         </select>
                     </div>
+
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Kategori Tiket & Acara</label>
-                        <select name="category" class="w-full border border-gray-300 rounded-lg p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500" required>
-                            <option value="" disabled selected>-- Pilih Kategori --</option>
-                            {% for c in categories %}
-                                <option value="{{ c.category_id }}">{{ c.category_name }} - {{ c.event_title }}</option>
-                            {% endfor %}
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Kategori Tiket</label>
+                        <select name="category" id="selectCategory" class="w-full border border-gray-300 rounded-lg p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500" required disabled>
+                            <option value="" disabled selected>Pilih order terlebih dahulu...</option>
                         </select>
                     </div>
-                    <div>
+
+                    <div id="containerSeat" class="hidden">
                         <label class="block text-sm font-medium text-gray-700 mb-1">Pilih Kursi (Opsional)</label>
-                        <select name="seat" class="w-full border border-gray-300 rounded-lg p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500">
+                        <select name="seat" id="selectSeat" class="w-full border border-gray-300 rounded-lg p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500">
                             <option value="">-- Tanpa Kursi / Festival --</option>
-                            {% for s in seats %}
-                                <option value="{{ s.seat_id }}">{{ s.section }} {{ s.row_number }}-{{ s.seat_number }} ({{ s.venue_name }})</option>
-                            {% endfor %}
                         </select>
+                    </div>
+                    
+                    <div class="bg-blue-50 p-3 rounded-lg border border-blue-100 mt-2 flex items-start gap-2">
+                        <svg class="w-5 h-5 text-blue-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <p class="text-xs text-blue-700 leading-relaxed">
+                            <strong>Kode Tiket</strong> tidak perlu diisi manual. Sistem akan melakukan <i>generate otomatis</i>.
+                        </p>
                     </div>
                 </div>
+
                 <div class="mt-6 flex justify-end gap-3 pt-4 border-t border-gray-100">
                     <button type="button" onclick="toggleModal('ticketModal')" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 rounded-lg transition-colors">Batal</button>
-                    <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors shadow-sm">Simpan Tiket</button>
+                    <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors shadow-sm">Buat Tiket</button>
                 </div>
             </form>
         </div>
@@ -200,7 +208,65 @@
         </div>
     </div>
 
+    {{ categories|json_script:"raw-categories" }}
+    {{ seats|json_script:"raw-seats" }}
+
     <script>
+        function filterData() {
+            const orderSelect = document.getElementById('selectOrder');
+            const selectedOption = orderSelect.options[orderSelect.selectedIndex];
+            
+            if (!selectedOption.value) return;
+
+            // 1. Ambil Event ID
+            const eventId = selectedOption.getAttribute('data-event-id');
+
+            // Parsing Data JSON
+            const rawCategories = JSON.parse(document.getElementById('raw-categories').textContent);
+            const rawSeats = JSON.parse(document.getElementById('raw-seats').textContent);
+
+            // 2. Filter Dropdown Kategori (Poin 4.b)
+            const catSelect = document.getElementById('selectCategory');
+            catSelect.innerHTML = '<option value="" disabled selected>-- Pilih Kategori --</option>';
+            catSelect.disabled = false;
+
+            const filteredCats = rawCategories.filter(c => c.event_id == eventId);
+            filteredCats.forEach(c => {
+                const isFull = parseInt(c.terpakai || 0) >= parseInt(c.kuota || 0);
+                const option = document.createElement('option');
+                option.value = c.category_id;
+                
+                // Format Tampilan: Nama Kategori — Harga — (terpakai/kuota)
+                option.textContent = `${c.category_name} — Rp ${c.price} — (${c.terpakai || 0}/${c.kuota || 0})`;
+                if (isFull) option.textContent += ' [PENUH]';
+                
+                catSelect.appendChild(option);
+            });
+
+            // 3. Filter Dropdown Kursi (Poin 4.c)
+            const seatContainer = document.getElementById('containerSeat');
+            const seatSelect = document.getElementById('selectSeat');
+            
+            const filteredSeats = rawSeats.filter(s => s.event_id == eventId);
+            const isReserved = filteredSeats.length > 0;
+            
+            if (isReserved) {
+                seatContainer.classList.remove('hidden'); // Tampilkan dropdown jika reserved
+                seatSelect.innerHTML = '<option value="">-- Pilih Kursi (Format: Section — Baris X, No. Y) --</option>';
+                
+                filteredSeats.forEach(s => {
+                    const option = document.createElement('option');
+                    option.value = s.seat_id;
+                    option.textContent = `${s.section} — Baris ${s.row_number}, No. ${s.seat_number}`;
+                    seatSelect.appendChild(option);
+                });
+            } else {
+                seatContainer.classList.add('hidden'); // Sembunyikan dropdown
+                seatSelect.innerHTML = '<option value="">Festival</option>';
+            }
+        }
+
+        // Script untuk Modal
         function toggleModal(modalId) {
             const modal = document.getElementById(modalId);
             if (modal.classList.contains('hidden')) {
@@ -221,4 +287,4 @@
         }
     </script>
 </body>
-</html>
+</html>     
