@@ -5,6 +5,8 @@ import uuid
 
 def show_promotions(request):
     user_role = request.session.get('role')
+    discount_type = request.GET.get("discount_type") # list promotion based on discount type
+    search_code = request.GET.get("input_kode_promo")
     
     # Getting all the promo data needed
     
@@ -12,30 +14,43 @@ def show_promotions(request):
     
     try:
         with conn.cursor() as cur:
-                cur.execute(
+                query = """
+                        SELECT
+                            p.promotion_id,
+                            p.promo_code,
+                            p.discount_type,
+                            p.discount_value,
+                            p.start_date,
+                            p.end_date,
+                            p.usage_limit,
+                            COUNT(op.promotion_id) AS total_usage
+                        FROM promotion p
+                        LEFT JOIN order_promotion op
+                            ON p.promotion_id = op.promotion_id
+                        """
+
+                params = []
+
+                if discount_type:
+                    query += " WHERE p.discount_type = %s"
+                    params.append(discount_type)
+                
+                # if search_code:
+                #     query += " AND p.promo_code LIKE %s"
+                #     params.append(f"%{search_code}%")
+
+                query += """
+                    GROUP BY
+                        p.promotion_id,
+                        p.promo_code,
+                        p.discount_type,
+                        p.discount_value,
+                        p.start_date,
+                        p.end_date,
+                        p.usage_limit
                 """
-                SELECT
-                    p.promotion_id,
-                    p.promo_code,
-                    p.discount_type,
-                    p.discount_value,
-                    p.start_date,
-                    p.end_date,
-                    p.usage_limit,
-                    COUNT(op.promotion_id) AS total_usage
-                FROM promotion as p
-                LEFT JOIN order_promotion as op
-                    ON p.promotion_id = op.promotion_id
-                GROUP BY
-                    p.promotion_id,
-                    p.promo_code,
-                    p.discount_type,
-                    p.discount_value,
-                    p.start_date,
-                    p.end_date,
-                    p.usage_limit;
-                """
-                )
+
+                cur.execute(query, params)
                 rows = cur.fetchall()
                 
                 promos = []
@@ -126,3 +141,80 @@ def create_promotion(request):
     messages.error(request, 'Uh oh! Something is wrong.')
     return redirect('promotion:show_promotions')
         
+def delete_promotion(request):
+    if request.method == "POST" and request.session.get('role') == 'Admin':
+        promo_id = request.POST.get("promotion_id")
+        
+        conn = get_connection()
+        
+        try:
+            with conn.cursor() as cur:
+                  cur.execute(
+                    """
+                    DELETE FROM promotion WHERE promotion_id = %s
+                    """,
+                    [promo_id]
+                  )
+
+            conn.commit()
+            messages.success(request, 'The promotion has been deleted.')
+            return redirect('promotion:show_promotions')
+            
+        except Exception as e:
+            # If any query fails, undo everything
+            conn.rollback()
+            messages.error(request, 'Uh oh! Something is wrong.')
+            raise
+        
+        finally:
+            conn.close()
+    
+    messages.error(request, 'Uh oh! Something is wrong.')
+    return redirect('promotion:show_promotions')
+        
+def update_promotion(request):
+    if request.method == "POST" and request.session.get('role') == 'Admin':
+        kode_promo = request.POST.get("promo_code")
+        tipe_promo = request.POST.get("promo_type")
+        nominal_diskon = request.POST.get("discount_value")
+        tanggal_awal = request.POST.get("start_date")
+        tanggal_akhir = request.POST.get("end_date")
+        batas_penggunaan = request.POST.get("max_usage")
+        promo_id = request.POST.get("promo_id")
+        
+        conn = get_connection()
+        
+        try:
+            with conn.cursor() as cur:
+                  cur.execute(
+                    """
+                    UPDATE promotion 
+                    SET
+                        promo_code = %s, 
+                        discount_type = %s, 
+                        discount_value = %s, 
+                        start_date = %s, 
+                        end_date = %s, 
+                        usage_limit = %s
+                    WHERE promotion_id = %s
+                    
+                    """,
+                    [kode_promo, tipe_promo, nominal_diskon, tanggal_awal, tanggal_akhir, batas_penggunaan, promo_id]
+                  )
+
+            conn.commit()
+            messages.success(request, 'The promotion has been updated.')
+            return redirect('promotion:show_promotions')
+            
+        except Exception as e:
+            # If any query fails, undo everything
+            conn.rollback()
+            messages.error(request, 'Uh oh! Something is wrong.')
+            raise
+        
+        finally:
+            conn.close()
+            
+    
+    messages.error(request, 'Uh oh! Something is wrong.')
+    return redirect('promotion:show_promotions')
