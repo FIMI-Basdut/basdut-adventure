@@ -29,7 +29,7 @@
 
                     {% elif request.session.role == 'Customer' %}
                         <a href="{% url 'dashboard:dashboard_customer' %}" class="nav-link">Dashboard</a>
-                        <a href="{% url 'order:show_order_list' %}" class="nav-link">Tiket Saya</a>
+                        <a href="{% url 'ticket:show_ticket' %}" class="nav-link">Tiket Saya</a>
                         <a href="{% url 'event:event_list' %}" class="nav-link">Cari Event</a>
                         <a href="{% url 'promotion:show_promotions' %}" class="nav-link">Promosi</a>
                         <a href="{% url 'venue:venue_list' %}" class="nav-link">Venue</a>
