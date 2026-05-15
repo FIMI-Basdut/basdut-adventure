@@ -46,7 +46,8 @@ def get_db_user(request):
         FROM USER_ACCOUNT AS ua, ROLE AS r, ACCOUNT_ROLE AS ar
         WHERE ua.user_id = ar.user_id
               and r.role_id = ar.role_id
-              and ua.user_id = %s;
+              and ua.user_id = %s
+        ORDER BY ua.user_id ASC, r.role_name ASC;
     """
     params = (session_user_id,)
 
@@ -57,6 +58,9 @@ def get_db_user(request):
             return redirect('autentikasi:login')
         
         db_user = rows[0]
+
+        for r in rows:
+            print(r)
         
         if ((str(session_user_id) == str(db_user['user_id'])) and (session_role == db_user['role_name'])):
             return db_user
