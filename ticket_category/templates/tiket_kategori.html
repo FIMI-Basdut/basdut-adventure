@@ -11,9 +11,9 @@
     </style>
 </head>
 <body class="bg-gray-50 text-slate-800">
+    {% include 'navbar.html' %}
 
     <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-
         <!-- Header -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
             <div>
@@ -72,7 +72,7 @@
                         {% for cat in categories %}
                         <tr class="hover:bg-gray-50 transition group">
                             <td class="py-4 px-4 font-bold text-slate-800">{{ cat.category_name }}</td>
-                            <td class="py-4 px-4 text-slate-500 font-medium text-sm">{{ cat.event.event_title }}</td>
+                            <td class="py-4 px-4 text-slate-500 font-medium text-sm">{{ cat.event_name }}</td>
                             <td class="py-4 px-4 font-bold text-blue-600">Rp {{ cat.price|floatformat:0 }}</td>
                             <td class="py-4 px-4 text-slate-600 text-sm">{{ cat.quota }} tiket</td>
                         </tr>
