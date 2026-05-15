@@ -23,13 +23,33 @@
                 <p class="text-sm text-gray-500 mt-1">Kelola kode promo dan kampanye diskon</p>
             </div>
             
-            {% if user_role == "ADMIN" %}
+            {% if request.session.role == 'Admin' %}
             <button class="px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-700 transition shadow-sm"
             onclick="toggleModal('createModal')">
                 + Buat Promo
             </button>
             {% endif %}
         </div>
+
+        {% if messages %}
+        <div class="mt-6">
+            {% for message in messages %}
+            <div 
+              class="
+                px-4 py-3 rounded-md text-sm border
+                {% if message.tags == 'success' %}
+                  bg-blue-50 border-blue-200 text-blue-700
+                {% elif message.tags == 'error' %}
+                  bg-red-50 border-red-200 text-red-700
+                {% else %}
+                  bg-gray-50 border-gray-200 text-gray-700
+                {% endif %}
+              ">
+                {{ message }}
+                </div>
+            {% endfor %}
+            </div>
+        {% endif %}
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
@@ -47,21 +67,46 @@
         </div>
 
         <div class="flex flex-col sm:flex-row gap-4 mb-6">
-            <div class="relative flex-1 max-w-md">
-                <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none"
-                    stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                </svg>
-                <input type="text" placeholder="Cari kode promo..."
-                    class="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
-            </div>
-            <select
-                class="px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10">
-                <option>Semua Tipe</option>
-                <option>Percentage</option>
-                <option>Nominal</option>
-            </select>
+            
+            <!-- Added flex and gap-2 to create spacing -->
+            <form method="GET" class="flex items-center gap-2">
+                <div class="relative flex-1 max-w-md">
+                    <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                    <input type="text"
+                        name="input_kode_promo"
+                        placeholder="Cari kode promo..."
+                        class="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                </div>
+                <select name="discount_type"
+                        class="px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10">
+                    <option value="">Semua Tipe</option>
+                    <option value="PERCENTAGE">Persentase (%)</option>
+                    <option value="NOMINAL">Nominal</option>
+                </select>
+
+                <button type="submit"
+                        class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="w-4 h-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="2">
+                        <path stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M21 21l-4.35-4.35m1.85-5.15a7 7 0 11-14 0a7 7 0 0114 0z" />
+                    </svg>
+                    Cari
+                </button>
+            </form>
         </div>
 
         <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
@@ -75,7 +120,7 @@
                         <th class="px-6 py-4 text-left text-[11px] font-bold text-gray-500 uppercase tracking-wider">BERAKHIR</th>
                         <th class="px-6 py-4 text-left text-[11px] font-bold text-gray-500 uppercase tracking-wider">PENGGUNAAN</th>
                         
-                        {% if user_role == "ADMIN" %}
+                        {% if request.session.role == 'Admin'%}
                         <th class="px-6 py-4 text-right text-[11px] font-bold text-gray-500 uppercase tracking-wider">AKSI</th>
                         {% endif %}
                     </tr>
@@ -107,21 +152,29 @@
                         </td>
                         
                         <td class="px-6 py-4 text-sm text-gray-600">
-                            {{ promo.start_date }}
+                            {{ promo.sdate }}
                         </td>
                         
                         <td class="px-6 py-4 text-sm text-gray-600">
-                            {{ promo.end_date }}
+                            {{ promo.edate }}
                         </td>
                         
                         <td class="px-6 py-4 text-sm font-medium text-gray-700">
-                            {{ promo.usage_count }} / {{ promo.max_usage }}
+                            {{ promo.used }} / {{ promo.max }}
                         </td>
                         
-                        {% if user_role == "ADMIN" %}
+                        {% if request.session.role == 'Admin' %}
                         <td class="px-6 py-4 text-right text-sm">
-                            <button class="text-gray-400 hover:text-blue-600 mx-1.5" onclick="toggleModal('editModal')">✏️</button>
-                            <button class="text-gray-400 hover:text-red-600 mx-1.5" onclick="toggleModal('deleteModal')">🗑️</button>
+                            <button class="text-gray-400 hover:text-blue-600 mx-1.5" onclick="openEditModal(
+                                                                                                '{{ promo.id }}',
+                                                                                                '{{ promo.code|escapejs }}',
+                                                                                                '{{ promo.type }}',
+                                                                                                '{{ promo.value }}',
+                                                                                                '{{ promo.sdate|date:"Y-m-d" }}',
+                                                                                                '{{ promo.edate|date:"Y-m-d" }}',
+                                                                                                '{{ promo.max }}'
+                                                                                            )">✏️</button>
+                            <button class="text-gray-400 hover:text-red-600 mx-1.5" onclick="openDeleteModal('{{ promo.id }}')">🗑️</button>
                         </td>
                         {% endif %}
                     </tr>
@@ -138,60 +191,74 @@
             <h3 class="text-lg font-bold text-gray-800">Edit Promo</h3>
         </div>
 
-        <form action="{% url 'promotion:promo_action' %}" method="POST">
+        <form action="{% url 'promotion:update_promo' %}" method="POST">
             {% csrf_token %}
             <input type="hidden" name="action_type" value="update">
-            <input type="hidden" name="promo_id" id="edit_promo_id" value="">
+            <input type="hidden" name="promo_id" id="edit_promo_id">
 
             <div class="space-y-4">
                 <div>
-                    <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">KODE PROMO</label>
-                    <input type="text" name="promo_code" value="TIKTAK20" 
+                    <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">
+                        KODE PROMO
+                    </label>
+                    <input type="text" name="promo_code" id="edit_promo_code"
                            class="w-full border border-gray-200 rounded-lg p-3 text-sm focus:ring-blue-500 focus:border-blue-500 bg-white">
                 </div>
 
                 <div>
-                    <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">TIPE DISKON</label>
-                    <select name="promo_type" 
+                    <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">
+                        TIPE DISKON
+                    </label>
+                    <select name="promo_type" id="edit_promo_type"
                             class="w-full border border-gray-200 rounded-lg p-3 text-sm focus:ring-blue-500 focus:border-blue-500 appearance-none bg-white">
-                        <option value="Persentase (%)" selected>Persentase (%)</option>
-                        <option value="Nominal">Nominal</option>
+                        <option value="PERCENTAGE">Persentase (%)</option>
+                        <option value="NOMINAL">Nominal</option>
                     </select>
                 </div>
 
                 <div>
-                    <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">NILAI DISKON</label>
-                    <input type="number" name="discount_value" value="20" 
+                    <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">
+                        NILAI DISKON
+                    </label>
+                    <input type="number" name="discount_value" id="edit_discount_value"
                            class="w-full border border-gray-200 rounded-lg p-3 text-sm focus:ring-blue-500 focus:border-blue-500 bg-white">
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">TANGGAL MULAI</label>
-                        <input type="date" name="start_date" value="2024-01-01" 
+                        <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">
+                            TANGGAL MULAI
+                        </label>
+                        <input type="date" name="start_date" id="edit_start_date"
                                class="w-full border border-gray-200 rounded-lg p-3 text-sm text-gray-700 focus:ring-blue-500 focus:border-blue-500 bg-white">
                     </div>
+
                     <div>
-                        <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">TANGGAL BERAKHIR</label>
-                        <input type="date" name="end_date" value="2024-12-31" 
+                        <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">
+                            TANGGAL BERAKHIR
+                        </label>
+                        <input type="date" name="end_date" id="edit_end_date"
                                class="w-full border border-gray-200 rounded-lg p-3 text-sm text-gray-700 focus:ring-blue-500 focus:border-blue-500 bg-white">
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">BATAS PENGGUNAAN</label>
-                    <input type="number" name="max_usage" value="100" 
+                    <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">
+                        BATAS PENGGUNAAN
+                    </label>
+                    <input type="number" name="max_usage" id="edit_max_usage"
                            class="w-full border border-gray-200 rounded-lg p-3 text-sm focus:ring-blue-500 focus:border-blue-500 bg-white">
                 </div>
             </div>
 
             <div class="mt-8 flex justify-center gap-4">
                 <button type="button" onclick="toggleModal('editModal')"
-                    class="flex-1 py-2.5 text-sm font-semibold text-gray-700 bg-white border border-gray-200 hover:bg-gray-50 rounded-xl transition-all">
+                        class="flex-1 py-2.5 text-sm font-semibold text-gray-700 bg-white border border-gray-200 hover:bg-gray-50 rounded-xl transition-all">
                     Batal
                 </button>
+
                 <button type="submit"
-                    class="flex-1 py-2.5 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-all shadow-md">
+                        class="flex-1 py-2.5 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-all shadow-md">
                     Simpan
                 </button>
             </div>
@@ -206,7 +273,7 @@
             <p class="text-xs text-gray-500 mt-1">Tambahkan kode promo baru ke dalam sistem</p>
         </div>
 
-        <form action="{% url 'promotion:promo_action' %}" method="POST">
+        <form action="{% url 'promotion:create_promo' %}" method="POST">
             {% csrf_token %}
             <input type="hidden" name="action_type" value="create">
 
@@ -222,8 +289,8 @@
                     <select name="promo_type" required
                             class="w-full border border-gray-200 rounded-lg p-3 text-sm focus:ring-blue-500 focus:border-blue-500 appearance-none bg-white">
                         <option value="" disabled selected>Pilih Tipe Diskon...</option>
-                        <option value="Persentase (%)">Persentase (%)</option>
-                        <option value="Nominal">Nominal</option>
+                        <option value="PERCENTAGE">Persentase (%)</option>
+                        <option value="NOMINAL">Nominal</option>
                     </select>
                 </div>
 
@@ -275,9 +342,9 @@
             <p class="text-sm text-gray-400 mb-8">Tindakan ini tidak dapat dibatalkan.</p>
         </div>
 
-        <form action="{% url 'order:order_action' %}" method="POST" class="flex justify-end gap-3">
+        <form action="{% url 'promotion:delete_promo' %}" method="POST" class="flex justify-end gap-3">
             {% csrf_token %}
-            <input type="hidden" name="seat_id" id="delete_seat_id" value="">
+            <input type="hidden" name="promotion_id" id="delete_promotion_id">
             <input type="hidden" name="action_type" value="delete">
 
             <button type="button" onclick="toggleModal('deleteModal')"
@@ -300,6 +367,21 @@
             } else {
                 modal.classList.add('hidden');
             }
+        }
+        function openDeleteModal(promotionId) {
+            document.getElementById('delete_promotion_id').value = promotionId;
+            toggleModal('deleteModal');
+        }
+        function openEditModal(id, code, type, value, startDate, endDate, maxUsage) {
+            document.getElementById('edit_promo_id').value = id;
+            document.getElementById('edit_promo_code').value = code;
+            document.getElementById('edit_promo_type').value = type;
+            document.getElementById('edit_discount_value').value = value;
+            document.getElementById('edit_start_date').value = startDate;
+            document.getElementById('edit_end_date').value = endDate;
+            document.getElementById('edit_max_usage').value = maxUsage;
+
+            toggleModal('editModal');
         }
     </script>
 </body>

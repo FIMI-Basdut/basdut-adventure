@@ -17,6 +17,11 @@ def login_user(request):
       with get_connection().cursor() as cur:
          cur.execute(
             """
+            SET search_path TO tiktaktuk, public
+            """
+         )
+         cur.execute(
+            """
             SELECT UA.user_id, UA.username, UA.password, R.role_name
             FROM User_Account as UA
             JOIN Account_Role as AR ON UA.user_id = AR.user_id
@@ -26,6 +31,8 @@ def login_user(request):
             [username]
          )
          row = cur.fetchone()
+         
+         get_connection().close()
          
       if row:
          user_id, db_username, db_password, db_role = row
@@ -39,7 +46,7 @@ def login_user(request):
             
             return redirect('main:mantap')
          else:
-            messages.error(request, "Invalid password")
+            messages.error(request, "Invalid password or username")
       else:
          messages.error(request, "User does not exist.")
          
@@ -193,5 +200,54 @@ def register_action(request):
             messages.success(request, 'Your account has been successfully created!')
             conn.close()
          
-        
+      elif role == 'administrator':
+         full_name = request.POST.get('nama')
+         email = request.POST.get('email')
+         
+         try:
+            with conn.cursor() as cur:
+                  # get role id based on admin
+                  cur.execute(
+                     """
+                     SELECT role_id
+                     FROM ROLE
+                     WHERE role_name = 'Admin'
+                     """,
+                  )
+                  row = cur.fetchone()
+                  
+                  if row is None:
+                     raise ValueError("Role not found")
+                  
+                  role_id = str(row[0])
+
+                  # insert the user into user_account
+                  cur.execute(
+                     """
+                     INSERT INTO USER_ACCOUNT (user_id, username, password)
+                     VALUES (%s, %s, %s)
+                     """,
+                     (user_id, username, password),
+                  )
+                  
+                  # insert the user and it's role into account_role
+                  cur.execute(
+                     """ 
+                     INSERT INTO ACCOUNT_ROLE
+                     VALUES (%s, %s)
+                     """,
+                     (role_id, user_id)
+                  )
+                  
+            conn.commit()
+            
+         except Exception:
+            # If any query fails, undo everything
+            conn.rollback()
+            raise
+         
+         finally:
+            messages.success(request, 'Your account has been successfully created!')
+            conn.close()
+           
    return redirect('autentikasi:login')

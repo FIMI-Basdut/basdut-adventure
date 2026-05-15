@@ -1,61 +1,167 @@
 from django.shortcuts import render, redirect
+from django.contrib import messages
+from basdut_adventure.db import get_connection
 
-DUMMY_ORDERS = [
-    {
-        "order_id": "ORD-354F4",
-        "order_date": "2026-07-03 10:15",
-        "payment_status": "PAID", # Sesuai dengan {% if order.payment_status == "PAID" %}
-        "total_amount": 300000,
-        "customer_name": "Alice Johnson" # Dibutuhkan untuk avatar dan nama di tabel
-    },
-    {
-        "order_id": "ORD-D3E42",
-        "order_date": "2026-07-05 14:20",
-        "payment_status": "PENDING",
-        "total_amount": 150000,
-        "customer_name": "Bob Smith"
-    },
-    {
-        "order_id": "ORD-2504C",
-        "order_date": "2026-07-10 09:00",
-        "payment_status": "CANCELLED",
-        "total_amount": 0,
-        "customer_name": "Charlie Brown"
-    },
-    {
-        "order_id": "ORD-DF1AC",
-        "order_date": "2026-07-12 16:45",
-        "payment_status": "PAID",
-        "total_amount": 500000,
-        "customer_name": "David Miller"
-    },
-    {
-        "order_id": "ORD-AE6C3",
-        "order_date": "2026-07-15 11:30",
-        "payment_status": "PENDING",
-        "total_amount": 200000,
-        "customer_name": "Eve Wilson"
-    }
-]
 
 def show_order_list(request):
-    user_role = "ADMIN" 
+    user_role = request.session.get('role')
     
-    total_orders = len(DUMMY_ORDERS)
-    total_paid = sum(1 for o in DUMMY_ORDERS if o["payment_status"] == "PAID")
-    total_pending = sum(1 for o in DUMMY_ORDERS if o["payment_status"] == "PENDING")
+    conn = get_connection()
     
+    if user_role == 'Admin':
     
-    revenue_raw = sum(o["total_amount"] for o in DUMMY_ORDERS if o["payment_status"] == "PAID")
-    total_revenue = f"{revenue_raw:,}".replace(",", ".")
+        try:
+            with conn.cursor() as cur:
 
+                    cur.execute(
+                        """
+                        SELECT * FROM ticket_order
+                        """, 
+                    )
+                    rows = cur.fetchall()
+                    
+                    orders = []
+
+                    for row in rows:
+                        # get customer full name
+                        cur.execute(
+                            """
+                            SELECT full_name
+                            FROM Customer
+                            WHERE customer_id = %s
+                            """,
+                            [row[4]]
+                        )
+                        
+                        second_row = cur.fetchone()
+                        
+                        if second_row is None:
+                            raise ValueError("Customer name not found")
+                        
+                        order = {
+                            'id': row[0],               # order_id
+                            'date': row[1],             # order_date
+                            'status': row[2],           # payment_status
+                            'amount': row[3],           # total_amount
+                            'cust_id': row[4],          # customer_id
+                            'cust_name': second_row[0]  # customer_name
+                        }
+                        orders.append(order)
+            conn.commit()
+            
+        except Exception:
+            # If any query fails, undo everything
+            messages.error(request, 'Uh oh! Something is wrong.')
+            conn.rollback()
+            raise
+        
+        finally:
+            conn.close()
+            
+    elif user_role == 'Organizer':
+    
+        try:
+            with conn.cursor() as cur:
+
+                    cur.execute(
+                        """
+                        SELECT TO.order_id, TO.order_date, TO.payment_status, TO.total_amount, TO.customer_id
+                        FROM ticket_order as TO
+                        JOIN ticket as T ON T.torder_id = TO.order_id
+                        JOIN ticket_category as TC ON T.tcategory_id = TC.category_id
+                        JOIN event as E ON TC.tevent_id = E.event_id
+                        WHERE E.organization_id = %s
+                        """, [request.session.get('user_id')]
+                    )
+                    rows = cur.fetchall()
+                    
+                    orders = []
+
+                    for row in rows:
+                        # get customer full name
+                        cur.execute(
+                            """
+                            SELECT full_name
+                            FROM Customer
+                            WHERE customer_id = %s
+                            """,
+                            [row[4]]
+                        )
+                        
+                        second_row = cur.fetchone()
+                        
+                        if second_row is None:
+                            raise ValueError("Customer name not found")
+                        
+                        order = {
+                            'id': row[0],               # order_id
+                            'date': row[1],             # order_date
+                            'status': row[2],           # payment_status
+                            'amount': row[3],           # total_amount
+                            'cust_id': row[4],          # customer_id
+                            'cust_name': second_row[0]  # customer_name
+                        }
+                        orders.append(order)
+            conn.commit()
+            
+        except Exception:
+            # If any query fails, undo everything
+            messages.error(request, 'Uh oh! Something is wrong.')
+            conn.rollback()
+            raise
+        
+        finally:
+            conn.close()
+    
+    elif user_role == 'Customer':
+    
+        try:
+            with conn.cursor() as cur:
+
+                    cur.execute(
+                        """
+                        SELECT * FROM ticket_order as TI
+                        JOIN customer as C ON TI.customer_id = C.customer_id
+                        WHERE C.user_id = %s
+                        """, [request.session.get('user_id')]
+                    )
+                    rows = cur.fetchall()
+                    
+                    orders = []
+
+                    for row in rows:
+                        
+                        order = {
+                            'id': row[0],               # order_id
+                            'date': row[1],             # order_date
+                            'status': row[2],           # payment_status
+                            'amount': row[3],           # total_amount
+                            'cust_id': row[4],          # customer_id
+                        }
+                        orders.append(order)
+            conn.commit()
+            
+        except Exception:
+            # If any query fails, undo everything
+            messages.error(request, 'Uh oh! Something is wrong.')
+            conn.rollback()
+            raise
+        
+        finally:
+            conn.close()
+    
+    total_orders = len(orders)
+    total_paid = sum(1 for o in orders if o["status"] == "Lunas")
+    total_pending = sum(1 for o in orders if o["status"] == "Pending")
+    revenue_raw = sum(o["amount"] for o in orders if o["status"] == "Lunas")
+    
     context = {
-        "orders": DUMMY_ORDERS,
+        "orders": orders,
         "user_role": user_role, 
         "total_orders": total_orders,
         "total_paid": total_paid,
         "total_pending": total_pending,
-        "total_revenue": f"Rp {total_revenue}",
+        "total_revenue": f"Rp {revenue_raw}",
     }
     
     return render(request, 'list-order.html', context)
@@ -64,4 +170,72 @@ def show_order_create(request):
     return render(request, 'create-order.html')
 
 def dummy_order_action(request):
+    return redirect('order:show_order_list')
+
+def delete_order(request):
+    if request.method == "POST" and request.session.get('role') == 'Admin':
+        order_id = request.POST.get("order_id")
+        
+        conn = get_connection()
+        
+        try:
+            with conn.cursor() as cur:
+                  cur.execute(
+                    """
+                    DELETE FROM ticket_order WHERE order_id = %s
+                    """,
+                    [order_id]
+                  )
+
+            conn.commit()
+            messages.success(request, 'The order has been deleted.')
+            return redirect('order:show_order_list')
+            
+        except Exception as e:
+            # If any query fails, undo everything
+            conn.rollback()
+            messages.error(request, 'Uh oh! Something is wrong.')
+            raise
+        
+        finally:
+            conn.close()
+    
+    messages.error(request, 'Uh oh! Something is wrong.')
+    return redirect('order:show_order_list')
+        
+def update_order(request):
+    if request.method == "POST" and request.session.get('role') == 'Admin':
+        order_id = request.POST.get("order_id")
+        status_order = request.POST.get("status")
+        
+        conn = get_connection()
+        
+        try:
+            with conn.cursor() as cur:
+                  cur.execute(
+                    """
+                    UPDATE ticket_order
+                    SET
+                        payment_status = %s
+                    WHERE order_id = %s
+                    
+                    """,
+                    [status_order, order_id]
+                  )
+
+            conn.commit()
+            messages.success(request, 'The order has been updated.')
+            return redirect('order:show_order_list')
+            
+        except Exception as e:
+            # If any query fails, undo everything
+            conn.rollback()
+            messages.error(request, 'Uh oh! Something is wrong.')
+            raise
+        
+        finally:
+            conn.close()
+            
+    
+    messages.error(request, 'Uh oh! Something is wrong.')
     return redirect('order:show_order_list')
