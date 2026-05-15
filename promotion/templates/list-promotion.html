@@ -23,13 +23,33 @@
                 <p class="text-sm text-gray-500 mt-1">Kelola kode promo dan kampanye diskon</p>
             </div>
             
-            {% if user_role == "ADMIN" %}
+            {% if request.session.role == 'Admin' %}
             <button class="px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-700 transition shadow-sm"
             onclick="toggleModal('createModal')">
                 + Buat Promo
             </button>
             {% endif %}
         </div>
+
+        {% if messages %}
+        <div class="mt-6">
+          {% for message in messages %}
+            <div 
+              class="
+                px-4 py-3 rounded-md text-sm border
+                {% if message.tags == 'success' %}
+                  bg-blue-50 border-blue-200 text-blue-700
+                {% elif message.tags == 'error' %}
+                  bg-red-50 border-red-200 text-red-700
+                {% else %}
+                  bg-gray-50 border-gray-200 text-gray-700
+                {% endif %}
+              ">
+              {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
@@ -75,7 +95,7 @@
                         <th class="px-6 py-4 text-left text-[11px] font-bold text-gray-500 uppercase tracking-wider">BERAKHIR</th>
                         <th class="px-6 py-4 text-left text-[11px] font-bold text-gray-500 uppercase tracking-wider">PENGGUNAAN</th>
                         
-                        {% if user_role == "ADMIN" %}
+                        {% if request.session.role == 'Admin'%}
                         <th class="px-6 py-4 text-right text-[11px] font-bold text-gray-500 uppercase tracking-wider">AKSI</th>
                         {% endif %}
                     </tr>
@@ -107,18 +127,18 @@
                         </td>
                         
                         <td class="px-6 py-4 text-sm text-gray-600">
-                            {{ promo.start_date }}
+                            {{ promo.sdate }}
                         </td>
                         
                         <td class="px-6 py-4 text-sm text-gray-600">
-                            {{ promo.end_date }}
+                            {{ promo.edate }}
                         </td>
                         
                         <td class="px-6 py-4 text-sm font-medium text-gray-700">
-                            {{ promo.usage_count }} / {{ promo.max_usage }}
+                            {{ promo.used }} / {{ promo.max }}
                         </td>
                         
-                        {% if user_role == "ADMIN" %}
+                        {% if request.session.role == 'Admin' %}
                         <td class="px-6 py-4 text-right text-sm">
                             <button class="text-gray-400 hover:text-blue-600 mx-1.5" onclick="toggleModal('editModal')">✏️</button>
                             <button class="text-gray-400 hover:text-red-600 mx-1.5" onclick="toggleModal('deleteModal')">🗑️</button>
@@ -206,7 +226,7 @@
             <p class="text-xs text-gray-500 mt-1">Tambahkan kode promo baru ke dalam sistem</p>
         </div>
 
-        <form action="{% url 'promotion:promo_action' %}" method="POST">
+        <form action="{% url 'promotion:create_promo' %}" method="POST">
             {% csrf_token %}
             <input type="hidden" name="action_type" value="create">
 
@@ -222,8 +242,8 @@
                     <select name="promo_type" required
                             class="w-full border border-gray-200 rounded-lg p-3 text-sm focus:ring-blue-500 focus:border-blue-500 appearance-none bg-white">
                         <option value="" disabled selected>Pilih Tipe Diskon...</option>
-                        <option value="Persentase (%)">Persentase (%)</option>
-                        <option value="Nominal">Nominal</option>
+                        <option value="PERCENTAGE">Persentase (%)</option>
+                        <option value="NOMINAL">Nominal</option>
                     </select>
                 </div>
 
