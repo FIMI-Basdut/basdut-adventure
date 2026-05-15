@@ -17,7 +17,7 @@
 {% block content %}
 <body class="text-gray-800 p-8">
 
-    <div class="max-w-6xl mx-auto">
+    <div class="mb-6 px-4 md:px-8 py-4"> 
         
         <!-- Header Section -->
         <div class="flex justify-between items-center mb-8">
@@ -35,238 +35,108 @@
             <!-- Card 1 -->
             <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
                 <p class="text-xs text-gray-400 font-bold tracking-wider uppercase mb-2">TOTAL VENUE</p>
-                <p class="text-3xl font-bold text-gray-900">5</p>
+                <p class="text-3xl font-bold text-gray-900"> {{ total_venue }} </p>
             </div>
             <!-- Card 2 -->
             <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
                 <p class="text-xs text-gray-400 font-bold tracking-wider uppercase mb-2">RESERVED SEATING</p>
-                <p class="text-3xl font-bold text-gray-900">3</p>
+                <p class="text-3xl font-bold text-gray-900">{{ total_jenis_reserved_seating }}</p>
             </div>
             <!-- Card 3 -->
             <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
                 <p class="text-xs text-gray-400 font-bold tracking-wider uppercase mb-2">TOTAL KAPASITAS</p>
-                <p class="text-3xl font-bold text-gray-900">2,200</p>
+                <p class="text-3xl font-bold text-gray-900">{{ total_kapasitas }}</p>
             </div>
         </div>
 
         <!-- Search & Filter Bar -->
-        <div class="flex flex-col md:flex-row gap-4 mb-6">
-            <!-- Search -->
-            <div class="flex-1 relative">
-                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <i class="fas fa-search text-gray-400"></i>
+        <div class="mb-6"> 
+            <form method="GET" action="{% url 'venue:venue_list' %}" class="flex flex-row items-center gap-4 w-full">
+                
+                <!-- Search -->
+                <div class="relative flex-grow">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <i class="fas fa-search text-gray-400"></i>
+                    </div>
+                    <input type="text" name="search" value="{{ request.GET.search|default:'' }}"
+                        placeholder="Cari Nama atau Alamat Venue" 
+                        class="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-sm shadow-sm">
                 </div>
-                <input type="text" placeholder="Cari nama atau alamat..." class="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-sm shadow-sm">
-            </div>
-            <!-- Filter Kota -->
-            <select class="py-3 px-4 rounded-xl border border-gray-200 bg-white text-gray-600 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm appearance-none pr-10 relative">
-                <option>Semua Kota</option>
-                <option>Jakarta</option>
-                <option>Bandung</option>
-                <option>Surabaya</option>
-                <option>Yogyakarta</option>
-                <option>Balikpapan</option>
-            </select>
-            <!-- Filter Tipe -->
-            <select class="py-3 px-4 rounded-xl border border-gray-200 bg-white text-gray-600 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm appearance-none pr-10 relative">
-                <option>Semua Tipe Seating</option>
-                <option>Reserved Seating</option>
-                <option>Free Seating</option>
-            </select>
+
+                <!-- Filter Kota -->
+                <div class="min-w-[150px]">
+                    <select name="city" onchange="this.form.submit()" 
+                            class="w-full py-3 px-4 rounded-xl border border-gray-200 bg-white text-blue-600 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm cursor-pointer">
+                        <option value="">Semua Kota</option>
+                        {% for city_name in all_cities %}
+                            <option value="{{ city_name }}" {% if request.GET.city == city_name %}selected{% endif %}>
+                                {{ city_name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Filter Tipe Seating -->
+                <div class="min-w-[180px]">
+                    <select name="seating" onchange="this.form.submit()" 
+                            class="w-full py-3 px-4 rounded-xl border border-gray-200 bg-white text-blue-600 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm cursor-pointer">
+                        <option value="">Semua Tipe Seating</option>
+                        <option value="Reserved Seating" {% if request.GET.seating == 'Reserved Seating' %}selected{% endif %}>Reserved Seating</option>
+                        <option value="Free Seating" {% if request.GET.seating == 'Free Seating' %}selected{% endif %}>Free Seating</option>
+                    </select>
+                </div>
+
+                <!-- Tombol Cari -->
+                <button type="submit" class="bg-blue-600 text-white px-8 py-3 rounded-xl hover:bg-blue-700 transition whitespace-nowrap shadow-sm font-medium">
+                    Cari
+                </button>
+
+            </form>
         </div>
 
         <!-- Venue List -->
         <div class="flex flex-col gap-6">
+            {% for venue in venues %}
             
-            <!-- Venue Item 1 -->
-            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex gap-5">
-                <!-- Icon -->
-                <div class="w-14 h-14 rounded-xl bg-blue-50 flex items-center justify-center text-blue-500 shrink-0">
-                    <i class="far fa-building text-xl"></i>
-                </div>
-                <!-- Content -->
-                <div class="flex-1">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h2 class="text-lg font-bold text-gray-900">Garuda Hall</h2>
-                            <p class="text-sm text-gray-500 mt-1 flex items-center gap-1.5">
-                                <i class="fas fa-map-marker-alt text-gray-400"></i> Jl. Sudirman No. 45, Jakarta
+                <!-- Venue Item 1 -->
+                <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex gap-5">
+                    <!-- Icon -->
+                    <div class="w-14 h-14 rounded-xl bg-blue-50 flex items-center justify-center text-blue-500 shrink-0">
+                        <i class="far fa-building text-xl"></i>
+                    </div>
+                    <!-- Content -->
+                    <div class="flex-1">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h2 class="text-lg font-bold text-gray-900">{{ venue.venue_name }}</h2>
+                                <p class="text-sm text-gray-500 mt-1 flex items-center gap-1.5">
+                                    <i class="fas fa-map-marker-alt text-gray-400"></i> {{ venue.address }}, {{ venue.city }}
+                                </p>
+                            </div>
+                            <span class="bg-blue-50 text-blue-600 px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 tracking-wide">
+                                <i class="far fa-check-circle"></i> {{ venue.jenis_seating }}
+                            </span>
+                        </div>
+                        
+                        <div class="mt-4 bg-gray-50 rounded-xl p-3 inline-block min-w-[200px]">
+                            <p class="text-[10px] text-gray-400 font-bold tracking-wider uppercase">KAPASITAS</p>
+                            <p class="text-sm font-bold text-gray-900 mt-1 flex items-center gap-2">
+                                <i class="fas fa-user-friends text-gray-500"></i> {{ venue.capacity }} Kursi
                             </p>
                         </div>
-                        <span class="bg-blue-50 text-blue-600 px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 tracking-wide">
-                            <i class="far fa-check-circle"></i> RESERVED SEATING
-                        </span>
-                    </div>
-                    
-                    <div class="mt-4 bg-gray-50 rounded-xl p-3 inline-block min-w-[200px]">
-                        <p class="text-[10px] text-gray-400 font-bold tracking-wider uppercase">KAPASITAS</p>
-                        <p class="text-sm font-bold text-gray-900 mt-1 flex items-center gap-2">
-                            <i class="fas fa-user-friends text-gray-500"></i> 500 Kursi
-                        </p>
-                    </div>
 
-                    <div class="mt-5 flex gap-3">
-                        <button onclick="showUpdateVenueModal()" class="px-4 py-2 rounded-lg border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-2 transition-colors">
-                            <i class="far fa-edit"></i> Edit
-                        </button>
-                        <button onclick="showDeleteVenueModal()" class="px-4 py-2 rounded-lg border border-red-100 text-sm font-medium text-red-500 hover:bg-red-50 flex items-center gap-2 transition-colors">
-                            <i class="far fa-trash-alt"></i> Hapus
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Venue Item 2 -->
-            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex gap-5">
-                <!-- Icon -->
-                <div class="w-14 h-14 rounded-xl bg-blue-50 flex items-center justify-center text-blue-500 shrink-0">
-                    <i class="far fa-building text-xl"></i>
-                </div>
-                <!-- Content -->
-                <div class="flex-1">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h2 class="text-lg font-bold text-gray-900">Nusantara Arena</h2>
-                            <p class="text-sm text-gray-500 mt-1 flex items-center gap-1.5">
-                                <i class="fas fa-map-marker-alt text-gray-400"></i> Jl. Gatot Subroto No. 12, Bandung
-                            </p>
+                        <div class="mt-5 flex gap-3">
+                            <button onclick="showUpdateVenueModal()" class="px-4 py-2 rounded-lg border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-2 transition-colors">
+                                <i class="far fa-edit"></i> Edit
+                            </button>
+                            <button onclick="showDeleteVenueModal()" class="px-4 py-2 rounded-lg border border-red-100 text-sm font-medium text-red-500 hover:bg-red-50 flex items-center gap-2 transition-colors">
+                                <i class="far fa-trash-alt"></i> Hapus
+                            </button>
                         </div>
-                        <span class="bg-gray-50 text-gray-500 px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 tracking-wide border border-gray-100">
-                            <i class="far fa-circle"></i> FREE SEATING
-                        </span>
-                    </div>
-                    
-                    <div class="mt-4 bg-gray-50 rounded-xl p-3 inline-block min-w-[200px]">
-                        <p class="text-[10px] text-gray-400 font-bold tracking-wider uppercase">KAPASITAS</p>
-                        <p class="text-sm font-bold text-gray-900 mt-1 flex items-center gap-2">
-                            <i class="fas fa-user-friends text-gray-500"></i> 750 Kursi
-                        </p>
-                    </div>
-
-                    <div class="mt-5 flex gap-3">
-                        <button onclick="showUpdateVenueModal()" class="px-4 py-2 rounded-lg border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-2 transition-colors">
-                            <i class="far fa-edit"></i> Edit
-                        </button>
-                        <button onclick="showDeleteVenueModal()" class="px-4 py-2 rounded-lg border border-red-100 text-sm font-medium text-red-500 hover:bg-red-50 flex items-center gap-2 transition-colors">
-                            <i class="far fa-trash-alt"></i> Hapus
-                        </button>
                     </div>
                 </div>
-            </div>
 
-            <!-- Venue Item 3 -->
-            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex gap-5">
-                <!-- Icon -->
-                <div class="w-14 h-14 rounded-xl bg-blue-50 flex items-center justify-center text-blue-500 shrink-0">
-                    <i class="far fa-building text-xl"></i>
-                </div>
-                <!-- Content -->
-                <div class="flex-1">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h2 class="text-lg font-bold text-gray-900">Merdeka Convention</h2>
-                            <p class="text-sm text-gray-500 mt-1 flex items-center gap-1.5">
-                                <i class="fas fa-map-marker-alt text-gray-400"></i> Jl. Merdeka Barat No. 8, Surabaya
-                            </p>
-                        </div>
-                        <span class="bg-blue-50 text-blue-600 px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 tracking-wide">
-                            <i class="far fa-check-circle"></i> RESERVED SEATING
-                        </span>
-                    </div>
-                    
-                    <div class="mt-4 bg-gray-50 rounded-xl p-3 inline-block min-w-[200px]">
-                        <p class="text-[10px] text-gray-400 font-bold tracking-wider uppercase">KAPASITAS</p>
-                        <p class="text-sm font-bold text-gray-900 mt-1 flex items-center gap-2">
-                            <i class="fas fa-user-friends text-gray-500"></i> 300 Kursi
-                        </p>
-                    </div>
-
-                    <div class="mt-5 flex gap-3">
-                        <button onclick="showUpdateVenueModal()" class="px-4 py-2 rounded-lg border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-2 transition-colors">
-                            <i class="far fa-edit"></i> Edit
-                        </button>
-                        <button onclick="showDeleteVenueModal()" class="px-4 py-2 rounded-lg border border-red-100 text-sm font-medium text-red-500 hover:bg-red-50 flex items-center gap-2 transition-colors">
-                            <i class="far fa-trash-alt"></i> Hapus
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Venue Item 4 -->
-            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex gap-5">
-                <!-- Icon -->
-                <div class="w-14 h-14 rounded-xl bg-blue-50 flex items-center justify-center text-blue-500 shrink-0">
-                    <i class="far fa-building text-xl"></i>
-                </div>
-                <!-- Content -->
-                <div class="flex-1">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h2 class="text-lg font-bold text-gray-900">Cendrawasih Auditorium</h2>
-                            <p class="text-sm text-gray-500 mt-1 flex items-center gap-1.5">
-                                <i class="fas fa-map-marker-alt text-gray-400"></i> Jl. Diponegoro No. 21, Yogyakarta
-                            </p>
-                        </div>
-                        <span class="bg-blue-50 text-blue-600 px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 tracking-wide">
-                            <i class="far fa-check-circle"></i> RESERVED SEATING
-                        </span>
-                    </div>
-                    
-                    <div class="mt-4 bg-gray-50 rounded-xl p-3 inline-block min-w-[200px]">
-                        <p class="text-[10px] text-gray-400 font-bold tracking-wider uppercase">KAPASITAS</p>
-                        <p class="text-sm font-bold text-gray-900 mt-1 flex items-center gap-2">
-                            <i class="fas fa-user-friends text-gray-500"></i> 200 Kursi
-                        </p>
-                    </div>
-
-                    <div class="mt-5 flex gap-3">
-                        <button onclick="showUpdateVenueModal()" class="px-4 py-2 rounded-lg border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-2 transition-colors">
-                            <i class="far fa-edit"></i> Edit
-                        </button>
-                        <button onclick="showDeleteVenueModal()" class="px-4 py-2 rounded-lg border border-red-100 text-sm font-medium text-red-500 hover:bg-red-50 flex items-center gap-2 transition-colors">
-                            <i class="far fa-trash-alt"></i> Hapus
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Venue Item 5 -->
-            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex gap-5">
-                <!-- Icon -->
-                <div class="w-14 h-14 rounded-xl bg-blue-50 flex items-center justify-center text-blue-500 shrink-0">
-                    <i class="far fa-building text-xl"></i>
-                </div>
-                <!-- Content -->
-                <div class="flex-1">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h2 class="text-lg font-bold text-gray-900">Borneo Expo Hall</h2>
-                            <p class="text-sm text-gray-500 mt-1 flex items-center gap-1.5">
-                                <i class="fas fa-map-marker-alt text-gray-400"></i> Jl. Ahmad Yani No. 99, Balikpapan
-                            </p>
-                        </div>
-                        <span class="bg-gray-50 text-gray-500 px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 tracking-wide border border-gray-100">
-                            <i class="far fa-circle"></i> FREE SEATING
-                        </span>
-                    </div>
-                    
-                    <div class="mt-4 bg-gray-50 rounded-xl p-3 inline-block min-w-[200px]">
-                        <p class="text-[10px] text-gray-400 font-bold tracking-wider uppercase">KAPASITAS</p>
-                        <p class="text-sm font-bold text-gray-900 mt-1 flex items-center gap-2">
-                            <i class="fas fa-user-friends text-gray-500"></i> 450 Kursi
-                        </p>
-                    </div>
-
-                    <div class="mt-5 flex gap-3">
-                        <button onclick="showUpdateVenueModal()" class="px-4 py-2 rounded-lg border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-2 transition-colors">
-                            <i class="far fa-edit"></i> Edit
-                        </button>
-                        <button onclick="showDeleteVenueModal()" class="px-4 py-2 rounded-lg border border-red-100 text-sm font-medium text-red-500 hover:bg-red-50 flex items-center gap-2 transition-colors">
-                            <i class="far fa-trash-alt"></i> Hapus
-                        </button>
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
 
         </div>
     </div>

@@ -8,9 +8,25 @@ from django.contrib import messages
 @login_required
 def show_venue_list(request):
     db_user = get_db_user(request)
+
+    query_all_cities = "SELECT DISTINCT city FROM VENUE ORDER BY city ASC"
+    city_rows = execute_query(query_all_cities, fetch=True)
+    all_cities = [row['city'] for row in city_rows]
+
+    venues = get_venues(request)
+
+    total_venue = len(venues)
+    total_jenis_reserved_seating = sum(1 for v in venues if v['jenis_seating'] == "Reserved Seating")
+    total_kapasitas = sum(v['capacity'] for v in venues)
+        
     
     context = {
         'user': db_user,
+        'venues': venues,
+        'total_venue': total_venue,
+        'total_jenis_reserved_seating': total_jenis_reserved_seating,
+        'total_kapasitas': total_kapasitas,
+        'all_cities': all_cities,
     }
     return render(request, 'venue_list_page.html', context)
 
@@ -40,9 +56,6 @@ def get_db_user(request):
             messages.error(request, "Akun tidak ditemukan di database.")
             return redirect('autentikasi:login')
         
-        for r in rows:
-            print(r)
-        
         db_user = rows[0]
         
         if ((str(session_user_id) == str(db_user['user_id'])) and (session_role == db_user['role_name'])):
@@ -57,3 +70,33 @@ def get_db_user(request):
         messages.error(request, "Terjadi kesalahan sistem. Silakan coba lagi nanti.")
         return redirect('autentikasi:login')
 
+def get_venues(request):
+    filter_seating = request.GET.get('seating', '')
+    filter_city = request.GET.get('city', '')
+    search_query = request.GET.get('search', '')
+    
+    query_get_venues = """
+        SELECT *
+        FROM VENUE
+        WHERE 1=1
+    """
+    params = []
+
+    if search_query:
+        query_get_venues += " AND (venue_name ILIKE %s OR address ILIKE %s)"
+        search_param = f"%{search_query}%"
+        params.append(search_param) # nama venue
+        params.append(search_param) # alamat venue
+
+    if filter_city:
+        query_get_venues += " AND city = %s"
+        params.append(filter_city)
+    
+    if filter_seating:
+        query_get_venues += " AND jenis_seating = %s"
+        params.append(filter_seating)
+
+    query_get_venues += " ORDER BY venue_name ASC;"
+    rows = execute_query(query_get_venues, tuple(params), fetch=True)
+
+    return rows
