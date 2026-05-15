@@ -18,31 +18,32 @@
     </div>
     <!-- Modal body -->
     <div class="px-6 py-4 space-y-6 form-style">
-      <form id="updateVenueForm">
+      <form id="updateVenueForm" onsubmit="event.preventDefault(); submitUpdateVenue();">
+        {% csrf_token %}
         <div class="mb-4">
-          <label for="venue_name" class="block text-sm font-medium text-gray-700">NAMA VENUE (VENUE_NAME)</label>
-          <input type="text" id="venue_name" name="venue_name" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 transition-colors hover:border-blue-700 focus:outline-none focus:border-blue-700 focus:ring-1 focus:ring-blue-700" placeholder="contoh: Jakarta Convention Center" required>
+          <label for="update_venue_name" class="block text-sm font-medium text-gray-700">NAMA VENUE (VENUE_NAME)</label>
+          <input type="text" id="update_venue_name" name="venue_name" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 transition-colors hover:border-blue-700 focus:outline-none focus:border-blue-700 focus:ring-1 focus:ring-blue-700" placeholder="contoh: Jakarta Convention Center" required>
         </div>
         
         <div class="mb-4">
-          <label for="capacity" class="block text-sm font-medium text-gray-700">KAPASITAS (CAPACITY)</label>
-          <input type="number" id="capacity" name="capacity" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 transition-colors hover:border-blue-700 focus:outline-none focus:border-blue-700 focus:ring-1 focus:ring-blue-700" placeholder="0">
+          <label for="update_capacity" class="block text-sm font-medium text-gray-700">KAPASITAS (CAPACITY)</label>
+          <input type="number" id="update_capacity" name="capacity" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 transition-colors hover:border-blue-700 focus:outline-none focus:border-blue-700 focus:ring-1 focus:ring-blue-700" placeholder="0">
         </div>
 
         <div class="mb-4">
-          <label for="city" class="block text-sm font-medium text-gray-700">KOTA (CITY)</label>
-          <input type="url" id="city" name="city" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 transition-colors hover:border-blue-700 focus:outline-none focus:border-blue-700 focus:ring-1 focus:ring-blue-700" placeholder="Jakarta">
+          <label for="update_city" class="block text-sm font-medium text-gray-700">KOTA (CITY)</label>
+          <input type="text" id="update_city" name="city" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 transition-colors hover:border-blue-700 focus:outline-none focus:border-blue-700 focus:ring-1 focus:ring-blue-700" placeholder="Jakarta">
         </div>
 
         <div class="mb-4">
-          <label for="address" class="block text-sm font-medium text-gray-700">ALAMAT (ADDRESS)</label>
-          <textarea id="address" name="address" rows="3" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 transition-colors hover:border-blue-700 focus:outline-none focus:border-blue-700 focus:ring-1 focus:ring-blue-700" placeholder="Jl. Gatot Subroto No. 1" required></textarea>
+          <label for="update_address" class="block text-sm font-medium text-gray-700">ALAMAT (ADDRESS)</label>
+          <textarea id="update_address" name="address" rows="3" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 transition-colors hover:border-blue-700 focus:outline-none focus:border-blue-700 focus:ring-1 focus:ring-blue-700" placeholder="Jl. Gatot Subroto No. 1" required></textarea>
         </div>
 
         <div class="mb-4">
           <div class="flex items-center">
-            <input id="has_reserved_seating" name="has_reserved_seating" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded">
-            <label for="has_reserved_seating" class="ml-2 text-sm font-medium text-gray-900">Has Reserved Seating</label>
+            <input id="update_has_reserved_seating" name="has_reserved_seating" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded">
+            <label for="update_has_reserved_seating" class="ml-2 text-sm font-medium text-gray-900">Has Reserved Seating</label>
           </div>
         </div>
       </form>
@@ -58,10 +59,24 @@
 <!-- SCRIPT sama HTML nya masih ngikutin create venue, belum diesesuaiin untuk edit-->
 <!-- referensi modal edit bisa lihat di tugas kelompok pbp-->
 <script>
-  function showUpdateVenueModal() {
+  let currentUpdateVenueId = ''; // Menyimpan ID venue yang sedang diedit
+
+  function showUpdateVenueModal(id, name, capacity, city, address, jenisSeating) {
+      currentUpdateVenueId = id;
+      
+      // Isi form dengan data venue yang diklik
+      document.getElementById('update_venue_name').value = name;
+      document.getElementById('update_capacity').value = capacity;
+      document.getElementById('update_city').value = city;
+      document.getElementById('update_address').value = address;
+      
+      // Centang checkbox jika "Reserved Seating"
+      const isReserved = (jenisSeating === "Reserved Seating");
+      document.getElementById('update_has_reserved_seating').checked = isReserved;
+
       const modal = document.getElementById('updateVenueModal');
       const modalContent = document.getElementById('updateVenueModalContent');
-
+      
       modal.classList.remove('hidden'); 
       setTimeout(() => {
         modalContent.classList.remove('opacity-0', 'scale-95');
@@ -81,4 +96,30 @@
       }, 150); 
   }
 
+  async function submitUpdateVenue() {
+    const form = document.querySelector('#updateVenueForm');
+    const formData = new FormData(form);
+
+    try {
+        // Panggil endpoint update dengan menyisipkan ID di URL
+        const response = await fetch(`/venue/update-venue/${currentUpdateVenueId}/`, {
+            method: "POST",
+            body: formData,
+            headers: {
+                "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value
+            }
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            hideUpdateVenueModal();
+            window.location.reload(); 
+        } else {
+            alert("Gagal update venue: " + result.message);
+        }
+    } catch (error) {
+        console.error("Error:", error);
+    }
+  }
 </script>

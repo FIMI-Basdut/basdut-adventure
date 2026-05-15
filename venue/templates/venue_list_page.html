@@ -130,7 +130,7 @@
 
                         {% if user.role_name == 'Admin' or user.role_name == 'Organizer' %}
                             <div class="mt-5 flex gap-3">
-                                <button onclick="showUpdateVenueModal()" class="px-4 py-2 rounded-lg border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-2 transition-colors">
+                                <button onclick="showUpdateVenueModal('{{ venue.venue_id }}', '{{ venue.venue_name|escapejs }}', '{{ venue.capacity }}', '{{ venue.city|escapejs }}', '{{ venue.address|escapejs }}', '{{ venue.jenis_seating }}')" class="px-4 py-2 rounded-lg border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-2 transition-colors">
                                     <i class="far fa-edit"></i> Edit
                                 </button>
                                 <button onclick="showDeleteVenueModal()" class="px-4 py-2 rounded-lg border border-red-100 text-sm font-medium text-red-500 hover:bg-red-50 flex items-center gap-2 transition-colors">

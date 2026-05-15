@@ -139,8 +139,45 @@ def add_venue(request):
 
         try:
             execute_query(query_insert, params, fetch=False)
-            print("execute query sudah dijalankan")
+            print("execute query add venue sudah dijalankan")
             return JsonResponse({"status": "success", "message": "Venue berhasil ditambahkan"}, status=201)
         except Exception as e:
-            print(f"--- ERROR DARI NEONDB: {str(e)} ---")
+            print(f"error darii neondb: {str(e)}")
+            return JsonResponse({"status": "error", "message": str(e)}, status=500)
+        
+def update_venue(request, id):
+    if request.method == 'POST':
+        print(f"masuk fungsi update_venue dengan {id}")
+
+        venue_name = request.POST.get("venue_name")
+        capacity = request.POST.get("capacity")
+        city = request.POST.get("city")
+        address = request.POST.get("address")
+
+        if not venue_name or not city or not address:
+             return JsonResponse({"status": "error", "message": "Nama, Kota, dan Alamat wajib diisi"}, status=400)
+
+        try:
+            capacity = int(capacity)
+            if capacity <= 0:
+                capacity = 1
+        except (ValueError, TypeError):
+            capacity = 1
+        
+        has_reserved = request.POST.get("has_reserved_seating")
+        jenis_seating = "Reserved Seating" if has_reserved else "Free Seating"
+
+        query_update = """
+            UPDATE VENUE 
+            SET venue_name = %s, capacity = %s, city = %s, address = %s, jenis_seating = %s
+            WHERE venue_id = %s
+        """
+        params = (venue_name, capacity, city, address, jenis_seating, id)
+
+        try:
+            execute_query(query_update, params, fetch=False)
+            print("execute query update venue sudah dijalanka")
+            return JsonResponse({"status": "success", "message": "Venue berhasil diperbarui"}, status=200)
+        except Exception as e:
+            print(f"error dari neondb: {str(e)}")
             return JsonResponse({"status": "error", "message": str(e)}, status=500)
