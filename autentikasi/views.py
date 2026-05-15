@@ -17,6 +17,11 @@ def login_user(request):
       with get_connection().cursor() as cur:
          cur.execute(
             """
+            SET search_path TO tiktaktuk, public
+            """
+         )
+         cur.execute(
+            """
             SELECT UA.user_id, UA.username, UA.password, R.role_name
             FROM User_Account as UA
             JOIN Account_Role as AR ON UA.user_id = AR.user_id
