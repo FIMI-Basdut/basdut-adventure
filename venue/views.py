@@ -142,7 +142,7 @@ def add_venue(request):
             print("execute query add venue sudah dijalankan")
             return JsonResponse({"status": "success", "message": "Venue berhasil ditambahkan"}, status=201)
         except Exception as e:
-            print(f"error darii neondb: {str(e)}")
+            print(f"error darii neondb add venue: {str(e)}")
             return JsonResponse({"status": "error", "message": str(e)}, status=500)
         
 def update_venue(request, id):
@@ -179,5 +179,20 @@ def update_venue(request, id):
             print("execute query update venue sudah dijalanka")
             return JsonResponse({"status": "success", "message": "Venue berhasil diperbarui"}, status=200)
         except Exception as e:
-            print(f"error dari neondb: {str(e)}")
+            print(f"error dari neondb saat update venue: {str(e)}")
+            return JsonResponse({"status": "error", "message": str(e)}, status=500)
+        
+def delete_venue(request, id):
+    if request.method in ['DELETE', 'POST']:
+        print(f"masuk fungsi dleete_venue() dengan id {id}")
+        
+        query_delete = "DELETE FROM VENUE WHERE venue_id = %s"
+        params = (id,)
+
+        try:
+            execute_query(query_delete, params, fetch=False)
+            print("kueri delete sudah dijalankan")
+            return JsonResponse({"status": "success", "message": "Venue berhasil dihapus"}, status=200)
+        except Exception as e:
+            print(f"error dari neondb saat delete venue: {str(e)}")
             return JsonResponse({"status": "error", "message": str(e)}, status=500)
