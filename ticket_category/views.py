@@ -23,7 +23,7 @@ def daftar_tiket_kategori(request):
                 SELECT TC.category_id,TC.category_name,E.event_title,TC.price,TC.quota
                 FROM ticket_category TC
                 JOIN event E ON TC.tevent_id = E.event_id
-                ORDER BY E.event_title
+                ORDER BY E.event_title ASC,TC.category_name ASC
                 """
             )
             rows= cursor.fetchall()
@@ -119,7 +119,7 @@ def daftar_tiket_kategori_admin(request):
                 SELECT TC.category_id,TC.category_name,E.event_title,TC.price,TC.quota
                 FROM ticket_category TC
                 JOIN event E ON TC.tevent_id = E.event_id
-                ORDER BY E.event_title
+                ORDER BY E.event_title ASC,TC.category_name ASC
                 """
             )
             rows= cursor.fetchall()
@@ -185,6 +185,9 @@ def daftar_tiket_kategori_admin(request):
 
 @login_required
 def edit_tiket_kategori(request, id):
+    role = request.session.get('role')
+    if role != 'Admin':
+        return redirect('main:mantap')
     if request.method == 'POST':
         event_id = request.POST.get('event_id')
         category_name = request.POST.get('category_name', '').strip()
@@ -219,6 +222,9 @@ def edit_tiket_kategori(request, id):
 
 @login_required
 def hapus_tiket_kategori(request, id):
+    role = request.session.get('role')
+    if role != 'Admin':
+        return redirect('main:mantap')
     if request.method == 'POST':
         with get_connection() as conn:
             with conn.cursor() as cursor:

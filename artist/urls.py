@@ -1,9 +1,14 @@
-from django.urls import include, path
-from artist.views import show_daftar_artist, show_daftar_artist_admin
+from django.urls import path
+from . import views
 
-app_name = 'artist'
+app_name = 'artist' 
 
 urlpatterns = [
-    path('', show_daftar_artist, name='daftar_artist'),
-    path('admin/', show_daftar_artist_admin, name='daftar_artist_admin'),
+    # URL Publik / Non-Admin
+    path('', views.daftar_artis, name='daftar_artis'),
+
+    # URL Khusus Admin
+    path('admin/', views.daftar_artis_admin, name='daftar_artis_admin'),
+    path('admin/edit/<uuid:id>/', views.edit_artis, name='edit_artis'),
+    path('admin/hapus/<uuid:id>/', views.hapus_artis, name='hapus_artis'),
 ]
