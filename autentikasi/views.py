@@ -46,7 +46,7 @@ def login_user(request):
             
             return redirect('main:mantap')
          else:
-            messages.error(request, "Invalid password")
+            messages.error(request, "Invalid password or username")
       else:
          messages.error(request, "User does not exist.")
          

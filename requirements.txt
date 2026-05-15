@@ -5,6 +5,4 @@ psycopg2-binary
 requests
 urllib3
 python-dotenv
-django-extensions
-psycopg[binary]
 dj-database-url
