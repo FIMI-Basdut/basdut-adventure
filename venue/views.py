@@ -1,9 +1,13 @@
+import uuid
+
 from django.shortcuts import render, redirect
 from basdut_adventure.db import get_connection
 from basdut_adventure.decorators import login_required 
 from django.db import connection, InternalError, DatabaseError
 from basdut_adventure.db import execute_query
 from django.contrib import messages
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
 
 @login_required
 def show_venue_list(request):
@@ -104,3 +108,39 @@ def get_venues(request):
     rows = execute_query(query_get_venues, tuple(params), fetch=True)
 
     return rows
+
+
+def add_venue(request):
+    if request.method == 'POST':
+        print("masuk ke fungsi add_venue()")
+
+        venue_name = request.POST.get("venue_name")
+        capacity = request.POST.get("capacity")
+        city = request.POST.get("city")
+        address = request.POST.get("address")
+
+        try:
+            capacity = int(capacity)
+            if capacity <= 0:
+                capacity = 1  # Minimal bernilai 1 agar lolos constraint DB
+        except (ValueError, TypeError):
+            capacity = 1
+        
+        has_reserved = request.POST.get("has_reserved_seating")
+        jenis_seating = "Reserved Seating" if has_reserved else "Free Seating"
+        
+        new_id = str(uuid.uuid4())
+
+        query_insert = """
+            INSERT INTO VENUE (venue_id, venue_name, capacity, city, address, jenis_seating)
+            VALUES (%s, %s, %s, %s, %s, %s)
+        """
+        params = (new_id, venue_name, capacity, city, address, jenis_seating)
+
+        try:
+            execute_query(query_insert, params, fetch=False)
+            print("execute query sudah dijalankan")
+            return JsonResponse({"status": "success", "message": "Venue berhasil ditambahkan"}, status=201)
+        except Exception as e:
+            print(f"--- ERROR DARI NEONDB: {str(e)} ---")
+            return JsonResponse({"status": "error", "message": str(e)}, status=500)

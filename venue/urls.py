@@ -1,8 +1,9 @@
 from django.urls import path
-from venue.views import show_venue_list
+from venue.views import show_venue_list, add_venue
 
 app_name = 'venue'
 
 urlpatterns = [
     path('', show_venue_list, name='venue_list'),
+    path('add-venue/', add_venue, name='add_venue'),
 ]

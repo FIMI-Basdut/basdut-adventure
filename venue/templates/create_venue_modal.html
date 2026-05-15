@@ -18,7 +18,8 @@
     </div>
     <!-- Modal body -->
     <div class="px-6 py-4 space-y-6 form-style">
-      <form id="venueForm">
+      <form id="createVenueForm" onsubmit="event.preventDefault(); addVenueEntry();">
+        {% csrf_token %}
         <div class="mb-4">
           <label for="venue_name" class="block text-sm font-medium text-gray-700">NAMA VENUE (VENUE_NAME)</label>
           <input type="text" id="venue_name" name="venue_name" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 transition-colors hover:border-blue-700 focus:outline-none focus:border-blue-700 focus:ring-1 focus:ring-blue-700" placeholder="contoh: Jakarta Convention Center" required>
@@ -31,7 +32,7 @@
 
         <div class="mb-4">
           <label for="city" class="block text-sm font-medium text-gray-700">KOTA (CITY)</label>
-          <input type="url" id="city" name="city" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 transition-colors hover:border-blue-700 focus:outline-none focus:border-blue-700 focus:ring-1 focus:ring-blue-700" placeholder="Jakarta">
+          <input type="text" id="city" name="city" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 transition-colors hover:border-blue-700 focus:outline-none focus:border-blue-700 focus:ring-1 focus:ring-blue-700" placeholder="Jakarta">
         </div>
 
         <div class="mb-4">
@@ -50,7 +51,7 @@
     <!-- Modal footer -->
     <div class="flex flex-col sm:flex-row gap-4 p-6 border-t border-gray-200 rounded-b">
       <button type="button" id="cancelButton" class="order-2 sm:order-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-md font-medium hover:bg-gray-50 transition-colors text-center" onclick="hideCreateVenueModal()">Cancel</button>
-      <button type="submit" id="submitVenue" form="venueForm" class="order-1 sm:order-2 flex-1 bg-blue-600 text-white px-6 py-3 rounded-md font-medium hover:bg-blue-700 transition-colors">Tambah</button>
+      <button type="submit" id="submitVenue" form="createVenueForm" class="order-1 sm:order-2 flex-1 bg-blue-600 text-white px-6 py-3 rounded-md font-medium hover:bg-blue-700 transition-colors">Tambah</button>
     </div>
   </div>
 </div>
@@ -81,25 +82,35 @@
   }
 
   async function addVenueEntry() {
-    await fetch("{% url 'venue:venue_list' %}", {
-      method: "POST",
-      body: new FormData(document.querySelector('#venueForm')),
-    })
+    const form = document.querySelector('#createVenueForm');
+    const formData = new FormData(form);
 
-    document.getElementById("venueForm").reset();
-    hideCreateVenueModal();
-      
-    // Show toast notification
-    showToast('Venue added successfully!', '', 'success');
+    try {
+        const response = await fetch("{% url 'venue:add_venue' %}", {
+            method: "POST",
+            body: formData,
+            // Header X-CSRFToken biasanya dibutuhkan jika tidak menggunakan {% csrf_token %} di form
+            headers: {
+                "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value
+            }
+        });
 
-    // Dispatch custom event to notify main.html about new data
-    document.dispatchEvent(new CustomEvent('venueAdded'));
+        const result = await response.json();
+
+        if (response.ok) {
+            form.reset();
+            hideCreateVenueModal();
+            
+            // Refresh halaman atau update list secara dinamis
+            window.location.reload(); 
+        } else {
+            alert("Gagal menambahkan venue: " + result.message);
+        }
+    } catch (error) {
+        console.error("Error:", error);
+    }
 
     return false;
   }
 
-  document.getElementById("venueForm").addEventListener("submit", function(e) {
-    e.preventDefault();
-    addVenueEntry();
-  })
 </script>
