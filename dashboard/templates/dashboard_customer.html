@@ -11,6 +11,7 @@
     </style>
 </head>
 <body class="bg-gray-50 text-slate-800">
+    {% include 'navbar.html' %}
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
@@ -71,7 +72,7 @@
                     </div>
                 </div>
                 <div>
-                    <h2 class="text-3xl font-bold text-slate-800">{{ kode_promo }}</h2>
+                    <h2 class="text-3xl font-bold text-slate-800">{{ banyak_promo }}</h2>
                     <p class="text-xs text-slate-500 mt-1">Tersedia untuk anda</p>
                 </div>
             </div>
@@ -109,7 +110,7 @@
                     <div class="flex justify-between items-center">
                         <div>
                             <div class="flex items-center gap-3 mb-1">
-                                <h4 class="font-bold text-slate-800 group-hover:text-green-600 transition">{{ item.tevent.event_title }}</h4>
+                                <h4 class="font-bold text-slate-800 group-hover:text-green-600 transition">{{ item.event_title }}</h4>
                                 <span class="px-2 py-0.5 bg-blue-100 text-blue-700 text-[10px] font-bold rounded uppercase tracking-wide">{{ item.category_name }}</span>
                             </div>
                             <div class="flex items-center text-sm text-slate-500 gap-4 mt-2">
@@ -117,14 +118,14 @@
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 mr-1">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
                                     </svg>
-                                    {{ item.tevent.event_datetime|date:"d M Y" }}
+                                    {{ item.event_datetime|date:"d M Y" }}
                                 </span>
                                 <span class="flex items-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 mr-1">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
                                     </svg>
-                                    {{ item.tevent.venue.venue_name }}
+                                    {{ item.venue.venue_name }}
                                 </span>
                             </div>
                         </div>

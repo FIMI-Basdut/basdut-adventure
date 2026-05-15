@@ -92,9 +92,9 @@ WSGI_APPLICATION = 'basdut_adventure.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',          
-        'USER': 'postgres',          
-        'PASSWORD': 'postgres', 
+        'NAME': 'tiktaktukdb',          
+        'USER': 'ilham.afuw',          
+        'PASSWORD': 'bulanmatahari1', 
         'HOST': 'localhost',         
         'PORT': '5432',              
         'OPTIONS': {
