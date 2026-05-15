@@ -8,6 +8,8 @@
 
         <h3 class="text-xl font-bold text-red-600 mb-3">Hapus Venue</h3>
         
+        {% csrf_token %}
+
         <p class="text-sm text-gray-500 mb-8 pr-2 leading-relaxed">
             Apakah Anda yakin ingin menghapus venue ini? Tindakan ini tidak dapat dibatalkan.
         </p>
@@ -16,7 +18,7 @@
             <button onclick="hideDeleteVenueModal()" class="px-5 py-2.5 rounded-lg border border-gray-200 text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors">
                 Batal
             </button>
-            <button class="bg-[#e11d48] hover:bg-red-700 text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition-colors">
+            <button onclick="deleteVenue()" class="bg-[#e11d48] hover:bg-red-700 text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition-colors">
                 Hapus
             </button>
         </div>
@@ -25,7 +27,10 @@
 
 <!-- SCRIPT buat beneran hapusnya belum ada -->
 <script>
-    function showDeleteVenueModal() {
+    let currentDeleteVenueId = '';
+
+    function showDeleteVenueModal(id) {
+        currentDeleteVenueId = id;
         const modal = document.getElementById('deleteVenueModal');
         modal.classList.remove('hidden');
         modal.classList.add('flex');
@@ -35,5 +40,29 @@
         const modal = document.getElementById('deleteVenueModal');
         modal.classList.remove('flex');
         modal.classList.add('hidden');
+    }
+
+    async function deleteVenue() {
+        try {
+            const response = await fetch(`/venue/delete-venue/${currentDeleteVenueId}/`, {
+                method: "DELETE", 
+                headers: {
+                    "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
+                    "Content-Type": "application/json"
+                }
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                hideDeleteVenueModal();
+                window.location.reload(); 
+            } else {
+                alert("Gagal menghapus venue: " + result.message);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("Terjadi kesalahan pada sistem.");
+        }
     }
 </script>
