@@ -11,7 +11,7 @@
     </style>
 </head>
 <body class="bg-gray-50 text-slate-800">
-
+    {% include 'navbar.html' %}
     <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
 
         <!-- Header -->
@@ -34,7 +34,7 @@
             </div>
             <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
                 <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Tampil di Event</p>
-                <h2 class="text-3xl font-bold text-slate-800">-</h2>
+                <h2 class="text-3xl font-bold text-slate-800">{{ total_artis_terlibat }}</h2>
             </div>
         </div>
 

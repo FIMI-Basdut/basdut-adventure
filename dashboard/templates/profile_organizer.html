@@ -64,7 +64,7 @@
 
                             Nama Organizer
                         </p>
-                        <p class="text-sm font-semibold text-slate-800">Budi Santoso</p>
+                        <p class="text-sm font-semibold text-slate-800">{{ organizer.organizer_name }}</p>
                     </div>
 
                     <div>
@@ -75,7 +75,7 @@
 
                             Contact Email
                         </p>
-                        <p class="text-sm font-semibold text-slate-800">organizer1@example.com</p>
+                        <p class="text-sm font-semibold text-slate-800">{{ organizer.contact_email }}</p>
                     </div>
 
                     <div>
@@ -85,14 +85,14 @@
                             </svg>
                             Username
                         </p>
-                        <p class="text-sm font-semibold text-slate-800">@organizer1</p>
+                        <p class="text-sm font-semibold text-slate-800">{{ organizer.username }}</p>
                     </div>
                 </div>
 
             </div>
         </div>
 
-        <!-- Card Update Password -->
+<!-- Card Update Password -->
         <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 sm:p-8">
             
             <!-- Card Header -->
@@ -101,28 +101,47 @@
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
                     </svg>
-
                     Update Password
                 </h2>
                 <p class="text-[13px] text-slate-500 mt-1">Perbarui password Anda untuk menjaga keamanan akun</p>
             </div>
 
-            <!-- Form Password -->
+            <!-- Notifikasi (Alerts) -->
+            {% if error %}
+            <div class="mb-5 p-3 rounded-lg bg-red-50 border border-red-200 text-sm text-red-600 font-medium flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3Z" />
+                </svg>
+                {{ error }}
+            </div>
+            {% endif %}
+
+            {% if success %}
+            <div class="mb-5 p-3 rounded-lg bg-green-50 border border-green-200 text-sm text-green-700 font-medium flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+                {{ success }}
+            </div>
+            {% endif %}
+
+
             <form action="" method="POST" class="space-y-5">
+                {% csrf_token %}
                 
                 <div>
                     <label class="block text-[13px] font-semibold text-slate-600 mb-1.5">Password Lama</label>
-                    <input type="password" name="old_password" placeholder="Password Lama" class="block w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm text-slate-800 focus:border-slate-800 focus:ring-1 focus:ring-slate-800 outline-none placeholder-gray-400 transition">
+                    <input type="password" name="old_password" required placeholder="Password Lama" class="block w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm text-slate-800 focus:border-slate-800 focus:ring-1 focus:ring-slate-800 outline-none placeholder-gray-400 transition">
                 </div>
 
                 <div>
                     <label class="block text-[13px] font-semibold text-slate-600 mb-1.5">Password Baru</label>
-                    <input type="password" name="new_password" placeholder="Password Baru" class="block w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm text-slate-800 focus:border-slate-800 focus:ring-1 focus:ring-slate-800 outline-none placeholder-gray-400 transition">
+                    <input type="password" name="new_password" required placeholder="Password Baru" class="block w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm text-slate-800 focus:border-slate-800 focus:ring-1 focus:ring-slate-800 outline-none placeholder-gray-400 transition">
                 </div>
 
                 <div>
                     <label class="block text-[13px] font-semibold text-slate-600 mb-1.5">Konfirmasi Password Baru</label>
-                    <input type="password" name="confirm_password" placeholder="Konfirmasi Password Baru" class="block w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm text-slate-800 focus:border-slate-800 focus:ring-1 focus:ring-slate-800 outline-none placeholder-gray-400 transition">
+                    <input type="password" name="confirm_password" required placeholder="Konfirmasi Password Baru" class="block w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm text-slate-800 focus:border-slate-800 focus:ring-1 focus:ring-slate-800 outline-none placeholder-gray-400 transition">
                 </div>
 
                 <div class="flex justify-end gap-3 pt-4">
