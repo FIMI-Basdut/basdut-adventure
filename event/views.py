@@ -1,3 +1,5 @@
+import uuid
+
 from django.shortcuts import render, redirect
 from basdut_adventure.decorators import login_required 
 from basdut_adventure.db import execute_query
@@ -10,11 +12,13 @@ def show_event_list(request):
     events = get_events(request)
     venues = get_venues(request)
     artists = get_artist(request)
+    organizers = get_organizers(request)
 
     context = {
         'events': events,
         'venues': venues,
         'artists': artists,
+        'organizers': organizers,
     }
 
     return render(request, "event_list_page.html", context)
@@ -77,8 +81,9 @@ def get_events(request):
 
 def get_venues(request): 
     query_get_venues = """
-        SELECT venue_name
-        FROM VENUE;
+        SELECT venue_id, venue_name
+        FROM VENUE
+        ORDER BY venue_name ASC;
     """
     params = []
 
@@ -88,11 +93,76 @@ def get_venues(request):
 
 def get_artist(request):
     query_get_artist = """
-        SELECT artist_name
-        FROM ARTIST;
+        SELECT artist_id, artist_name
+        FROM ARTIST
+        ORDER BY artist_name ASC;
     """
     params = []
 
     rows = execute_query(query_get_artist, tuple(params), fetch=True)
 
     return rows
+
+def get_organizers(request):
+    query_get_organizer = """
+        SELECT organizer_id, organizer_name
+        FROM ORGANIZER
+        ORDER BY organizer_name ASC;
+    """
+    params = []
+
+    rows = execute_query(query_get_organizer, tuple(params), fetch=True)
+
+    return rows
+
+def add_event(request):
+    if request.method == 'POST':
+        print("masuk ke fungsi add_event()")
+
+        try: 
+            event_id = str(uuid.uuid4())
+            event_title = request.POST.get("event_title") 
+            event_date = request.POST.get("event_date") 
+            event_time = request.POST.get("event_time")
+            event_datetime = f"{event_date} {event_time}:00" 
+            event_emoji = request.POST.get("event_emoji")
+            event_description = request.POST.get("event_description")
+
+            venue_id = request.POST.get("venue_id") 
+            organizer_id = request.POST.get("organizer_id")
+
+            query_event = """
+                INSERT INTO EVENT (event_id, event_datetime, event_title, venue_id, organizer_id, emoji, event_description)
+                VALUES (%s, %s, %s, %s, %s, %s, %s)
+            """
+            params_event = (event_id, event_datetime, event_title, venue_id, organizer_id, event_emoji, event_description)
+            execute_query(query_event, params_event, fetch=False)
+
+            artist_ids = request.POST.getlist("artist_ids")
+            if artist_ids:
+                for artist_id in artist_ids:
+                    custom_role = request.POST.get(f"role_{artist_id}")
+                    
+                    if not custom_role or custom_role.strip() == "":
+                        custom_role = "Performer"
+                        
+                    query_ea = "INSERT INTO EVENT_ARTIST (event_id, artist_id, role) VALUES (%s, %s, %s)"
+                    execute_query(query_ea, (event_id, artist_id, custom_role), fetch=False)
+
+            categories = request.POST.getlist("ticket_category[]")
+            prices = request.POST.getlist("ticket_price[]")
+            quotas = request.POST.getlist("ticket_quota[]")
+
+            for cat_name, price, quota in zip(categories, prices, quotas):
+                cat_id = str(uuid.uuid4())
+                query_tc = """
+                    INSERT INTO TICKET_CATEGORY (category_id, category_name, quota, price, tevent_id)
+                    VALUES (%s, %s, %s, %s, %s)
+                """
+                execute_query(query_tc, (cat_id, cat_name, int(quota), float(price), event_id), fetch=False)
+
+            return JsonResponse({"status": "success", "message": "Acara beserta relasinya berhasil dibuat!"}, status=201)
+        
+        except Exception as e:
+            print(f"Error Database: {str(e)}")
+            return JsonResponse({"status": "error", "message": str(e)}, status=500)
