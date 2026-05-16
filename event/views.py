@@ -28,36 +28,47 @@ def get_events(request):
         SELECT e.event_title, TO_CHAR(e.event_datetime, 'YYYY-MM-DD HH24:MI') as event_datetime, e.emoji, 
                 v.venue_name, v.city,
                 ARRAY_AGG(DISTINCT a.artist_name) AS artists
-        FROM EVENT e, VENUE v, ARTIST a, EVENT_ARTIST ea
-        WHERE e.venue_id = v.venue_id
-                and e.event_id = ea.event_id
-                and a.artist_id = ea.artist_id 
+        FROM EVENT e
+        JOIN VENUE v ON e.venue_id = v.venue_id
+        JOIN EVENT_ARTIST ea ON e.event_id = ea.event_id
+        JOIN ARTIST a ON ea.artist_id = a.artist_id
+        WHERE 1=1
         
     """
     params = []
 
     if search_query:
-        query_get_event += " AND (e.event_title ILIKE %s OR a.artist_name ILIKE %s)"
+        query_get_event += """ 
+            AND (e.event_title ILIKE %s OR e.event_id IN (
+                SELECT ea2.event_id 
+                FROM EVENT_ARTIST ea2 
+                JOIN ARTIST a2 ON ea2.artist_id = a2.artist_id 
+                WHERE a2.artist_name ILIKE %s
+            )) 
+        """
         search_param = f"%{search_query}%"
         params.append(search_param) # judul event
         params.append(search_param) # nama artis
 
     if filter_artist:
-        query_get_event += " AND artist = %s"
+        query_get_event += """ 
+            AND e.event_id IN (
+                SELECT ea3.event_id 
+                FROM EVENT_ARTIST ea3 
+                JOIN ARTIST a3 ON ea3.artist_id = a3.artist_id 
+                WHERE a3.artist_name = %s
+            ) 
+        """
         params.append(filter_artist)
     
     if filter_venue:
-        query_get_event += " AND venue_name = %s"
+        query_get_event += " AND v.venue_name = %s"
         params.append(filter_venue)
 
     query_get_event += """ GROUP BY event_title, e.event_datetime, v.venue_name, v.city, e.emoji
                             ORDER BY e.event_title ASC; """
 
     rows = execute_query(query_get_event, tuple(params), fetch=True)
-    print(rows)
-    
-    # for r in rows:
-    #     print(r)
 
     return rows
 
@@ -69,9 +80,6 @@ def get_venues(request):
     params = []
 
     rows = execute_query(query_get_venues, tuple(params), fetch=True)
-    
-    # for r in rows:
-    #     print(r)
 
     return rows
 
@@ -83,8 +91,5 @@ def get_artist(request):
     params = []
 
     rows = execute_query(query_get_artist, tuple(params), fetch=True)
-    
-    # for r in rows:
-    #     print(r)
 
     return rows

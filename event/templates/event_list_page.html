@@ -45,20 +45,20 @@
                 <!-- Filters -->
                 <div class="flex gap-4">
                     <select name="venue" onchange="this.form.submit()"
-                            class="py-3 px-4 w-full md:w-auto min-w-[160px] rounded-xl border border-gray-200 bg-white text-gray-600 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm appearance-none relative">
-                        <option>Semua Venue</option>
+                            class="py-3 px-4 w-full md:w-auto min-w-[160px] rounded-xl border border-gray-200 bg-white text-blue-600 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm appearance-none relative">
+                        <option value="">Semua Venue</option>
                         {% for v in venues %}
-                            <option value="{{ v.venue_name }}" {% if request.GET.city == v.venue_name %}selected{% endif %}>
+                            <option value="{{ v.venue_name }}" {% if request.GET.venue == v.venue_name %}selected{% endif %}>
                                 {{ v.venue_name }}
                             </option>
                         {% endfor %}
                     </select>
 
                     <select name="artist" onchange="this.form.submit()" 
-                            class="py-3 px-4 w-full md:w-auto min-w-[160px] rounded-xl border border-gray-200 bg-white text-gray-600 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm appearance-none relative">
-                        <option>Semua Artis</option>
+                            class="py-3 px-4 w-full md:w-auto min-w-[160px] rounded-xl border border-gray-200 bg-white text-blue-600 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm appearance-none relative">
+                        <option value="">Semua Artis</option>
                         {% for a in artists %}
-                            <option value="{{ a.artist_name }}" {% if request.GET.city == a.artist_name %}selected{% endif %}>
+                            <option value="{{ a.artist_name }}" {% if request.GET.artist == a.artist_name %}selected{% endif %}>
                                 {{ a.artist_name }}
                             </option>
                         {% endfor %}
@@ -117,140 +117,6 @@
                     </div>
                 </div>
             {% endfor %}
-            
-            <!-- Card 1 -->
-            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm flex flex-col overflow-hidden">
-                <!-- Image Header -->
-                <div class="h-48 bg-indigo-500 relative flex items-center justify-center">
-                    <button class="absolute top-4 right-4 w-8 h-8 bg-white rounded-full flex items-center justify-center text-gray-400 hover:text-red-500 shadow transition-colors">
-                        <i class="far fa-heart"></i>
-                    </button>
-                    <span class="text-6xl">🪩</span>
-                </div>
-                <!-- Content -->
-                <div class="p-6 flex flex-col flex-1">
-                    <h2 class="text-lg font-bold text-gray-900 mb-2">After Hours Til Dawn Tour</h2>
-                    
-                    <!-- Artist Tags -->
-                    <div class="flex flex-wrap gap-2 mb-4">
-                        <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-md text-[11px] font-medium">The Weeknd</span>
-                    </div>
-
-                    <!-- Details -->
-                    <div class="space-y-2 mb-4 text-sm text-gray-500">
-                        <p class="flex items-center gap-2"><i class="far fa-calendar-alt w-4"></i> 2026-11-14 - 19:00</p>
-                        <p class="flex items-center gap-2"><i class="fas fa-map-marker-alt w-4 text-center"></i>Garuda Hall, Jakarta</p>
-                        <p class="flex items-center gap-2 text-blue-600 font-bold"><i class="fas fa-dollar-sign w-4 text-center"></i> Mulai Rp 250,000</p>
-                    </div>
-
-                    <!-- Categories -->
-                    <div class="flex flex-wrap gap-2 mb-6">
-                        <span class="bg-blue-50 text-blue-600 px-2 py-1 rounded-md text-[10px] font-bold">VVIP</span>
-                        <span class="bg-blue-50 text-blue-600 px-2 py-1 rounded-md text-[10px] font-bold">VIP</span>
-                        <span class="bg-blue-50 text-blue-600 px-2 py-1 rounded-md text-[10px] font-bold">Category 1</span>
-                        <span class="bg-blue-50 text-blue-600 px-2 py-1 rounded-md text-[10px] font-bold">Category 2</span>
-                    </div>
-
-                    <!-- Action Button -->
-                    <button class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl text-sm font-semibold transition-colors">
-                        Beli Tiket
-                    </button>
-
-                    <button onclick="showUpdateEventModal()" class="p-6 mt-auto w-full bg-white-600 hover:bg-white-700 text-blue py-3 rounded-xl text-sm font-semibold transition-colors">
-                        Edit Tiket
-                    </button>
-                </div>
-            </div>
-
-            <!-- Card 2 -->
-            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm flex flex-col overflow-hidden">
-                <!-- Image Header -->
-                <div class="h-48 bg-indigo-500 relative flex items-center justify-center">
-                    <button class="absolute top-4 right-4 w-8 h-8 bg-white rounded-full flex items-center justify-center text-gray-400 hover:text-red-500 shadow transition-colors">
-                        <i class="far fa-heart"></i>
-                    </button>
-                    <span class="text-6xl">🎷</span>
-                </div>
-                <!-- Content -->
-                <div class="p-6 flex flex-col flex-1">
-                    <h2 class="text-lg font-bold text-gray-900 mb-2">Prambanan Jazz Festival 2026</h2>
-                    
-                    <!-- Artist Tags -->
-                    <div class="flex flex-wrap gap-2 mb-4">
-                        <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-md text-[11px] font-medium">NIKI</span>
-                        <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-md text-[11px] font-medium">Xdinary Heroes</span>
-                        <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-md text-[11px] font-medium">Michael Learns to Rock</span>
-                        <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-md text-[11px] font-medium">ALI</span>
-                        <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-md text-[11px] font-medium">Barasuara</span>
-                        <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-md text-[11px] font-medium">Lomba Sihir</span>
-                        <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-md text-[11px] font-medium">Idgitaf</span>
-                    </div>
-
-                    <!-- Details -->
-                    <div class="space-y-2 mb-4 text-sm text-gray-500">
-                        <p class="flex items-center gap-2"><i class="far fa-calendar-alt w-4"></i> 2026-07-03 - 10:00</p>
-                        <p class="flex items-center gap-2"><i class="fas fa-map-marker-alt w-4 text-center"></i>Borneo Expo Hall, Balikpapan</p>
-                        <p class="flex items-center gap-2 text-blue-600 font-bold"><i class="fas fa-dollar-sign w-4 text-center"></i> Mulai Rp 150,000</p>
-                    </div>
-
-                    <!-- Categories -->
-                    <div class="flex flex-wrap gap-2 mb-6">
-                        <span class="bg-blue-50 text-blue-600 px-2 py-1 rounded-md text-[10px] font-bold">General Admission</span>
-                    </div>
-
-                    <!-- Action Button -->
-                    <button class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl text-sm font-semibold transition-colors">
-                        Beli Tiket
-                    </button>
-
-                    <button onclick="showUpdateEventModal()" class="p-6 mt-auto w-full bg-white-600 hover:bg-white-700 text-blue py-3 rounded-xl text-sm font-semibold transition-colors">
-                        Edit Tiket
-                    </button>
-                </div>
-            </div>
-
-            <!-- Card 3 -->
-            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm flex flex-col overflow-hidden">
-                <!-- Image Header -->
-                <div class="h-48 bg-indigo-500 relative flex items-center justify-center">
-                    <button class="absolute top-4 right-4 w-8 h-8 bg-white rounded-full flex items-center justify-center text-gray-400 hover:text-red-500 shadow transition-colors">
-                        <i class="far fa-heart"></i>
-                    </button>
-                    <span class="text-6xl">🪐</span>
-                </div>
-                <!-- Content -->
-                <div class="p-6 flex flex-col flex-1">
-                    <h2 class="text-lg font-bold text-gray-900 mb-2">EXO PLANET #6 – EXhOrizon</h2>
-                    
-                    <!-- Artist Tags -->
-                    <div class="flex flex-wrap gap-2 mb-4">
-                        <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-md text-[11px] font-medium">EXO</span>
-                    </div>
-
-                    <!-- Details -->
-                    <div class="space-y-2 mb-4 text-sm text-gray-500">
-                        <p class="flex items-center gap-2"><i class="far fa-calendar-alt w-4"></i> 2026-08-22 - 18:00</p>
-                        <p class="flex items-center gap-2"><i class="fas fa-map-marker-alt w-4 text-center"></i> Garuda Hall, Jakarta</p>
-                        <p class="flex items-center gap-2 text-blue-600 font-bold"><i class="fas fa-dollar-sign w-4 text-center"></i> Mulai Rp 350,000</p>
-                    </div>
-
-                    <!-- Categories -->
-                    <div class="flex flex-wrap gap-2 mb-6">
-                        <span class="bg-blue-50 text-blue-600 px-2 py-1 rounded-md text-[10px] font-bold">VVIP</span>
-                        <span class="bg-blue-50 text-blue-600 px-2 py-1 rounded-md text-[10px] font-bold">VIP</span>
-                        <span class="bg-blue-50 text-blue-600 px-2 py-1 rounded-md text-[10px] font-bold">Regular</span>
-                    </div>
-
-                    <!-- Action Button -->
-                    <button class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl text-sm font-semibold transition-colors">
-                        Beli Tiket
-                    </button>
-
-                    <button onclick="showUpdateEventModal()" class="p-6 mt-auto w-full bg-white-600 hover:bg-white-700 text-blue py-3 rounded-xl text-sm font-semibold transition-colors">
-                        Edit Tiket
-                    </button>
-                </div>
-            </div>
 
         </div>
     </div>
