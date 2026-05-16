@@ -27,11 +27,14 @@ def get_events(request):
     query_get_event = """
         SELECT e.event_title, TO_CHAR(e.event_datetime, 'YYYY-MM-DD HH24:MI') as event_datetime, e.emoji, 
                 v.venue_name, v.city,
-                ARRAY_AGG(DISTINCT a.artist_name) AS artists
+                ARRAY_AGG(DISTINCT a.artist_name) AS artists,
+                ARRAY_AGG(DISTINCT tc.category_name) AS ticket_categories,
+                TO_CHAR(MIN(tc.price), 'FM999,999,999') AS lowest_price
         FROM EVENT e
         JOIN VENUE v ON e.venue_id = v.venue_id
         JOIN EVENT_ARTIST ea ON e.event_id = ea.event_id
         JOIN ARTIST a ON ea.artist_id = a.artist_id
+        JOIN TICKET_CATEGORY tc ON e.event_id = tc.tevent_id
         WHERE 1=1
         
     """
