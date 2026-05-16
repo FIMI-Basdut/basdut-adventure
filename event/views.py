@@ -6,15 +6,18 @@ from basdut_adventure.db import execute_query
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
+from venue.views import get_db_user
 
 @login_required
 def show_event_list(request):
+    user = get_db_user(request)
     events = get_events(request)
     venues = get_venues(request)
     artists = get_artist(request)
     organizers = get_organizers(request)
 
     context = {
+        'user': user,
         'events': events,
         'venues': venues,
         'artists': artists,
@@ -73,7 +76,7 @@ def get_events(request):
         params.append(filter_venue)
 
     query_get_event += """ GROUP BY event_title, e.event_datetime, v.venue_name, v.city, e.emoji
-                            ORDER BY e.event_title ASC; """
+                            ORDER BY e.event_datetime DESC; """
 
     rows = execute_query(query_get_event, tuple(params), fetch=True)
 
