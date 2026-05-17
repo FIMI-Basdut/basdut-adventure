@@ -91,10 +91,11 @@ def get_venues(request):
     params = []
 
     if search_query:
-        query_get_venues += " AND (venue_name ILIKE %s OR address ILIKE %s)"
+        query_get_venues += " AND (venue_name ILIKE %s OR address ILIKE %s OR city ILIKE %s)"
         search_param = f"%{search_query}%"
         params.append(search_param) # nama venue
         params.append(search_param) # alamat venue
+        params.append(search_param) # kota venue
 
     if filter_city:
         query_get_venues += " AND city = %s"
