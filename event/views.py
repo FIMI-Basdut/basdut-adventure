@@ -36,7 +36,8 @@ def get_events(request):
                 v.venue_name, v.city,
                 ARRAY_AGG(DISTINCT a.artist_name) AS artists,
                 ARRAY_AGG(DISTINCT tc.category_name) AS ticket_categories,
-                TO_CHAR(MIN(tc.price), 'FM999,999,999') AS lowest_price
+                TO_CHAR(MIN(tc.price), 'FM999,999,999') AS lowest_price,
+                e.event_id, v.venue_id, e.organizer_id, e.event_description
         FROM EVENT e
         JOIN VENUE v ON e.venue_id = v.venue_id
         JOIN EVENT_ARTIST ea ON e.event_id = ea.event_id
@@ -75,7 +76,8 @@ def get_events(request):
         query_get_event += " AND v.venue_name = %s"
         params.append(filter_venue)
 
-    query_get_event += """ GROUP BY event_title, e.event_datetime, v.venue_name, v.city, e.emoji
+    query_get_event += """ GROUP BY event_title, e.event_datetime, v.venue_name, v.city, e.emoji,
+                                    e.event_id, v.venue_id, e.organizer_id, e.event_description
                             ORDER BY e.event_datetime DESC; """
 
     rows = execute_query(query_get_event, tuple(params), fetch=True)
@@ -166,6 +168,35 @@ def add_event(request):
 
             return JsonResponse({"status": "success", "message": "Acara beserta relasinya berhasil dibuat!"}, status=201)
         
+        except Exception as e:
+            print(f"Error Database: {str(e)}")
+            return JsonResponse({"status": "error", "message": str(e)}, status=500)
+        
+def update_event(request, id):
+    if request.method == 'POST':
+        print(f"masuk ke fungsi add_event dengan id {id}")
+
+        event_title = request.POST.get("event_title")
+        event_emoji = request.POST.get("event_emoji")
+        event_date = request.POST.get("event_date")
+        event_time = request.POST.get("event_time")
+        event_datetime = f"{event_date} {event_time}:00"
+        
+        venue_id = request.POST.get("venue_id")
+        organizer_id = request.POST.get("organizer_id")
+        event_description = request.POST.get("event_description")
+
+        query_update = """
+            UPDATE EVENT 
+            SET event_title = %s, emoji = %s, event_datetime = %s, venue_id = %s, organizer_id = %s, event_description = %s
+            WHERE event_id = %s
+        """
+        params = (event_title, event_emoji, event_datetime, venue_id, organizer_id, event_description, id)
+
+        try:
+            execute_query(query_update, params, fetch=False)
+            print("kueri update event dijalankan")
+            return JsonResponse({"status": "success", "message": "Acara berhasil diperbarui"}, status=200)
         except Exception as e:
             print(f"Error Database: {str(e)}")
             return JsonResponse({"status": "error", "message": str(e)}, status=500)

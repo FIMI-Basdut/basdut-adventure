@@ -148,7 +148,7 @@ def add_venue(request):
         
 def update_venue(request, id):
     if request.method == 'POST':
-        print(f"masuk fungsi update_venue dengan {id}")
+        print(f"masuk fungsi update_venue dengan id {id}")
 
         venue_name = request.POST.get("venue_name")
         capacity = request.POST.get("capacity")
