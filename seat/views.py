@@ -3,19 +3,26 @@ from django.db import connection, InternalError, DatabaseError
 from django.contrib import messages
 import uuid
 
+from basdut_adventure.decorators import login_required 
+
 def execute_query(query, params=None, fetch=False):
     with connection.cursor() as cursor:
         cursor.execute("SET search_path TO TikTakTuk;")
         cursor.execute(query, params)
         if fetch:
-            # Mengubah hasil fetchall (tuple) menjadi list of dictionary
-            # Agar mudah dipanggil di template dengan format {{ seat.kolom }}
             columns = [col[0] for col in cursor.description]
             return [dict(zip(columns, row)) for row in cursor.fetchall()]
         return None
 
+
+@login_required
 def show_seat(request):
-    # Query untuk mengambil data seat, venue, dan status (TERISI/TERSEDIA)
+    role = request.session.get('role')
+    
+    if role == 'Customer':
+        messages.error(request, "Akses ditolak! Customer tidak memiliki izin untuk melihat Manajemen Kursi.")
+        return redirect('dashboard:dashboard_customer') 
+
     query_seats = """
         SELECT 
             s.seat_id, 
@@ -36,12 +43,12 @@ def show_seat(request):
     if not seats:
         seats = []
 
-    # Perhitungan statistik kursi
+
     total_kursi = len(seats)
     tersedia = sum(1 for s in seats if s['status'] == 'TERSEDIA')
     terisi = sum(1 for s in seats if s['status'] == 'TERISI')
 
-    # Query untuk memuat pilihan venue pada form select
+
     venues = execute_query("SELECT venue_id, venue_name FROM VENUE;", fetch=True)
 
     context = {
@@ -53,7 +60,15 @@ def show_seat(request):
     }
     return render(request, 'seat.html', context)
 
+
+@login_required
 def seat_action(request):
+    role = request.session.get('role')
+    
+    if role == 'Customer':
+        messages.error(request, "Aksi diblokir! Customer tidak diizinkan menambah, mengubah, atau menghapus data kursi.")
+        return redirect('dashboard:dashboard_customer')
+
     if request.method == 'POST':
         action_type = request.POST.get('action_type', 'create')
         
