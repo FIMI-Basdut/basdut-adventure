@@ -1,150 +1,201 @@
-<!-- Modal Container -->
 <div id="updateEventModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8 bg-black bg-opacity-50 transition-opacity duration-150">
-
-    <!-- Modal Content -->
     <div id="updateEventModalContent" class="bg-white w-full max-w-4xl rounded-2xl shadow-xl p-6 md:p-8 relative transform transition-all duration-150 opacity-0 scale-95 overflow-y-auto max-h-[90vh]">
         
-        <!-- Header & Tombol Close -->
         <div class="flex justify-between items-center mb-8">
-            <h2 class="text-xl font-bold text-gray-800">Edit Acara</h2>
-            <button onclick="hideUpdateEventModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
+            <h2 class="text-xl font-bold text-gray-800">Edit Acara & Kategori</h2>
+            <button type="button" onclick="hideUpdateEventModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
                 <i class="far fa-times-circle text-2xl"></i>
             </button>
         </div>
 
-        <!-- form -->
-        <form id="eventForm">
-            <!-- Grid Layout untuk Form -->
+        <form id="updateEventForm">
+            {% csrf_token %}
             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
                 
-                <!-- kiri -->
                 <div class="space-y-6">
                     <div>
-                        <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-wide mb-2">Judul Acara (Event_Title)</label>
-                        <input type="text" name="event_title" placeholder="cth. Konser Melodi Senja" 
-                            class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-700 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors placeholder-gray-400">
+                        <label class="block text-[11px] font-bold text-gray-500 uppercase mb-2">Judul Acara & Emoji</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="update_event_emoji" name="event_emoji" placeholder="🎫" class="w-16 text-center border border-gray-200 rounded-xl px-2 py-3 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500" required>
+                            <input type="text" id="update_event_title" name="event_title" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-700 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500" required>
+                        </div>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-wide mb-2">Tanggal (Date)</label>
-                            <input type="date" name="event_date"
-                                class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-700 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors">
+                            <label class="block text-[11px] font-bold text-gray-500 uppercase mb-2">Tanggal</label>
+                            <input type="date" id="update_event_date" name="event_date" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-700 focus:outline-none" required>
                         </div>
                         <div>
-                            <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-wide mb-2">Waktu (Time)</label>
-                            <input type="time" name="event_time"
-                                class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-700 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors">
+                            <label class="block text-[11px] font-bold text-gray-500 uppercase mb-2">Waktu</label>
+                            <input type="time" id="update_event_time" name="event_time" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-700 focus:outline-none" required>
                         </div>
                     </div>
 
                     <div>
-                        <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-wide mb-2">Venue (Venue_ID)</label>
-                        <select name="venue_id" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-700 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors appearance-none bg-white">
-                            <option>Jakarta Convention Center</option>
-                            <option>Taman Impian Jayakarta</option>
-                            <option>Bandung Hall Center</option>
+                        <label class="block text-[11px] font-bold text-gray-500 uppercase mb-2">Venue</label>
+                        <select id="update_venue_id" name="venue_id" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-700 bg-white focus:outline-none" required>
+                            {% for v in venues %}
+                                <option value="{{ v.venue_id }}">{{ v.venue_name }}</option>
+                            {% endfor %}
                         </select>
                     </div>
 
                     <div>
-                        <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-wide mb-2">Artis (Event_Artist)</label>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="border border-gray-200 text-gray-600 px-4 py-1.5 rounded-full text-xs font-medium bg-white">The Weeknd</span>
-                            <span class="border border-gray-200 text-gray-600 px-4 py-1.5 rounded-full text-xs font-medium bg-white">BTS</span>
+                        <label class="block text-[11px] font-bold text-gray-500 uppercase mb-2">Organizer</label>
+                        <select id="update_organizer_id" name="organizer_id" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-700 bg-white focus:outline-none" required>
+                            {% for o in organizers %}
+                                <option value="{{ o.organizer_id }}">{{ o.organizer_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-bold text-gray-500 uppercase mb-2">Pilih Artis & Role</label>
+                        <div class="max-h-48 overflow-y-auto border border-gray-200 rounded-xl p-3 space-y-3">
+                            {% for a in artists %}
+                            <div class="flex items-center justify-between gap-4">
+                                <label class="flex items-center space-x-2 text-sm text-gray-700 cursor-pointer flex-1">
+                                    <input type="checkbox" name="artist_ids" value="{{ a.artist_id }}" id="update_artist_{{ a.artist_id }}" class="update-artist-checkbox rounded text-blue-500 focus:ring-blue-500">
+                                    <span class="font-medium">{{ a.artist_name }}</span>
+                                </label>
+                                <input type="text" name="role_{{ a.artist_id }}" id="update_role_{{ a.artist_id }}" placeholder="Role (cth: Guest Star)" 
+                                    class="w-1/2 border border-gray-200 rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+                            </div>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
 
-                <!-- kanan -->
-                <div class="space-y-6">
+                <div class="space-y-6 flex flex-col">
                     <div>
-                        <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-wide mb-2">Kategori Tiket (Ticket_Category)</label>
-                        <div class="bg-gray-50 border border-gray-100 rounded-xl p-4 relative">
-                            <div class="flex items-center gap-3 mb-3">
-                                <input type="text" value="Regular" placeholder="Nama Kategori" name="ticket_category"
-                                    class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-700 focus:outline-none focus:border-blue-500">
-                                <button type="button" class="text-red-400 hover:text-red-600 transition-colors">
-                                    <i class="far fa-times-circle text-lg"></i>
-                                </button>
+                        <label class="block text-[11px] font-bold text-gray-500 uppercase mb-2">Kategori Tiket</label>
+                        <div id="updateTicketCategoriesWrapper" class="space-y-3 max-h-48 overflow-y-auto pr-2">
                             </div>
-                            <div class="grid grid-cols-2 gap-3">
-                                <input type="number" value="100000" placeholder="Harga" name="ticket_price"
-                                    class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-700 focus:outline-none focus:border-blue-500">
-                                <input type="number" value="100" placeholder="Kuota" name="ticket_quota"
-                                    class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-700 focus:outline-none focus:border-blue-500">
-                            </div>
-                        </div>
-                        <button type="button" class="mt-3 text-blue-500 hover:text-blue-700 text-xs font-bold flex items-center gap-1.5 transition-colors">
-                            <i class="fas fa-plus"></i> Tambah Kategori
+                        <button type="button" onclick="addUpdateTicketRow('', '', '', '')" class="mt-3 text-blue-500 hover:text-blue-700 text-xs font-bold flex items-center gap-1.5">
+                            <i class="fas fa-plus"></i> Tambah Kategori Lain
                         </button>
                     </div>
 
-                    <div>
-                        <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-wide mb-2">Deskripsi</label>
-                        <textarea placeholder="Deskripsi acara..." name="event_description"
-                            class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-700 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors resize-none h-32"></textarea>
+                    <div class="flex-1">
+                        <label class="block text-[11px] font-bold text-gray-500 uppercase mb-2">Deskripsi Acara</label>
+                        <textarea id="update_event_description" name="event_description" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-700 focus:outline-none resize-none h-28" required></textarea>
                     </div>
                 </div>
             </div>
+
+            <div class="grid grid-cols-2 gap-4 mt-8 pt-6 border-t border-gray-200">
+                <button onclick="hideUpdateEventModal()" type="button" class="w-full border border-gray-200 text-gray-800 font-bold py-3.5 rounded-xl text-sm hover:bg-gray-50">Batal</button>
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl text-sm shadow-sm">Simpan Perubahan</button>
+            </div>
         </form>
-
-        <div class="grid grid-cols-2 gap-4 mt-10 pt-2 border-t border-gray-200">
-            <button onclick="hideUpdateEventModal()" type="button" class="w-full border border-gray-200 text-gray-800 font-bold py-3.5 rounded-xl text-sm hover:bg-gray-50 transition-colors">
-                Batal
-            </button>
-            <button type="submit" form="eventForm" class="w-full bg-[#82a4fc] hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl text-sm transition-colors shadow-sm">
-                Buat Acara
-            </button>
-        </div>
-
     </div>
 </div>
 
 <script>
-  function showUpdateEventModal() {
-      const modal = document.getElementById('updateEventModal');
-      const modalContent = document.getElementById('updateEventModalContent');
+    let currentUpdateEventId = '';
 
-      modal.classList.remove('hidden'); 
-      setTimeout(() => {
-        modalContent.classList.remove('opacity-0', 'scale-95');
-        modalContent.classList.add('opacity-100', 'scale-100');
-      }, 50); 
-  }
+    function showUpdateEventModal(id, title, datetime, venueId, organizerId, description, emoji, artistsDetailed, categoriesDetailed) {
+        currentUpdateEventId = id;
+        
+        document.getElementById('update_event_emoji').value = emoji;
+        document.getElementById('update_event_title').value = title;
+        
+        const [datePart, timePart] = datetime.split(' ');
+        document.getElementById('update_event_date').value = datePart;
+        document.getElementById('update_event_time').value = timePart;
 
-  function hideUpdateEventModal() {
-      const modal = document.getElementById('updateEventModal');
-      const modalContent = document.getElementById('updateEventModalContent');
+        document.getElementById('update_venue_id').value = venueId;
+        document.getElementById('update_organizer_id').value = organizerId;
+        document.getElementById('update_event_description').value = description;
 
-      modalContent.classList.remove('opacity-100', 'scale-100');
-      modalContent.classList.add('opacity-0', 'scale-95');
+        // Reset state Checkbox & Role Artis
+        document.querySelectorAll('.update-artist-checkbox').forEach(cb => cb.checked = false);
 
-      setTimeout(() => {
-        modal.classList.add('hidden');
-      }, 150); 
-  }
+        // cari semua input yang ID-nya berawalan "update_role_"
+        document.querySelectorAll('input[id^="update_role_"]').forEach(input => input.value = "");
 
-  async function addEventEntry() {
-    await fetch("{% url 'event:event_list' %}", {
-      method: "POST",
-      body: new FormData(document.querySelector('#eventForm')),
-    })
+        // Urai dan pasang Artis yang terdaftar di Event ini
+        if (artistsDetailed && artistsDetailed.trim() !== "") {
+            const artistRows = artistsDetailed.split(';;');
+            artistRows.forEach(row => {
+                const [artistId, artistName, role] = row.split('::');
+                const checkbox = document.getElementById(`update_artist_${artistId}`);
+                const roleInput = document.getElementById(`update_role_${artistId}`);
+                if (checkbox) checkbox.checked = true;
+                if (roleInput) roleInput.value = role;
+            });
+        }
 
-    document.getElementById("eventForm").reset();
-    hideUpdateEventModal();
-      
-    // Show toast notification
-    showToast('Event added successfully!', '', 'success');
+        // Urai dan bangun baris Kategori Tiket
+        const wrapper = document.getElementById('updateTicketCategoriesWrapper');
+        wrapper.innerHTML = '';
+        if (categoriesDetailed && categoriesDetailed.trim() !== "") {
+            const catRows = categoriesDetailed.split(';;');
+            catRows.forEach(row => {
+                const [catId, catName, price, quota] = row.split('::');
+                addUpdateTicketRow(catId, catName, price, quota);
+            });
+        } else {
+            addUpdateTicketRow('', '', '', '');
+        }
 
-    // Dispatch custom event to notify main.html about new data
-    document.dispatchEvent(new CustomEvent('eventAdded'));
+        const modal = document.getElementById('updateEventModal');
+        const content = document.getElementById('updateEventModalContent');
+        modal.classList.remove('hidden');
+        setTimeout(() => {
+            content.classList.remove('opacity-0', 'scale-95');
+            content.classList.add('opacity-100', 'scale-100');
+        }, 50);
+    }
 
-    return false;
-  }
+    function hideUpdateEventModal() {
+        const modal = document.getElementById('updateEventModal');
+        const content = document.getElementById('updateEventModalContent');
+        content.classList.remove('opacity-100', 'scale-100');
+        content.classList.add('opacity-0', 'scale-95');
+        setTimeout(() => { modal.classList.add('hidden'); }, 150);
+    }
 
-  document.getElementById("eventForm").addEventListener("submit", function(e) {
-    e.preventDefault();
-    addEventEntry();
-  })
+    function addUpdateTicketRow(catId, catName, price, quota) {
+        const wrapper = document.getElementById('updateTicketCategoriesWrapper');
+        const row = document.createElement('div');
+        row.className = 'ticket-row bg-gray-50 border border-gray-100 rounded-xl p-3 relative';
+        
+        // Bersihkan string numeric format jika ada koma dari database
+        const cleanPrice = price ? price.replace(/,/g, '') : '';
+        
+        row.innerHTML = `
+            <input type="hidden" name="ticket_category_id[]" value="${catId}">
+            
+            <div class="flex gap-2 mb-2 pr-6">
+                <input type="text" name="ticket_category[]" value="${catName}" placeholder="Nama Kategori" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" required>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+                <input type="number" name="ticket_price[]" value="${cleanPrice ? Math.round(cleanPrice) : ''}" placeholder="Harga" min="0" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" required>
+                <input type="number" name="ticket_quota[]" value="${quota}" placeholder="Kuota" min="1" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" required>
+            </div>
+        `;
+        wrapper.appendChild(row);
+    }
+
+    document.getElementById('updateEventForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        try {
+            const response = await fetch(`/event/update-event/${currentUpdateEventId}/`, {
+                method: "POST",
+                body: new FormData(e.target),
+                headers: { "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value }
+            });
+            const result = await response.json();
+            if (response.ok) {
+                hideUpdateEventModal();
+                window.location.reload();
+            } else {
+                alert("Gagal memperbarui acara: " + result.message);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    });
 </script>

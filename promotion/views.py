@@ -35,9 +35,9 @@ def show_promotions(request):
                     query += " WHERE p.discount_type = %s"
                     params.append(discount_type)
                 
-                # if search_code:
-                #     query += " AND p.promo_code LIKE %s"
-                #     params.append(f"%{search_code}%")
+                if search_code:
+                    query += " AND p.promo_code LIKE %s"
+                    params.append(f"{search_code}%")
 
                 query += """
                     GROUP BY
