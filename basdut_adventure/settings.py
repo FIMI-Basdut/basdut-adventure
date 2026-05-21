@@ -92,25 +92,11 @@ WSGI_APPLICATION = 'basdut_adventure.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-<<<<<<< HEAD
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'tiktaktukdb',          
-        'USER': 'ilham.afuw',          
-        'PASSWORD': 'bulanmatahari1', 
-        'HOST': 'localhost',         
-        'PORT': '5432',              
-        'OPTIONS': {
-            'options': '-c search_path=tiktaktuk,public'
-        },
-    }
-=======
     'default': dj_database_url.config(
         default=os.getenv("DATABASE_URL"),
         conn_max_age=0, 
         ssl_require=True
     )
->>>>>>> 45c4737cede63065c1f55af55e2a6883ee4c813e
 }
 
 DATABASE_URL = os.getenv("DATABASE_URL")
