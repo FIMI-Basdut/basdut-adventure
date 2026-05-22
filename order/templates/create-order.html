@@ -4,8 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Checkout Tiket</title>
-
-  <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
@@ -15,152 +13,181 @@
 
   <div class="max-w-6xl mx-auto p-6">
 
-    <!-- Header -->
+    {% if messages %}
+      <div class="mb-6">
+        {% for message in messages %}
+          <div class="p-4 rounded-lg font-medium {% if message.tags == 'error' %}bg-red-100 text-red-700{% else %}bg-green-100 text-green-700{% endif %}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
     <div class="flex justify-between items-center mb-6">
       <h2 class="text-xl font-semibold">Checkout Tiket</h2>
       <div class="text-sm text-gray-500">
-        <span class="text-blue-600 font-medium">Pilih</span> →
-        Bayar → Selesai
+        <span class="text-blue-600 font-medium">Pilih</span> → Bayar → Selesai
       </div>
     </div>
 
-    <!-- Main Layout -->
-    <div class="grid grid-cols-3 gap-6">
+    <form method="POST" action="{% url 'order:show_order_create' event.id %}">
+      {% csrf_token %}
+      
+      <div class="grid grid-cols-3 gap-6">
 
-      <!-- LEFT SIDE -->
-      <div class="col-span-2 space-y-6">
+        <div class="col-span-2 space-y-6">
 
-        <!-- Event Card -->
-        <div class="bg-white p-5 rounded-xl shadow-sm flex items-center gap-4">
-          <div class="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center text-white text-xl">
-            🎵
-          </div>
-          <div>
-            <h3 class="font-semibold">After Hours Til Dawn Tour</h3>
-            <p class="text-sm text-gray-500">2026-11-14 · Bandung</p>
-          </div>
-        </div>
-
-        <!-- Ticket Selection -->
-        <div class="bg-white p-5 rounded-xl shadow-sm">
-          <h3 class="font-semibold mb-4">Pilih Kategori Tiket</h3>
-
-          <div class="space-y-3">
-
-            <div class="flex justify-between p-3 rounded-lg hover:bg-gray-50 cursor-pointer">
-              <div>
-                <p class="font-medium">VVIP</p>
-                <p class="text-sm text-gray-500">Kuota: 50 tiket</p>
-              </div>
-              <span class="font-medium">Rp 1,500,000</span>
+          <div class="bg-white p-5 rounded-xl shadow-sm flex items-center gap-4">
+            <div class="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center text-white text-xl">🎵</div>
+            <div>
+              <h3 class="font-semibold">{{ event.title }}</h3>
+              <p class="text-sm text-gray-500">{{ event.datetime }}</p>
             </div>
-
-            <div class="flex justify-between p-3 rounded-lg hover:bg-gray-50 cursor-pointer">
-              <div>
-                <p class="font-medium">VIP</p>
-                <p class="text-sm text-gray-500">Kuota: 150 tiket</p>
-              </div>
-              <span class="font-medium">Rp 750,000</span>
-            </div>
-
-            <!-- SELECTED -->
-            <div class="flex justify-between p-3 rounded-lg border-2 border-blue-500 bg-blue-50 cursor-pointer">
-              <div>
-                <p class="font-medium">Category 2</p>
-                <p class="text-sm text-gray-500">Kuota: 600 tiket</p>
-              </div>
-              <span class="font-medium text-blue-600">Rp 250,000 ✓</span>
-            </div>
-
           </div>
-        </div>
 
-        <!-- Bottom Grid -->
-        <div class="grid grid-cols-2 gap-6">
-
-          <!-- Quantity -->
           <div class="bg-white p-5 rounded-xl shadow-sm">
-            <h4 class="font-semibold mb-3">Jumlah Tiket</h4>
-
-            <div class="flex items-center gap-3">
-              <button class="px-3 py-1 bg-gray-200 rounded">-</button>
-              <span class="font-medium">5</span>
-              <button class="px-3 py-1 bg-gray-200 rounded">+</button>
+            <h3 class="font-semibold mb-4">Pilih Kategori Tiket</h3>
+            <div class="space-y-3">
+              {% for category in categories %}
+                <label class="flex justify-between p-3 rounded-lg border-2 cursor-pointer transition-colors hover:bg-gray-50 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50">
+                  <div class="flex gap-3 items-center">
+                    <input type="radio" name="category_id" value="{{ category.id }}" 
+                           data-name="{{ category.name }}" data-price="{{ category.price }}"
+                           class="w-4 h-4 text-blue-600 category-radio" required>
+                    <div>
+                      <p class="font-medium">{{ category.name }}</p>
+                      <p class="text-sm text-gray-500">Kuota: {{ category.quota }} tiket</p>
+                    </div>
+                  </div>
+                  <span class="font-medium">Rp {{ category.price }}</span>
+                </label>
+              {% empty %}
+                <p class="text-sm text-gray-500">Belum ada kategori tiket.</p>
+              {% endfor %}
             </div>
-
-            <p class="text-xs text-gray-400 mt-2">Max 10 tiket per transaksi</p>
           </div>
 
-          <!-- Seats -->
-          <div class="bg-white p-5 rounded-xl shadow-sm">
-            <h4 class="font-semibold mb-3">Pilih Kursi</h4>
-
-            <div class="grid grid-cols-4 gap-2">
-              <button class="border rounded py-1">A1</button>
-              <button class="border rounded py-1">A2</button>
-              <button class="border rounded py-1">A3</button>
-              <button class="border rounded py-1">A4</button>
-              <button class="border rounded py-1">B1</button>
-              <button class="border rounded py-1">B2</button>
-              <button class="border rounded py-1">B3</button>
-              <button class="border rounded py-1">B4</button>
+          <div class="grid grid-cols-2 gap-6">
+            <div class="bg-white p-5 rounded-xl shadow-sm">
+              <h4 class="font-semibold mb-3">Jumlah Tiket</h4>
+              <div class="flex items-center gap-3">
+                <button id="btn-minus" class="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded font-bold" type="button">-</button>
+                <input id="quantity-input" type="number" name="quantity" value="1" min="1" max="10" readonly class="w-12 text-center font-semibold bg-transparent border-none focus:outline-none">
+                <button id="btn-plus" class="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded font-bold" type="button">+</button>
+              </div>
             </div>
 
+            <div class="bg-white p-5 rounded-xl shadow-sm">
+              <h4 class="font-semibold mb-3">Pilih Kursi (Opsional)</h4>
+              <div class="grid grid-cols-4 gap-2 max-h-40 overflow-y-auto">
+                {% for seat in seats %}
+                  <label class="border rounded py-1 text-center text-sm font-medium cursor-pointer transition-colors hover:bg-blue-50 has-[:checked]:bg-blue-500 has-[:checked]:text-white">
+                    <input type="checkbox" name="seat_ids" value="{{ seat.id }}" class="hidden">
+                    {{ seat.row_number }}{{ seat.seat_number }}
+                  </label>
+                {% empty %}
+                  <p class="col-span-4 text-xs text-gray-400">Tidak ada kursi khusus.</p>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white p-5 rounded-xl shadow-sm">
+            <h4 class="font-semibold mb-3">Kode Promo (Opsional)</h4>
+            <input type="text" name="promo_code" class="w-full border rounded px-3 py-2 text-sm uppercase" placeholder="CONTOH: TIKTAK20" />
+            <p class="text-xs text-gray-400 mt-2">Diskon akan diterapkan secara otomatis saat Anda menekan Bayar Sekarang, jika valid.</p>
           </div>
 
         </div>
 
-        <!-- Promo -->
-        <div class="bg-white p-5 rounded-xl shadow-sm">
-          <h4 class="font-semibold mb-3">Kode Promo</h4>
+        <div class="bg-white p-5 rounded-xl shadow-sm h-fit">
+          <h3 class="font-semibold mb-4">Ringkasan Pesanan</h3>
 
-          <div class="flex gap-2">
-            <input class="flex-1 border rounded px-3 py-2 text-sm"
-                   placeholder="CONTOH: TIKTAK20"/>
-            <button class="px-4 bg-gray-200 rounded">Terapkan</button>
+          <div class="text-sm text-gray-600 space-y-2">
+            <div class="flex justify-between">
+              <span id="summary-item-desc">Silahkan pilih tiket</span>
+              <span id="summary-item-subtotal">Rp 0</span>
+            </div>
+            
+            <div class="flex justify-between">
+              <span>Biaya Layanan</span>
+              <span>Rp 20,000</span>
+            </div>
           </div>
 
-          <p class="text-xs text-red-500 mt-2">Kode promo tidak valid.</p>
+          <div class="border-t my-4"></div>
+
+          <div class="flex justify-between font-semibold text-lg">
+            <span>Sub-Total</span>
+            <span id="summary-total-amount">Rp 20,000</span>
+          </div>
+
+          <input type="hidden" name="total_amount" id="hidden-total-amount" value="20000">
+
+          <button type="submit" class="w-full mt-4 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 font-semibold">
+            Bayar Sekarang
+          </button>
         </div>
 
       </div>
-
-      <!-- RIGHT SIDE -->
-      <div class="bg-white p-5 rounded-xl shadow-sm h-fit">
-
-        <h3 class="font-semibold mb-4">Ringkasan Pesanan</h3>
-
-        <div class="text-sm text-gray-600 space-y-2">
-          <div class="flex justify-between">
-            <span>Category 2 × 5</span>
-            <span>Rp 1,250,000</span>
-          </div>
-
-          <div class="flex justify-between">
-            <span>Biaya Layanan</span>
-            <span>Rp 200,000</span>
-          </div>
-        </div>
-
-        <div class="border-t my-4"></div>
-
-        <div class="flex justify-between font-semibold text-lg">
-          <span>Total</span>
-          <span>Rp 1,450,000</span>
-        </div>
-
-        <button class="w-full mt-4 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700">
-          Bayar Sekarang
-        </button>
-
-        <p class="text-xs text-gray-400 text-center mt-2">
-          Konfirmasi tiket akan dikirim ke email
-        </p>
-
-      </div>
-
-    </div>
+    </form>
   </div>
 
+  <script>
+    const btnMinus = document.getElementById('btn-minus');
+    const btnPlus = document.getElementById('btn-plus');
+    const quantityInput = document.getElementById('quantity-input');
+    
+    const summaryItemDesc = document.getElementById('summary-item-desc');
+    const summaryItemSubtotal = document.getElementById('summary-item-subtotal');
+    const summaryTotalAmount = document.getElementById('summary-total-amount');
+    const hiddenTotalAmount = document.getElementById('hidden-total-amount');
+
+    const serviceFee = 20000;
+
+    function formatRupiah(num) {
+      return 'Rp ' + Math.max(0, num).toLocaleString('id-ID');
+    }
+
+    function updateOrderSummary() {
+      const selectedRadio = document.querySelector('.category-radio:checked');
+      const qty = parseInt(quantityInput.value);
+
+      if (selectedRadio) {
+        const categoryName = selectedRadio.getAttribute('data-name');
+        const categoryPrice = parseFloat(selectedRadio.getAttribute('data-price'));
+        
+        const subtotal = categoryPrice * qty;
+        const total = subtotal + serviceFee;
+
+        summaryItemDesc.innerText = `${categoryName} × ${qty}`;
+        summaryItemSubtotal.innerText = formatRupiah(subtotal);
+        
+        // Hanya Sub-Total sebelum Promo
+        summaryTotalAmount.innerText = formatRupiah(total);
+        hiddenTotalAmount.value = total;
+      }
+    }
+
+    document.querySelectorAll('.category-radio').forEach(radio => {
+      radio.addEventListener('change', updateOrderSummary);
+    });
+
+    btnMinus.addEventListener('click', () => {
+      let currentVal = parseInt(quantityInput.value);
+      if (currentVal > 1) {
+        quantityInput.value = currentVal - 1;
+        updateOrderSummary();
+      }
+    });
+
+    btnPlus.addEventListener('click', () => {
+      let currentVal = parseInt(quantityInput.value);
+      if (currentVal < 10) {
+        quantityInput.value = currentVal + 1;
+        updateOrderSummary();
+      }
+    });
+  </script>
 </body>
 </html>

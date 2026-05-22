@@ -114,9 +114,9 @@
                         </div>
 
                         <!-- Action Button -->
-                        <button class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl text-sm font-semibold transition-colors">
+                        <a href="{% url 'order:show_order_create' e.event_id %}" class="mt-auto w-full block text-center bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl text-sm font-semibold transition-colors">
                             Beli Tiket
-                        </button>
+                        </a>
 
                         {% if user.role_name == 'Admin' or user.role_name == 'Organizer' %}
                             <button onclick="showUpdateEventModal('{{ e.event_id }}', '{{ e.event_title|escapejs }}', '{{ e.event_datetime }}', '{{ e.venue_id }}', '{{ e.organizer_id }}', '{{ e.event_description|escapejs }}', '{{ e.emoji|escapejs }}', '{{ e.artists_detailed|escapejs }}', '{{ e.categories_detailed|escapejs }}')" 
