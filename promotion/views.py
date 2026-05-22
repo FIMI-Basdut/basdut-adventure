@@ -3,6 +3,7 @@ from django.contrib import messages
 from basdut_adventure.db import get_connection
 import uuid
 
+
 def show_promotions(request):
     user_role = request.session.get('role')
     discount_type = request.GET.get("discount_type") # list promotion based on discount type
